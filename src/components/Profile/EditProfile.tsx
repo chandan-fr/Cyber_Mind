@@ -1,27 +1,29 @@
-import { StyleSheet, Text, View, SafeAreaView, Platform, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, View, SafeAreaView, Platform, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView, PermissionsAndroid } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import LinearGradient from 'react-native-linear-gradient';
-import { _Height, numericRegex } from '../../config/staticVariables';
+import { Gallery_Permission, _Height, numericRegex } from '../../config/staticVariables';
 import colors from '../../config/colors';
 import { icons } from '../../config/icons';
 import { fonts } from '../../config/fonts';
-import { Form_Error, User_Form_Data } from '../../config/CustomTypes';
+import { Form_Error, Profile_Image, User_Form_Data } from '../../config/CustomTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../../services/slices/UtilitySlice';
 import Loader from '../../utility/Loader';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 
 const EditProfile = ({ navigation }: { navigation: any }) => {
     const { user, user_loading, token } = useSelector((state: any) => state.userSlice);
     const [formData, setFormData] = useState<User_Form_Data>({ email: user?.email, phone: user?.phone, city_state: user?.city_state, full_name: user?.full_name });
     const [formError, setFormError] = useState<Form_Error>({});
+    const [image, setImage] = useState<Profile_Image>({});
     const _Header = { headers: { Authorization: "Bearer " + token } };
     const dispatch = useDispatch();
 
-    const validateForm = () => {
+    const validateForm = (): Form_Error => {
         const error: Form_Error = {};
-        const { phone, city_state, full_name } = formData;
+        const { phone, full_name } = formData;
 
         if (!full_name) {
             error.credential = "Full Name is required!";
@@ -38,8 +40,39 @@ const EditProfile = ({ navigation }: { navigation: any }) => {
         return error;
     };
 
+    const hasPermission = async (): Promise<boolean> => {
+        try {
+            const hasPermission = await PermissionsAndroid.check(Gallery_Permission);
+            if (!hasPermission) {
+                const granted = await PermissionsAndroid.request(Gallery_Permission);
+                return granted === "granted";
+            }
+            return true;
+        } catch (exc: any) {
+            dispatch(showModal({ msg: exc?.message, type: "error" }));
+            return false;
+        }
+    };
+
+    const openGallery = async (): Promise<void> => {
+        try {
+            if (Platform.OS === "android") {
+                const status: boolean = await hasPermission();
+                if (status) {
+                    const res = await launchImageLibrary({ mediaType: "photo" });
+                    console.log("android", res?.assets);
+                }
+            } else {
+                const res = await launchImageLibrary({ mediaType: "photo" });
+                console.log("ios =>", res?.assets);
+            }
+        } catch (exc: any) {
+            dispatch(showModal({ msg: exc?.message, type: "error" }));
+        }
+    }
+
     const handleSaveData = async () => {
-        const validationErrors: any = validateForm();
+        const validationErrors: Form_Error = validateForm();
         setFormError(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {
@@ -86,7 +119,7 @@ const EditProfile = ({ navigation }: { navigation: any }) => {
                         {/* edit button */}
                         <TouchableOpacity
                             style={[styles.galleryWrap, commonstyles.acjc]}
-                        // onPress={() => navigation.navigate("editprofile")}
+                            onPress={() => openGallery()}
                         >
                             <Image source={icons.gallery} style={styles.gallery} />
                         </TouchableOpacity>

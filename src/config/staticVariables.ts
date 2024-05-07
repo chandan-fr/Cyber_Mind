@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Permission, PermissionsAndroid, Platform } from "react-native";
 import { Wlcm_Data } from "./CustomTypes";
 
 export const wlcmData: Array<Wlcm_Data> = [
@@ -28,3 +28,7 @@ export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 export const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
 export const nameRegex = /^[a-zA-Z ]+$/;
 export const numericRegex = /^[0-9]+$/;
+export const Gallery_Permission: Permission = Number(Platform.Version) >= 33 ?
+    PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
+    :
+    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;

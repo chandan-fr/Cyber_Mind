@@ -43,7 +43,12 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>CyberMind requires Location Permission to run the App.</string>
+	<!-- gallary & camera permission -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Needs Gallary Permission to Access Photos</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Needs Camera Permission to Click Photos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins-Black.ttf</string>
@@ -76,6 +81,11 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<!-- orientation portrait -->
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+    	<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>

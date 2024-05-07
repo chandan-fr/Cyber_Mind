@@ -76,3 +76,10 @@ export type User_Form_Data = {
 export type Chat_Thread_Props = {
     item: {[key: string]: string};
 };
+
+export type Profile_Image = {
+    name?: string;
+    fileName?: string;
+    uri?: string;
+    type?: string;
+}
