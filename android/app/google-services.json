@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "279513793062",
+    "project_id": "cybermind-7f843",
+    "storage_bucket": "cybermind-7f843.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279513793062:android:17563b3c1fd98ae5585ce7",
+        "android_client_info": {
+          "package_name": "com.cybermind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279513793062-spf0sukctlpjgs78usr900b22oje863j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb7saF9Z0XJzgZWdL3tt7q8X4vXWpv8TM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "279513793062-spf0sukctlpjgs78usr900b22oje863j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "279513793062-i294caj6kk6b81livgvd8i086as4jp8s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.CyberMind"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
