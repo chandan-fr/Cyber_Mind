@@ -9,3 +9,4 @@ export const SOCIAL_LOGIN = (loginData) => Api.post("/auth/user/social", loginDa
 export const REGISTER = (userData) => Api.post("/auth/user/register", userData);
 export const ALLMEMBER = (_Header) => Api.get("/get/all/member", _Header);
 export const ALLCATEGORY = (_Header) => Api.get("/get/all/category", _Header);
+export const UPDATEUSER = (_Header, userData) => Api.post("/user/profile/update", userData, _Header);

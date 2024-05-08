@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ALLCATEGORY, ALLMEMBER, LOGIN, REGISTER, SOCIAL_LOGIN } from "../api/Api";
+import { ALLCATEGORY, ALLMEMBER, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { showModal } from "./UtilitySlice";
 import axios from "axios";
+import { _Base_Url } from "../../config/staticVariables";
 
 export const userLogin = createAsyncThunk("/auth/user/login", async ({ loginData, navigation, toggleChkbox }: any, { rejectWithValue, dispatch }) => {
     try {
@@ -26,11 +27,36 @@ export const userLogin = createAsyncThunk("/auth/user/login", async ({ loginData
     }
 });
 
-export const userUpdate = createAsyncThunk("/user/profile/update", async ({ config }: any, { rejectWithValue, dispatch }) => {
-    console.log(config);
+export const userDataUpdate = createAsyncThunk("/user/profile/update", async ({ _Header, formData }: any, { rejectWithValue, dispatch }) => {
+    try {
+        const resp: any = await UPDATEUSER(_Header, formData);
+
+        if (resp.data.success) {
+            AsyncStorage.setItem("@user", JSON.stringify(resp.data.data));
+            AsyncStorage.setItem("@token", resp.data.token);
+            dispatch(showModal({ msg: resp.data.message, type: "success" }));
+            return { user: resp.data.data, token: resp.data.token };
+        }
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        return rejectWithValue(exc.response.data);
+    }
+});
+
+export const userImageUpdate = createAsyncThunk("/user/profile/image/update", async ({ profile_img, token }: any, { rejectWithValue, dispatch }) => {
+    const config: any = {
+        method: "POST",
+        url: _Base_Url + "/user/profile/image/update",
+        headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": 'multipart/form-data',
+        },
+        data: profile_img,
+    };
+
     try {
         const resp: any = await axios(config);
-        console.log("fftfffyf",resp);
+        console.log("resp", resp.data);
 
         if (resp.data.success) {
             AsyncStorage.setItem("@user", JSON.stringify(resp.data.data));
@@ -190,15 +216,30 @@ const UserSlice = createSlice({
         })
 
         /* user update */
-        builder.addCase(userUpdate.pending, (state, { payload }) => {
+        builder.addCase(userDataUpdate.pending, (state, { payload }) => {
             state.user_loading = true;
         })
-        builder.addCase(userUpdate.fulfilled, (state, { payload }) => {
+        builder.addCase(userDataUpdate.fulfilled, (state, { payload }) => {
             state.user_loading = false;
             state.user = payload?.user;
             state.token = payload?.token;
         })
-        builder.addCase(userUpdate.rejected, (state, { payload }) => {
+        builder.addCase(userDataUpdate.rejected, (state, { payload }) => {
+            state.user_loading = false;
+            const err: any | null = payload;
+            state.error = err;
+        })
+
+        /* user image update */
+        builder.addCase(userImageUpdate.pending, (state, { payload }) => {
+            state.user_loading = true;
+        })
+        builder.addCase(userImageUpdate.fulfilled, (state, { payload }) => {
+            state.user_loading = false;
+            state.user = payload?.user;
+            state.token = payload?.token;
+        })
+        builder.addCase(userImageUpdate.rejected, (state, { payload }) => {
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;

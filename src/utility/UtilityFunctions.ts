@@ -1,4 +1,6 @@
-import { _Image_Url } from "../config/staticVariables";
+import { PermissionsAndroid } from "react-native";
+import { Gallery_Permission, _Image_Url } from "../config/staticVariables";
+import { showModal } from "../services/slices/UtilitySlice";
 
 export const getFullDate = (): string => {
     const months: string[] = [
@@ -23,4 +25,18 @@ export const getImagUrl = (url: string): string => {
     const image_url: string = url.replaceAll("\\", "/");
     const imgUrl = `${_Image_Url}${image_url}`;
     return imgUrl;
+};
+
+export const hasGalleryPermission = async (dispatch: any): Promise<boolean> => {
+    try {
+        const hasPermission = await PermissionsAndroid.check(Gallery_Permission);
+        if (!hasPermission) {
+            const granted = await PermissionsAndroid.request(Gallery_Permission);
+            return granted === "granted";
+        }
+        return true;
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc?.message, type: "error" }));
+        return false;
+    }
 };

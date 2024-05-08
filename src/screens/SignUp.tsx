@@ -76,7 +76,7 @@ const SignUp = ({ navigation }: { navigation: any }): JSX.Element => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView style={[commonstyles.parent, { backgroundColor: colors.login.bgcolor }]}>
-                <View style={{}}>
+                <View style={{ marginTop: 15 }}>
                     <TouchableOpacity
                         style={[commonstyles.fdRow, styles.navBtn]}
                         onPress={() => navigation.navigate("welcomescreen")}
@@ -86,7 +86,7 @@ const SignUp = ({ navigation }: { navigation: any }): JSX.Element => {
                     </TouchableOpacity>
                 </View>
 
-                <View style={{ alignItems: "center", marginTop: 30 }}>
+                <View style={{ alignItems: "center", marginTop: 15 }}>
                     <Image style={{ width: 130, height: 160 }} source={images.logo} />
                 </View>
 

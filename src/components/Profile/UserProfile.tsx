@@ -11,10 +11,10 @@ import { fonts } from '../../config/fonts';
 import { getImagUrl } from '../../utility/UtilityFunctions';
 
 const UserProfile = ({ navigation }: { navigation: any }): JSX.Element => {
-  const { user, user_loading } = useSelector((state: any) => state.userSlice);
+  const { user } = useSelector((state: any) => state.userSlice);
   
   return (
-    <View style={[commonstyles.parent, { backgroundColor: colors.userprofile.bgcolor }]}>
+    <View style={[commonstyles.parent, { backgroundColor: colors.userprofile.bgcolor, height: _Height }]}>
       {/* top content */}
       <LinearGradient
         style={styles.headerTop}
@@ -136,9 +136,6 @@ const UserProfile = ({ navigation }: { navigation: any }): JSX.Element => {
 export default UserProfile;
 
 const styles = StyleSheet.create({
-  body: {
-    flex: 1,
-  },
   headerTop: {
     borderBottomLeftRadius: 60,
     borderBottomRightRadius: 60,

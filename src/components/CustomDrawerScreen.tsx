@@ -23,13 +23,13 @@ type CDS_Props = {
     descriptors?: DrawerDescriptorMap;
 };
 
-const CustomDrawerScreen = ({ navigation }: CDS_Props) => {
+const CustomDrawerScreen = ({ navigation }: CDS_Props): JSX.Element => {
     const { user } = useSelector((state: any) => state.userSlice);
     const dispatch: any = useDispatch();
     const navigations: any = useNavigation();
 
-    const naigateToScreen = (screenName: string) => {
-        navigations.navigate("bottomnav", { screen: screenName });
+    const naigateToScreen = (screenName: string, params?: string) => {
+        navigations.navigate("bottomnav", { screen: screenName, params: { screen: params } });
     };
 
     const retrieveLoginData = async (): Promise<void> => {
@@ -94,6 +94,7 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props) => {
 
                                 <TouchableOpacity
                                     style={[styles.userEdit, commonstyles.acjc]}
+                                    onPress={() => naigateToScreen("profile", "editprofile")}
                                 >
                                     <Text style={styles.userEditTxt}>Edit</Text>
                                 </TouchableOpacity>
@@ -109,7 +110,7 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props) => {
                             {/* dashboard */}
                             <TouchableOpacity
                                 style={styles.navWrap}
-                                onPress={()=>naigateToScreen("home")}
+                                onPress={() => naigateToScreen("home")}
                             >
                                 <Text style={styles.navTxt}>Dashboard</Text>
                             </TouchableOpacity>
@@ -128,6 +129,7 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props) => {
                             {/* profile */}
                             <TouchableOpacity
                                 style={styles.navWrap}
+                                onPress={() => naigateToScreen("profile")}
                             >
                                 <Text style={styles.navTxt}>Profile</Text>
                             </TouchableOpacity>

@@ -6,7 +6,7 @@ import P2PChat from '../components/Chat/P2PChat';
 
 const ChatStack = createNativeStackNavigator();
 
-const ChatNav = () => {
+const ChatNav = (): JSX.Element => {
     return (
         <ChatStack.Navigator
             initialRouteName='chathome'

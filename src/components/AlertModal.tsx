@@ -30,7 +30,7 @@ const AlertModal = (): JSX.Element => {
             </View>
         </Modal>
     )
-}
+};
 
 export default AlertModal;
 
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: "center",
         marginHorizontal: 30,
-        marginTop: _Height / 2,
+        marginTop: _Height / 2.3,
         padding: 15,
         ...Platform.select({
             ios: {
@@ -50,9 +50,11 @@ const styles = StyleSheet.create({
                 },
                 shadowOpacity: 0.25,
                 shadowRadius: 4,
+                marginTop: _Height / 2.2,
             },
             android: {
                 elevation: 4,
+                marginTop: _Height / 2.4,
             },
         })
     },
