@@ -7,7 +7,7 @@ import { icons } from '../config/icons';
 import { images } from '../config/images';
 import { _Height, _Width } from '../config/staticVariables';
 import { commonstyles } from '../assets/css/CommonStyles';
-import { getFullDate } from '../utility/UtilityFunctions';
+import { getFullDate, getImagUrl } from '../utility/UtilityFunctions';
 import { fonts } from '../config/fonts';
 import { getAllCategory, getAllMember } from '../services/slices/UserSlice';
 import CategoryCard from '../components/Home/CategoryCard';
@@ -118,7 +118,7 @@ const Home = ({ navigation }: { navigation: any }): JSX.Element => {
                                 <TouchableOpacity
                                     style={styles.member}
                                 >
-                                    <Image source={item?.user?.profile_img ? { uri: item?.user?.profile_img } : icons.user_dumy} style={styles.memberImg} />
+                                    <Image source={item?.user?.profile_img ? { uri: getImagUrl(item?.user?.profile_img) } : icons.user_dumy} style={styles.memberImg} />
                                 </TouchableOpacity>
                             )}
                         />

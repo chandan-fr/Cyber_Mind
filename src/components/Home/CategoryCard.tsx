@@ -4,14 +4,10 @@ import { _Image_Url, _Width } from '../../config/staticVariables';
 import colors from '../../config/colors';
 import { fonts } from '../../config/fonts';
 import LinearGradient from 'react-native-linear-gradient';
+import { getImagUrl } from '../../utility/UtilityFunctions';
 
 const CategoryCard = ({ item, navigation }: { item: any, navigation: any }) => {
-    const getImagUrl = (url: string): string => {
-        const image_url: string = url.replaceAll("\\", "/");
-        const imgUrl = `${_Image_Url}${image_url}`;
-        return imgUrl;
-    };
-
+    
     return (
         <TouchableOpacity
             style={styles.cardWrap}

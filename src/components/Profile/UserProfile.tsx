@@ -8,10 +8,11 @@ import colors from '../../config/colors';
 import { icons } from '../../config/icons';
 import { _Height } from '../../config/staticVariables';
 import { fonts } from '../../config/fonts';
+import { getImagUrl } from '../../utility/UtilityFunctions';
 
 const UserProfile = ({ navigation }: { navigation: any }): JSX.Element => {
   const { user, user_loading } = useSelector((state: any) => state.userSlice);
-
+  
   return (
     <View style={[commonstyles.parent, { backgroundColor: colors.userprofile.bgcolor }]}>
       {/* top content */}
@@ -42,7 +43,7 @@ const UserProfile = ({ navigation }: { navigation: any }): JSX.Element => {
           <View
             style={[styles.user, commonstyles.acjc]}
           >
-            <Image source={icons.user_dumy} style={styles.user_dummy} />
+            <Image source={user?.profile_img ? { uri: getImagUrl(user?.profile_img) } : icons.user_dumy} style={styles.user_dummy} />
 
             {/* edit button */}
             <TouchableOpacity
@@ -181,6 +182,7 @@ const styles = StyleSheet.create({
   user_dummy: {
     width: 140,
     height: 140,
+    borderRadius: 100,
   },
   user: {
     borderWidth: 5,

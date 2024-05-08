@@ -3,6 +3,7 @@ import { ALLCATEGORY, ALLMEMBER, LOGIN, REGISTER, SOCIAL_LOGIN } from "../api/Ap
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { showModal } from "./UtilitySlice";
+import axios from "axios";
 
 export const userLogin = createAsyncThunk("/auth/user/login", async ({ loginData, navigation, toggleChkbox }: any, { rejectWithValue, dispatch }) => {
     try {
@@ -17,6 +18,24 @@ export const userLogin = createAsyncThunk("/auth/user/login", async ({ loginData
             AsyncStorage.setItem("@user", JSON.stringify(resp.data.data));
             AsyncStorage.setItem("@token", resp.data.token);
             navigation.replace("drawernav");
+            return { user: resp.data.data, token: resp.data.token };
+        }
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        return rejectWithValue(exc.response.data);
+    }
+});
+
+export const userUpdate = createAsyncThunk("/user/profile/update", async ({ config }: any, { rejectWithValue, dispatch }) => {
+    console.log(config);
+    try {
+        const resp: any = await axios(config);
+        console.log("fftfffyf",resp);
+
+        if (resp.data.success) {
+            AsyncStorage.setItem("@user", JSON.stringify(resp.data.data));
+            AsyncStorage.setItem("@token", resp.data.token);
+            dispatch(showModal({ msg: resp.data.message, type: "success" }));
             return { user: resp.data.data, token: resp.data.token };
         }
     } catch (exc: any) {
@@ -165,6 +184,21 @@ const UserSlice = createSlice({
             state.token = payload?.token;
         })
         builder.addCase(userRegister.rejected, (state, { payload }) => {
+            state.user_loading = false;
+            const err: any | null = payload;
+            state.error = err;
+        })
+
+        /* user update */
+        builder.addCase(userUpdate.pending, (state, { payload }) => {
+            state.user_loading = true;
+        })
+        builder.addCase(userUpdate.fulfilled, (state, { payload }) => {
+            state.user_loading = false;
+            state.user = payload?.user;
+            state.token = payload?.token;
+        })
+        builder.addCase(userUpdate.rejected, (state, { payload }) => {
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;

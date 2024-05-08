@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RememberMe_Data } from '../config/CustomTypes';
 import { logOut, saveUserCred } from '../services/slices/UserSlice';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { getImagUrl } from '../utility/UtilityFunctions';
 
 type CDS_Props = {
     state?: DrawerNavigationState<ParamListBase>;
@@ -73,7 +74,7 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props) => {
                                 <TouchableOpacity
                                     style={[styles.userWrap, commonstyles.acjc]}
                                 >
-                                    <Image source={icons.user_dumy} style={styles.user_dummy} />
+                                    <Image source={user?.profile_img ? { uri: getImagUrl(user?.profile_img) } : icons.user_dumy} style={styles.user_dummy} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
@@ -186,7 +187,6 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props) => {
                     blurType="light"
                     blurAmount={4}
                     reducedTransparencyFallbackColor="rgba(0, 158, 245, 0.3)"
-                // overlayColor='rgba(0, 158, 245, 0.3)'
                 />
                 :
                 null
@@ -280,6 +280,7 @@ const styles = StyleSheet.create({
     user_dummy: {
         width: 110,
         height: 110,
+        borderRadius: 100,
     },
     close: {
         width: 16,

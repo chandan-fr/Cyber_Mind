@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, SafeAreaView, Platform, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView, PermissionsAndroid } from 'react-native'
+import { StyleSheet, Text, View, Platform, TouchableOpacity, Image, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView, PermissionsAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import LinearGradient from 'react-native-linear-gradient';
-import { Gallery_Permission, _Height, numericRegex } from '../../config/staticVariables';
+import { Gallery_Permission, _Base_Url, _Height, _Image_Url, numericRegex } from '../../config/staticVariables';
 import colors from '../../config/colors';
 import { icons } from '../../config/icons';
 import { fonts } from '../../config/fonts';
@@ -10,7 +10,9 @@ import { Form_Error, Profile_Image, User_Form_Data } from '../../config/CustomTy
 import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../../services/slices/UtilitySlice';
 import Loader from '../../utility/Loader';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
+import { userUpdate } from '../../services/slices/UserSlice';
+import { getImagUrl } from '../../utility/UtilityFunctions';
 
 
 const EditProfile = ({ navigation }: { navigation: any }) => {
@@ -18,8 +20,7 @@ const EditProfile = ({ navigation }: { navigation: any }) => {
     const [formData, setFormData] = useState<User_Form_Data>({ email: user?.email, phone: user?.phone, city_state: user?.city_state, full_name: user?.full_name });
     const [formError, setFormError] = useState<Form_Error>({});
     const [image, setImage] = useState<Profile_Image>({});
-    const _Header = { headers: { Authorization: "Bearer " + token } };
-    const dispatch = useDispatch();
+    const dispatch: any = useDispatch();
 
     const validateForm = (): Form_Error => {
         const error: Form_Error = {};
@@ -29,10 +30,10 @@ const EditProfile = ({ navigation }: { navigation: any }) => {
             error.credential = "Full Name is required!";
         }
 
-        if (phone.length < 10) {
+        if (phone.length > 1 && phone.length < 10) {
             error.phone = "Phone Number should be minimum 10 characters long!";
             dispatch(showModal({ msg: "Phone Number should be minimum 10 characters long!", type: "error" }));
-        } else if (numericRegex.test(phone)) {
+        } else if (phone.length > 1 && !numericRegex.test(phone)) {
             error.phone = "Only Numerics are allowed!";
             dispatch(showModal({ msg: "Only Numerics are allowed!", type: "error" }));
         }
@@ -56,27 +57,52 @@ const EditProfile = ({ navigation }: { navigation: any }) => {
 
     const openGallery = async (): Promise<void> => {
         try {
+            let rawData: any;
             if (Platform.OS === "android") {
                 const status: boolean = await hasPermission();
                 if (status) {
-                    const res = await launchImageLibrary({ mediaType: "photo" });
-                    console.log("android", res?.assets);
+                    const res: ImagePickerResponse = await launchImageLibrary({ mediaType: "photo" });
+                    rawData = res?.assets && res?.assets[0];
                 }
             } else {
-                const res = await launchImageLibrary({ mediaType: "photo" });
-                console.log("ios =>", res?.assets);
+                const res: ImagePickerResponse = await launchImageLibrary({ mediaType: "photo" });
+                rawData = res?.assets && res?.assets[0];
             }
+            setImage({ type: rawData.type, uri: rawData.uri, name: rawData.fileName });
         } catch (exc: any) {
             dispatch(showModal({ msg: exc?.message, type: "error" }));
         }
-    }
+    };
 
-    const handleSaveData = async () => {
+    const convertToFormData = (): FormData => {
+        const formValue = new FormData();
+
+        formValue.append('full_name', formData.full_name);
+        formValue.append('profile_img', image? image : user?.profile_img);
+        formValue.append('email', formData.email);
+        formValue.append('phone', formData.phone);
+        formValue.append('city_state', formData.city_state);
+
+        return formValue;
+    };
+
+    const handleSaveData = () => {
         const validationErrors: Form_Error = validateForm();
         setFormError(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {
-            // await dispatch(userLogin({ loginData, navigation }));
+            const userData = convertToFormData();
+            const config = {
+                method: "POST",
+                url: _Base_Url + "/user/profile/update",
+                headers: {
+                    "Content-Type": 'multipart/form-data',
+                    "Authorization": "Bearer " + token,
+                },
+                data: userData
+            };
+            dispatch(userUpdate({ config }));
+            setImage({});
         }
     };
 
@@ -114,7 +140,10 @@ const EditProfile = ({ navigation }: { navigation: any }) => {
                     <View
                         style={[styles.user, commonstyles.acjc]}
                     >
-                        <Image source={icons.user_dumy} style={styles.user_dummy} />
+                        <Image
+                            source={image?.uri && { uri: image?.uri } || user?.profile_img && { uri: getImagUrl(user?.profile_img) } || icons.user_dumy}
+                            style={styles.user_dummy}
+                        />
 
                         {/* edit button */}
                         <TouchableOpacity
@@ -232,6 +261,7 @@ const styles = StyleSheet.create({
     user_dummy: {
         width: 160,
         height: 160,
+        borderRadius: 100,
     },
     user: {
         borderWidth: 5,

@@ -1,3 +1,5 @@
+import { _Image_Url } from "../config/staticVariables";
+
 export const getFullDate = (): string => {
     const months: string[] = [
         'January', 'February', 'March', 'April', 'May', 'June',
@@ -15,4 +17,10 @@ export const getFullDate = (): string => {
     const year: number = currentDate.getFullYear();
 
     return `${dayOfWeek}, ${month} ${dayOfMonth}, ${year}`;
+};
+
+export const getImagUrl = (url: string): string => {
+    const image_url: string = url.replaceAll("\\", "/");
+    const imgUrl = `${_Image_Url}${image_url}`;
+    return imgUrl;
 };
