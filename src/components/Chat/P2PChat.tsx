@@ -1,5 +1,5 @@
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
 import { commonstyles } from '../../assets/css/CommonStyles';
 import { useSelector } from 'react-redux';
 import colors from '../../config/colors';
@@ -8,8 +8,9 @@ import { _Height, _Width } from '../../config/staticVariables';
 import { icons } from '../../config/icons';
 import { fonts } from '../../config/fonts';
 
+
 const P2PChat = ({ navigation }: { navigation: any }) => {
-  const { user, user_loading } = useSelector((state: any) => state.userSlice);
+  const { user } = useSelector((state: any) => state.userSlice);
   const [message, setMessage] = useState<string>("");
 
   return (
@@ -166,7 +167,6 @@ const P2PChat = ({ navigation }: { navigation: any }) => {
                     <Image style={styles.readStat} source={icons.read} />
                   </View>
                 </View>
-
               </View>
             </ScrollView>
           </View>

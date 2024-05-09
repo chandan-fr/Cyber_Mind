@@ -75,6 +75,7 @@ export type User_Form_Data = {
 
 export type Chat_Thread_Props = {
     item: {[key: string]: string};
+    navigation: any;
 };
 
 export type Profile_Image = {

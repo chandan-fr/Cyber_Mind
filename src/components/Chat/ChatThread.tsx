@@ -8,10 +8,11 @@ import { _Width } from '../../config/staticVariables';
 import { Chat_Thread_Props } from '../../config/CustomTypes';
 
 
-const ChatThread = ({ item }: Chat_Thread_Props): JSX.Element => {
+const ChatThread = ({ item, navigation }: Chat_Thread_Props): JSX.Element => {
     return (
         <TouchableOpacity
             style={[styles.chatContainer, commonstyles.fdRow, commonstyles.acjsb]}
+            onPress={() => navigation.navigate("p2pchat")}
         >
             <View style={styles.left}>
                 <Image source={icons.woman} style={styles.userIcon} />

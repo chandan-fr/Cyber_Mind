@@ -6,4 +6,5 @@ export const images = {
     bgimg: require("../assets/images/bgimg.png"),
     agd: require("../assets/images/anglrGrdnt.png"),
     jhikimiki: require("../assets/images/jhikimiki.png"),
+    fchbg: require("../assets/images/fchbg.png"),
 };

@@ -2,8 +2,11 @@ import { FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View }
 import React from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import ChatThread from './ChatThread';
+import { useNavigation } from '@react-navigation/native';
 
 const Online = (): JSX.Element => {
+  const navigation = useNavigation();
+
   return (
     <View style={[commonstyles.parent, { marginHorizontal: 20, marginTop: 20 }]}>
       <FlatList
@@ -11,7 +14,7 @@ const Online = (): JSX.Element => {
         showsVerticalScrollIndicator={false}
         keyExtractor={(_, index: number) => index.toString()}
         renderItem={({ item }) => (
-          <ChatThread item={item} />
+          <ChatThread item={item} navigation={navigation} />
         )}
       />
 

@@ -105,4 +105,10 @@ module.exports = {
     promptmodal:{
         bgcolor: 'rgba(255, 255, 255, 0.5)'
     },
+    fchome:{
+        gdcolor: ["#49C4FC", "#13CCD9"],
+        month:"rgba(0, 0, 0, 0.2)",
+        underline: "#13A3B0",
+        calendarborder: "#E3E3E3",
+    },
 };

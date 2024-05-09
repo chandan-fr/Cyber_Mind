@@ -7,9 +7,10 @@ import { _Width } from '../../config/staticVariables';
 import { icons } from '../../config/icons';
 import { useNavigation } from '@react-navigation/native';
 
+
 const Group = (): JSX.Element => {
   const navigation: any = useNavigation();
-  
+
   return (
     <View style={[commonstyles.parent, { marginHorizontal: 20, marginTop: 20 }]}>
       <ScrollView>
@@ -19,12 +20,12 @@ const Group = (): JSX.Element => {
           onPress={() => navigation.navigate("p2pchat")}
         >
           <View style={styles.left}>
-            <Image source={require("../../assets/temp/woman.png")} style={styles.userIcon} />
+            <Image source={require("../../assets/icons/group.png")} style={styles.userIcon} />
             <View style={styles.greenDot} />
           </View>
 
           <View style={styles.mid}>
-            <Text style={styles.chatName} numberOfLines={1}>Jenny Wilson</Text>
+            <Text style={styles.chatName} numberOfLines={1}>NSO Orientation</Text>
 
             <View style={[commonstyles.fdRow, { width: 185 }]}>
               <Image source={icons.read} style={styles.chatInfoIcon} />
@@ -36,6 +37,60 @@ const Group = (): JSX.Element => {
             {/* <View style={[styles.noOfMsgWrap, commonstyles.acjc]}>
             <Text style={styles.noOfMsg}>2</Text>
           </View> */}
+
+            <Text style={styles.chatTime} >09:02</Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* sent thread */}
+        <TouchableOpacity
+          style={[styles.chatContainer, commonstyles.fdRow, commonstyles.acjsb]}
+        >
+          <View style={styles.left}>
+            <Image source={require("../../assets/icons/group.png")} style={styles.userIcon} />
+            <View style={styles.greenDot} />
+          </View>
+
+          <View style={styles.mid}>
+            <Text style={styles.chatName} numberOfLines={1}>ACOPS Collaboration</Text>
+
+            <View style={[commonstyles.fdRow, { width: 185 }]}>
+              <Image source={icons.tick} style={styles.chatInfoIcon} />
+              <Text style={styles.chatMsg} numberOfLines={1}>Let's see..</Text>
+            </View>
+          </View>
+
+          <View style={[styles.right, commonstyles.acjc]}>
+            {/* <View style={[styles.noOfMsgWrap, commonstyles.acjc]}>
+            <Text style={styles.noOfMsg}>2</Text>
+          </View> */}
+
+            <Text style={styles.chatTime} >09:02</Text>
+          </View>
+        </TouchableOpacity>
+
+        {/* received thread */}
+        <TouchableOpacity
+          style={[styles.chatContainer, commonstyles.fdRow, commonstyles.acjsb]}
+        >
+          <View style={styles.left}>
+            <Image source={require("../../assets/icons/group.png")} style={styles.userIcon} />
+            <View style={styles.greenDot} />
+          </View>
+
+          <View style={styles.mid}>
+            <Text style={styles.chatName} numberOfLines={1}>Site Members NSO</Text>
+
+            <View style={[commonstyles.fdRow, { width: 185 }]}>
+              {/* <Image source={icons.tick} style={styles.chatInfoIcon} /> */}
+              <Text style={styles.chatMsgRcvd} numberOfLines={1}>how are you?</Text>
+            </View>
+          </View>
+
+          <View style={[styles.right, commonstyles.acjc]}>
+            <View style={[styles.noOfMsgWrap, commonstyles.acjc]}>
+              <Text style={styles.noOfMsg}>2</Text>
+            </View>
 
             <Text style={styles.chatTime} >09:02</Text>
           </View>
