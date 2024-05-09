@@ -19,8 +19,6 @@ export const userLogin = createAsyncThunk("/auth/user/login", async ({ loginData
             AsyncStorage.setItem("@user", JSON.stringify(resp.data.data));
             AsyncStorage.setItem("@token", resp.data.token);
             navigation.replace("drawernav");
-            console.log(resp.data.data);
-            
             return { user: resp.data.data, token: resp.data.token };
         }
     } catch (exc: any) {

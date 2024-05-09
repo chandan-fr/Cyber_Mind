@@ -102,4 +102,7 @@ module.exports = {
         sendvoicebg:"#009EF5",
         chattimecolor: "#333232",
     },
+    promptmodal:{
+        bgcolor: 'rgba(255, 255, 255, 0.5)'
+    },
 };

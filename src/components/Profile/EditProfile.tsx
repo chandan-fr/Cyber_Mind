@@ -11,8 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { showModal } from '../../services/slices/UtilitySlice';
 import { ImagePickerResponse, launchImageLibrary } from 'react-native-image-picker';
 import { userDataUpdate, userImageUpdate } from '../../services/slices/UserSlice';
-import { getImagUrl, hasGalleryPermission } from '../../utility/UtilityFunctions';
+import { convertToFormData, getImagUrl, hasGalleryPermission } from '../../utility/UtilityFunctions';
+import PromptModal from '../PromptModal';
 
+var imgData: any;
 
 const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
     const { user, token } = useSelector((state: any) => state.userSlice);
@@ -20,6 +22,8 @@ const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
     const [formData, setFormData] = useState<User_Form_Data>({ email: user?.email, phone: user?.phone, city_state: user?.city_state, full_name: user?.full_name });
     const [formError, setFormError] = useState<Form_Error>({});
     const [image, setImage] = useState<Profile_Image>({});
+    const [visible, setVisible] = useState<boolean>(false);
+
     const dispatch: any = useDispatch();
 
     const validateForm = (): Form_Error => {
@@ -54,36 +58,26 @@ const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
                 const res: ImagePickerResponse = await launchImageLibrary({ mediaType: "photo" });
                 rawData = res?.assets && res?.assets[0];
             }
-
+            imgData = rawData;
             setImage({ type: rawData?.type, uri: rawData?.uri, name: rawData?.fileName });
 
-            rawData && Alert.alert("Cyber Mind", "Update Profile Image?", [
-                {
-                    text: 'Cancel',
-                    onPress: () => setImage({}),
-                    style: 'cancel',
-                },
-                { text: 'OK', onPress: () => updateImage(rawData) },
-            ]);
+            rawData && setVisible(true);
         } catch (exc: any) {
             dispatch(showModal({ msg: exc?.message, type: "error" }));
         }
     };
 
-    const convertToFormData = (data: any): FormData => {
-        const formValue = new FormData();
-        formValue.append('profile_img', { type: data?.type, uri: data?.uri, name: data?.fileName });
-        return formValue;
+    const cancelImage = () => {
+        setVisible(false);
+        setImage({});
     };
 
     const updateImage = (data: any) => {
-        console.log("called");
         if (data?.uri) {
-            console.log("called if");
-            
             const profile_img = convertToFormData(data);
             dispatch(userImageUpdate({ profile_img, token }));
             setImage({});
+            setVisible(false);
         }
     };
 
@@ -95,7 +89,7 @@ const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
             dispatch(userDataUpdate({ _Header, formData }));
         }
     };
-    
+
     return (
         <TouchableWithoutFeedback style={commonstyles.parent} onPress={Keyboard.dismiss}>
             <View style={[commonstyles.parent, { backgroundColor: colors.userprofile.bgcolor }]}>
@@ -131,7 +125,7 @@ const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
                         style={[styles.user, commonstyles.acjc]}
                     >
                         <Image
-                            source={image?.uri && { uri: image?.uri } || user?.profile_img && { 
+                            source={image?.uri && { uri: image?.uri } || user?.profile_img && {
                                 uri: user?.profile_img.includes("profile_photos") ? getImagUrl(user?.profile_img) : user?.profile_img
                             } || icons.user_dumy}
                             style={styles.user_dummy}
@@ -212,6 +206,9 @@ const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
                         </View>
                     </ScrollView>
                 </KeyboardAvoidingView>
+
+                {/* modal */}
+                <PromptModal visible={visible} msg='Update Profile Image?' onPressCancel={cancelImage} onPressOK={()=>updateImage(imgData)} />
             </View>
         </TouchableWithoutFeedback>
     )

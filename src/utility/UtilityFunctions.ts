@@ -40,3 +40,9 @@ export const hasGalleryPermission = async (dispatch: any): Promise<boolean> => {
         return false;
     }
 };
+
+export const convertToFormData = (data: any): FormData => {
+    const formValue = new FormData();
+    formValue.append('profile_img', { type: data?.type, uri: data?.uri, name: data?.fileName });
+    return formValue;
+};

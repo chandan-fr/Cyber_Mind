@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: "center",
         marginHorizontal: 30,
-        marginTop: _Height / 2.3,
         padding: 15,
         ...Platform.select({
             ios: {

@@ -12,7 +12,8 @@ const DrawerNavigation = (): JSX.Element => {
             screenOptions={{
                 drawerStyle: styles.drawerStyle,
                 drawerType: "front",
-                swipeEdgeWidth: Platform.OS === "android" ? 100 : undefined
+                swipeEdgeWidth: Platform.OS === "android" ? 100 : undefined,
+                swipeEnabled: false
             }}
             drawerContent={(props) => <CustomDrawerScreen {...props} />}
         >

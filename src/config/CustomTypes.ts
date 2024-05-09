@@ -82,4 +82,11 @@ export type Profile_Image = {
     fileName?: string;
     uri?: string;
     type?: string;
-}
+};
+
+export type Prompt_Modal_Props = {
+    visible: boolean;
+    msg: string;
+    onPressOK: Function;
+    onPressCancel: Function;
+};
