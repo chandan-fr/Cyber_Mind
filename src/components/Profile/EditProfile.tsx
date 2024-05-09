@@ -95,10 +95,10 @@ const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
             dispatch(userDataUpdate({ _Header, formData }));
         }
     };
-
+    
     return (
         <TouchableWithoutFeedback style={commonstyles.parent} onPress={Keyboard.dismiss}>
-            <View style={[commonstyles.parent, { backgroundColor: colors.userprofile.bgcolor, height: _Height }]}>
+            <View style={[commonstyles.parent, { backgroundColor: colors.userprofile.bgcolor }]}>
                 {/* top content */}
                 <LinearGradient
                     style={styles.headerTop}
@@ -131,7 +131,9 @@ const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
                         style={[styles.user, commonstyles.acjc]}
                     >
                         <Image
-                            source={image?.uri && { uri: image?.uri } || user?.profile_img && { uri: getImagUrl(user?.profile_img) } || icons.user_dumy}
+                            source={image?.uri && { uri: image?.uri } || user?.profile_img && { 
+                                uri: user?.profile_img.includes("profile_photos") ? getImagUrl(user?.profile_img) : user?.profile_img
+                            } || icons.user_dumy}
                             style={styles.user_dummy}
                         />
 

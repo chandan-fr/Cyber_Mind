@@ -65,7 +65,7 @@ const Home = ({ navigation }: { navigation: any }): JSX.Element => {
                                 {getFullDate()}
                             </Text>
 
-                            <Text style={styles.btmWlcmUser}>Welcome User</Text>
+                            <Text style={styles.btmWlcmUser} numberOfLines={1}>Welcome {user?.full_name?.split(" ")[0]}</Text>
                             <Text style={styles.btmWish}>Have a nice day !</Text>
                         </View>
                     </View>
@@ -109,19 +109,27 @@ const Home = ({ navigation }: { navigation: any }): JSX.Element => {
                     <Text style={styles.memberHeading}>All Members</Text>
 
                     <View style={[styles.memberWrap, commonstyles.fdRow]}>
-                        <FlatList
-                            data={all_member.slice(0, 4)}
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            keyExtractor={(_, idx) => idx.toString()}
-                            renderItem={({ item, index }) => (
-                                <TouchableOpacity
-                                    style={styles.member}
-                                >
-                                    <Image source={item?.user?.profile_img ? { uri: getImagUrl(item?.user?.profile_img) } : icons.user_dumy} style={styles.memberImg} />
-                                </TouchableOpacity>
-                            )}
-                        />
+                        {all_member.length ?
+                            <FlatList
+                                data={all_member.slice(0, 4)}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                keyExtractor={(_, idx) => idx.toString()}
+                                renderItem={({ item, index }) => (
+                                    <TouchableOpacity
+                                        style={styles.member}
+                                    >
+                                        <Image
+                                            source={item?.user?.profile_img ? { uri: getImagUrl(item?.user?.profile_img) } : icons.user_dumy}
+                                            style={styles.memberImg} />
+                                    </TouchableOpacity>
+                                )}
+                            />
+                            :
+                            <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
+                                <Image source={icons.plus} style={[styles.menu]}/>
+                            </TouchableOpacity>
+                        }
 
                         {all_member.length > 4 &&
                             <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
@@ -240,6 +248,7 @@ const styles = StyleSheet.create({
         fontFamily: fonts.bold,
         fontSize: 21,
         color: colors.white,
+        maxWidth: _Width - 70,
     },
     banner: {
         marginHorizontal: 30,

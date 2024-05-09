@@ -43,7 +43,8 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props): JSX.Element => {
             await GoogleSignin.signOut();
             Alert.alert("Sign Out Successfull!");
         } catch (exc) {
-            Alert.alert("Sign Out Failed!");
+            // Alert.alert("Sign Out Failed!");
+            console.log("Sign Out Failed!");
         }
     };
 
@@ -74,7 +75,12 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props): JSX.Element => {
                                 <TouchableOpacity
                                     style={[styles.userWrap, commonstyles.acjc]}
                                 >
-                                    <Image source={user?.profile_img ? { uri: getImagUrl(user?.profile_img) } : icons.user_dumy} style={styles.user_dummy} />
+                                    <Image
+                                        source={user?.profile_img ? { 
+                                            uri: user?.profile_img.includes("profile_photos") ? getImagUrl(user?.profile_img) : user?.profile_img
+                                        } : icons.user_dumy}
+                                        style={styles.user_dummy}
+                                    />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity

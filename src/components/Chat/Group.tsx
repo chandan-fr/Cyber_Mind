@@ -5,8 +5,11 @@ import colors from '../../config/colors';
 import { fonts } from '../../config/fonts';
 import { _Width } from '../../config/staticVariables';
 import { icons } from '../../config/icons';
+import { useNavigation } from '@react-navigation/native';
 
-const Group = ({ navigation }: { navigation: any }): JSX.Element => {
+const Group = (): JSX.Element => {
+  const navigation: any = useNavigation();
+  
   return (
     <View style={[commonstyles.parent, { marginHorizontal: 20, marginTop: 20 }]}>
       <ScrollView>

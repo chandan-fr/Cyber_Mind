@@ -12,9 +12,9 @@ import { getImagUrl } from '../../utility/UtilityFunctions';
 
 const UserProfile = ({ navigation }: { navigation: any }): JSX.Element => {
   const { user } = useSelector((state: any) => state.userSlice);
-  
+
   return (
-    <View style={[commonstyles.parent, { backgroundColor: colors.userprofile.bgcolor, height: _Height }]}>
+    <View style={[commonstyles.parent, { backgroundColor: colors.userprofile.bgcolor, }]}>
       {/* top content */}
       <LinearGradient
         style={styles.headerTop}
@@ -26,15 +26,16 @@ const UserProfile = ({ navigation }: { navigation: any }): JSX.Element => {
         {/* navigation */}
         <View style={[styles.navWrap, commonstyles.fdRow]}>
           <TouchableOpacity
-            style={[styles.nav, commonstyles.acjc]}
+            style={[styles.menuWrap, commonstyles.acjc]}
+            onPress={() => navigation.openDrawer()}
           >
-            <Image source={icons.arrow} style={styles.navImg} />
+            <Image source={icons.menu} style={styles.menu} />
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.menu, commonstyles.acjc]}
+            style={[styles.dotsWrap, commonstyles.acjc]}
           >
-            <Image source={icons.dots} style={styles.menuImg} />
+            <Image source={icons.dots} style={styles.dots} />
           </TouchableOpacity>
         </View>
 
@@ -43,7 +44,12 @@ const UserProfile = ({ navigation }: { navigation: any }): JSX.Element => {
           <View
             style={[styles.user, commonstyles.acjc]}
           >
-            <Image source={user?.profile_img ? { uri: getImagUrl(user?.profile_img) } : icons.user_dumy} style={styles.user_dummy} />
+            <Image
+              source={user?.profile_img ? { 
+                uri: user?.profile_img.includes("profile_photos") ? getImagUrl(user?.profile_img) : user?.profile_img
+              } : icons.user_dumy}
+              style={styles.user_dummy}
+            />
 
             {/* edit button */}
             <TouchableOpacity
@@ -166,12 +172,24 @@ const styles = StyleSheet.create({
     height: 20,
     tintColor: colors.white,
   },
+  menuWrap: {
+    width: 45,
+    height: 45,
+    borderRadius: 40,
+    borderWidth: 1,
+    borderColor: colors.white,
+  },
   menu: {
+    width: 30,
+    height: 30,
+    tintColor: colors.white,
+  },
+  dotsWrap: {
     width: 30,
     height: 30,
     borderRadius: 30,
   },
-  menuImg: {
+  dots: {
     width: 20,
     height: 20,
     tintColor: colors.white,
