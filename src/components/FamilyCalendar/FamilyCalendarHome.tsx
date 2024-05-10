@@ -1,14 +1,42 @@
-import { Image, ImageBackground, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { FlatList, Image, ImageBackground, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import colors from '../../config/colors';
 import { icons } from '../../config/icons';
-import { _Height } from '../../config/staticVariables';
+import { _Height, monthsArray } from '../../config/staticVariables';
 import { fonts } from '../../config/fonts';
 import { images } from '../../config/images';
+import Calendar from './Calendar';
+import { Date_State } from '../../config/CustomTypes';
+import { getMonthArray } from '../../utility/UtilityFunctions';
 
 
 const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
+    const currentDay: number = new Date().getDate();
+    const [currentDate, setCurrentDate] = useState<Date_State>(
+        {
+            currentMonth: new Date().toLocaleString('en-US', { month: 'long' }),
+            currentYear: new Date().getFullYear(),
+            currentMonthIndex: new Date().getMonth()
+        }
+    );
+    const monthData = getMonthArray();
+
+    const handleDatePress = (date: number) => {
+        console.log("date==>", date);
+
+    };
+
+    const getItemLayout = (_: any, index: number) => ({
+        length: 110,
+        offset: 90 * index,
+        index
+    });
+
+    useEffect(() => {
+        // console.log("page rendered==>");
+    }, []);
+
     return (
         <View style={commonstyles.parent}>
             {/* top content */}
@@ -39,26 +67,29 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
                 </View>
 
                 <View style={[styles.months, commonstyles.fdRow, commonstyles.acjsb]}>
-                    <View style={{ alignItems: "center" }}>
-                        <Text style={styles.month}>Jan</Text>
-                        {/* <View style={styles.underline } /> */}
-                    </View>
-
-                    <View style={{ alignItems: "center" }}>
-                        <Text style={styles.month}>Feb</Text>
-                        <View style={styles.underline} />
-                    </View>
-
-                    <View style={{ alignItems: "center" }}>
-                        <Text style={styles.month}>March</Text>
-                        {/* <View style={styles.underline } /> */}
-                    </View>
+                    <FlatList
+                        data={monthsArray}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        initialScrollIndex={currentDate.currentMonthIndex}
+                        getItemLayout={getItemLayout}
+                        pagingEnabled
+                        keyExtractor={(_, i) => i.toString()}
+                        renderItem={({ item, index }) => (
+                            <TouchableOpacity style={{ alignItems: "center", paddingHorizontal: 20, height: 55 }}>
+                                <Text style={[styles.month, {color: item.monthIndex === currentDate.currentMonthIndex ? colors.white : colors.fchome.month }]}>
+                                    {item.monthName}
+                                    </Text>
+                                {item.monthIndex === currentDate.currentMonthIndex ? <View style={styles.underline} /> : null}
+                            </TouchableOpacity>
+                        )}
+                    />
                 </View>
             </ImageBackground>
 
             {/* calendar */}
             <View style={styles.calendarWrap}>
-
+                <Calendar data={monthData} currentDay={currentDay} onDayPress={handleDatePress} navigation={navigation} />
             </View>
         </View>
     )
@@ -123,7 +154,6 @@ const styles = StyleSheet.create({
     },
     month: {
         fontSize: 27,
-        color: colors.fchome.month,
         fontFamily: fonts.bold,
     },
     underline: {
@@ -131,8 +161,14 @@ const styles = StyleSheet.create({
         height: 3,
         borderRadius: 70,
         backgroundColor: colors.fchome.underline,
+        ...Platform.select({
+            ios:{
+                marginTop: 5
+            },
+            android:{}
+        })
     },
-    calendarWrap:{
+    calendarWrap: {
         padding: 18.23,
         borderRadius: 13.67,
         backgroundColor: colors.white,
@@ -140,5 +176,5 @@ const styles = StyleSheet.create({
         borderColor: colors.fchome.calendarborder,
         marginTop: 8,
         marginHorizontal: 4,
-    }
+    },
 });

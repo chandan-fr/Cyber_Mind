@@ -6,7 +6,7 @@ export type BgGradient_Props = {
     angle?: number;
     xAxis?: number;
     yAxis?: number;
-    radius?:number;
+    radius?: number;
 };
 
 export type Button_Props = {
@@ -55,9 +55,9 @@ export type Form_Error = {
     credential?: string;
     password?: string;
     full_name?: string;
-    email?:string;
-    phone?:string;
-    city_state?:string;
+    email?: string;
+    phone?: string;
+    city_state?: string;
 };
 
 export type Icon_Props = {
@@ -74,7 +74,7 @@ export type User_Form_Data = {
 };
 
 export type Chat_Thread_Props = {
-    item: {[key: string]: string};
+    item: { [key: string]: string };
     navigation: any;
 };
 
@@ -90,4 +90,30 @@ export type Prompt_Modal_Props = {
     msg: string;
     onPressOK: Function;
     onPressCancel: Function;
+};
+
+export type DayDate = {
+    day: string;
+    date: number | null;
+    month: number;
+    time: string;
+    status: string;
+    empty?: boolean;
+    isDisabled: boolean;
+    isAbsent: string;
+    isHoliday?: boolean,
+    isLeave?: boolean,
+};
+
+export type Calendar_Props = {
+    data: Array<DayDate>;
+    currentDay: number;
+    onDayPress: Function;
+    navigation?: any;
+};
+
+export type Date_State = {
+    currentYear: number;
+    currentMonth: string;
+    currentMonthIndex: number;
 };

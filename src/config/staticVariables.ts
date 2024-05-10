@@ -24,11 +24,24 @@ export const _Height: number = Dimensions.get("window").height;
 export const _Base_Url: string = "http://192.168.7.231:4040/api";
 export const _Image_Url: string = "http://192.168.7.231:4040";
 export const _Client_ID: string = "279513793062-spf0sukctlpjgs78usr900b22oje863j.apps.googleusercontent.com";
-export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-export const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
-export const nameRegex = /^[a-zA-Z ]+$/;
-export const numericRegex = /^[0-9]+$/;
-export const Gallery_Permission: Permission = Number(Platform.Version) >= 33 ?
-    PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
-    :
-    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+export const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+export const passRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$/;
+export const nameRegex: RegExp = /^[a-zA-Z ]+$/;
+export const numericRegex: RegExp = /^[0-9]+$/;
+export const Gallery_Permission: Permission = Number(Platform.Version) >= 33 ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+
+export const _CellWidth: number = (_Width - 44.46) / 7;
+export const monthsArray = [
+    { monthIndex: 0, monthName: "Jan" },
+    { monthIndex: 1, monthName: "Feb" },
+    { monthIndex: 2, monthName: "Mar" },
+    { monthIndex: 3, monthName: "Apr" },
+    { monthIndex: 4, monthName: "May" },
+    { monthIndex: 5, monthName: "Jun" },
+    { monthIndex: 6, monthName: "Jul" },
+    { monthIndex: 7, monthName: "Aug" },
+    { monthIndex: 8, monthName: "Sep" },
+    { monthIndex: 9, monthName: "Oct" },
+    { monthIndex: 10, monthName: "Nov" },
+    { monthIndex: 11, monthName: "Dec" }
+];

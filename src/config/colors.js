@@ -110,5 +110,10 @@ module.exports = {
         month:"rgba(0, 0, 0, 0.2)",
         underline: "#13A3B0",
         calendarborder: "#E3E3E3",
+        weekday: "#8A8989",
+        weekend: "#007AFF",
+        currentday: "#FF6363",
+        day: "#2C2C2C",
+        holiday:"#FF271B"
     },
 };
