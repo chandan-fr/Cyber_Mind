@@ -1,13 +1,14 @@
-import { StyleSheet, Text, View, SafeAreaView } from 'react-native'
+import { StyleSheet, View, SafeAreaView, StatusBar } from 'react-native'
 import React from 'react'
 import FamilyCalendarNavigation from '../routes/FamilyCalendarNavigation';
 import { commonstyles } from '../assets/css/CommonStyles';
 
 const FamilyCalendar = (): JSX.Element => {
   return (
-    <SafeAreaView style={[commonstyles.parent, {}]}>
+    <View style={[commonstyles.parent, {}]}>
+      <StatusBar barStyle="default"  />
       <FamilyCalendarNavigation />
-    </SafeAreaView>
+    </View>
   )
 };
 

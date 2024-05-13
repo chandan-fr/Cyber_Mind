@@ -35,9 +35,13 @@ const BottomNavigation = (): JSX.Element => {
 
             <Tab.Screen
                 name='calendar'
-                options={{
-                    headerShown: false
-                }}
+                options={({ route }) => ({
+                    headerShown: false,
+                    tabBarStyle: {
+                        ...commonstyles.tabBarStyle,
+                        display: getFocusedRouteNameFromRoute(route) === "addevent" || getFocusedRouteNameFromRoute(route) === "addtodo" ? "none" : "flex",
+                    },
+                })}
                 component={FamilyCalendar}
             />
 
@@ -54,6 +58,7 @@ const BottomNavigation = (): JSX.Element => {
                     //     backgroundColor: colors.chathome.notifinum,
                     //     color: colors.white,
                     // },
+                    
                 })}
                 component={Chat}
             />

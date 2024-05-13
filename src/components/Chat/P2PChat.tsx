@@ -57,7 +57,7 @@ const P2PChat = ({ navigation }: { navigation: any }) => {
         </View>
 
         {/* user status */}
-        <View style={[commonstyles.acjc]}>
+        <View style={[commonstyles.acjc, { marginVertical: Platform.OS === "android" ? 0 : 5 }]}>
           <Text style={styles.userStatus}>Online</Text>
         </View>
 
@@ -232,16 +232,19 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 60,
     ...Platform.select({
       ios: {
-        height: _Height * 0.34,
+        height: _Height * 0.39,
       },
       android: {
-        height: _Height * 0.39,
+        height: _Height * 0.42,
       }
     })
   },
   navWrap: {
     marginHorizontal: 20,
-    marginTop: 25,
+    ...Platform.select({
+      ios: { marginTop: 60, },
+      android: { marginTop: 50, }
+    }),
     alignItems: "center",
     justifyContent: "space-between",
   },

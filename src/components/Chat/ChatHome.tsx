@@ -96,17 +96,20 @@ const styles = StyleSheet.create({
         width: "100%",
         ...Platform.select({
             ios: {
-                height: _Height * 0.21,
+                height: _Height * 0.23,
             },
             android: {
-                height: _Height * 0.24,
+                height: _Height * 0.25,
             }
         }),
         borderBottomLeftRadius: 40,
         borderBottomRightRadius: 40,
     },
     topMenuWrap: {
-        marginTop: 25,
+        ...Platform.select({
+            ios: { marginTop: 60, },
+            android: { marginTop: 50, }
+        }),
         alignItems: "center",
         justifyContent: "space-between",
     },

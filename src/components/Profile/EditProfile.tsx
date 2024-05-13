@@ -105,7 +105,7 @@ const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
                     <View style={[styles.navWrap, commonstyles.fdRow]}>
                         <TouchableOpacity
                             style={[styles.navMenu, commonstyles.acjc]}
-                            onPress={() => navigation.goBack()}
+                            onPress={() => navigation.navigate("userprofile")}
                         >
                             <Text style={styles.navTxt}>Cancel</Text>
                         </TouchableOpacity>
@@ -145,7 +145,7 @@ const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
                 <KeyboardAvoidingView
                     style={{ marginTop: 50, marginHorizontal: 25, flex: 1 }}
                     behavior={Platform.OS === "ios" ? "padding" : undefined}
-                    keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+                    keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
                 >
                     <ScrollView showsVerticalScrollIndicator={false}>
                         <View style={{ rowGap: 40 }}>
@@ -208,7 +208,7 @@ const EditProfile = ({ navigation }: { navigation: any }): JSX.Element => {
                 </KeyboardAvoidingView>
 
                 {/* modal */}
-                <PromptModal visible={visible} msg='Update Profile Image?' onPressCancel={cancelImage} onPressOK={()=>updateImage(imgData)} />
+                <PromptModal visible={visible} msg='Update Profile Image?' onPressCancel={cancelImage} onPressOK={() => updateImage(imgData)} />
             </View>
         </TouchableWithoutFeedback>
     )
@@ -220,16 +220,19 @@ const styles = StyleSheet.create({
     headerTop: {
         ...Platform.select({
             ios: {
-                height: _Height * 0.2,
+                height: _Height * 0.24,
             },
             android: {
-                height: _Height * 0.23,
+                height: _Height * 0.26,
             }
         })
     },
     navWrap: {
         marginHorizontal: 20,
-        marginTop: 25,
+        ...Platform.select({
+            ios: { marginTop: 60, },
+            android: { marginTop: 50, }
+        }),
         alignItems: "center",
         justifyContent: "space-between",
     },

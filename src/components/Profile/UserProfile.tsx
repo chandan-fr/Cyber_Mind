@@ -45,7 +45,7 @@ const UserProfile = ({ navigation }: { navigation: any }): JSX.Element => {
             style={[styles.user, commonstyles.acjc]}
           >
             <Image
-              source={user?.profile_img ? { 
+              source={user?.profile_img ? {
                 uri: user?.profile_img.includes("profile_photos") ? getImagUrl(user?.profile_img) : user?.profile_img
               } : icons.user_dumy}
               style={styles.user_dummy}
@@ -68,7 +68,7 @@ const UserProfile = ({ navigation }: { navigation: any }): JSX.Element => {
       </LinearGradient>
 
       {/* profile content */}
-      <View style={styles.profileMenu}>
+      <View style={[styles.profileMenu, commonstyles.parent]}>
         {/* content section */}
         <View style={{ paddingVertical: 8 }}>
           <TouchableOpacity
@@ -147,16 +147,19 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 60,
     ...Platform.select({
       ios: {
-        height: _Height * 0.37,
+        height: _Height * 0.44,
       },
       android: {
-        height: _Height * 0.42,
+        height: _Height * 0.47,
       }
     })
   },
   navWrap: {
     marginHorizontal: 20,
-    marginTop: 25,
+    ...Platform.select({
+      ios: { marginTop: 60, },
+      android: { marginTop: 50, }
+    }),
     alignItems: "center",
     justifyContent: "space-between",
   },
@@ -231,7 +234,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         ...StyleSheet.absoluteFillObject,
-        height: 383,
+        height: "100%",
         zIndex: -1,
       },
       android: {}
@@ -240,16 +243,15 @@ const styles = StyleSheet.create({
   profileMenu: {
     marginHorizontal: 30,
     borderRadius: 18,
+    marginBottom: 40,
     borderWidth: 3,
     borderColor: colors.white,
     ...Platform.select({
       ios: {
         marginTop: -35,
-        height: 390,
       },
       android: {
         marginTop: -40,
-        height: 380,
       }
     }),
     backgroundColor: colors.userprofile.contentbgcolor,

@@ -1,4 +1,4 @@
-import { FlatList, Image, ImageBackground, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View, VirtualizedList } from 'react-native'
+import { FlatList, Image, ImageBackground, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import colors from '../../config/colors';
@@ -8,11 +8,12 @@ import { fonts } from '../../config/fonts';
 import { images } from '../../config/images';
 import Calendar from './Calendar';
 import { Date_State } from '../../config/CustomTypes';
-import { getMonthArray } from '../../utility/UtilityFunctions';
-import { combineSlices } from '@reduxjs/toolkit';
+import { getImagUrl, getMonthArray } from '../../utility/UtilityFunctions';
+import { useSelector } from 'react-redux';
 
 
 const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
+    const { user } = useSelector((state: any) => state.userSlice);
     const currentDay: number = new Date().getDate();
     const [currentDate, setCurrentDate] = useState<Date_State>(
         {
@@ -178,7 +179,7 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
                                             <TouchableOpacity
                                                 style={[styles.remTodoWrap, commonstyles.fdRow, { backgroundColor: item }]}
                                             >
-                                                <Image style={styles.reminderImg} source={icons.man} />
+                                                <Image style={styles.reminderImg} source={user?.profile_img ? { uri: getImagUrl(user?.profile_img) } : icons.man} />
 
                                                 <View style={[commonstyles.parent, { rowGap: Platform.OS === "android" ? 4 : 8 }]}>
                                                     <Text style={styles.reminderTodoHeading} numberOfLines={1}>
@@ -209,18 +210,21 @@ const styles = StyleSheet.create({
     headerTop: {
         ...Platform.select({
             ios: {
-                height: _Height * 0.19,
+                height: _Height * 0.22,
             },
             android: {
-                height: _Height * 0.23,
+                height: _Height * 0.25,
             }
         }),
     },
     navWrap: {
         marginHorizontal: 20,
-        marginTop: 25,
         alignItems: "center",
         justifyContent: "space-between",
+        ...Platform.select({
+            ios: { marginTop: 60, },
+            android: { marginTop: 50, }
+        })
     },
     nav: {
         borderWidth: 1,
@@ -314,8 +318,8 @@ const styles = StyleSheet.create({
         columnGap: 10,
     },
     reminderImg: {
-        width: 25,
-        height: 25,
+        width: 35,
+        height: 35,
         borderRadius: 9.03,
     },
     timer: {

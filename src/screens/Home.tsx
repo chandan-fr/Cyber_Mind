@@ -28,138 +28,136 @@ const Home = ({ navigation }: { navigation: any }): JSX.Element => {
     }, [token]);
 
     return (
-        <SafeAreaView style={[commonstyles.parent, { backgroundColor: colors.home.bgcolor }]}>
-            <View style={{ flex: 1, }}>
-                {/* top header section */}
-                <LinearGradient
-                    useAngle={true}
-                    angle={90}
-                    angleCenter={{ x: 0.3, y: 0 }}
-                    colors={colors.homeheader.gdcolor}
-                    style={styles.lgStyle}
-                >
-                    <ImageBackground source={images.bgimg} style={styles.imgBg} />
+        <View style={[commonstyles.parent, { backgroundColor: colors.home.bgcolor }]}>
+            {/* top header section */}
+            <LinearGradient
+                useAngle={true}
+                angle={90}
+                angleCenter={{ x: 0.3, y: 0 }}
+                colors={colors.homeheader.gdcolor}
+                style={styles.lgStyle}
+            >
+                <ImageBackground source={images.bgimg} style={styles.imgBg} />
 
-                    <View style={{ marginHorizontal: 30, rowGap: 20 }}>
-                        {/* top text */}
-                        <View style={[styles.topMenuWrap, commonstyles.fdRow]}>
-                            <TouchableOpacity
-                                style={[styles.menuWrap, commonstyles.acjc]}
-                                onPress={() => navigation.openDrawer()}
-                            >
-                                <Image source={icons.menu} style={styles.menu} />
-                            </TouchableOpacity>
+                <View style={{ marginHorizontal: 30, rowGap: 20 }}>
+                    {/* top text */}
+                    <View style={[styles.topMenuWrap, commonstyles.fdRow]}>
+                        <TouchableOpacity
+                            style={[styles.menuWrap, commonstyles.acjc]}
+                            onPress={() => navigation.openDrawer()}
+                        >
+                            <Image source={icons.menu} style={styles.menu} />
+                        </TouchableOpacity>
 
-                            <TouchableOpacity
-                                style={styles.bellWrap}
-                            >
-                                <Image source={icons.bell} style={styles.bell} />
+                        <TouchableOpacity
+                            style={styles.bellWrap}
+                        >
+                            <Image source={icons.bell} style={styles.bell} />
 
-                                <View style={styles.notiDot} />
-                            </TouchableOpacity>
-                        </View>
-
-                        {/* bottom text */}
-                        <View style={styles.btmMenuWrap}>
-                            <Text style={styles.btmDate}>
-                                {getFullDate()}
-                            </Text>
-
-                            <Text style={styles.btmWlcmUser} numberOfLines={1}>Welcome {user?.full_name?.split(" ")[0]}</Text>
-                            <Text style={styles.btmWish}>Have a nice day !</Text>
-                        </View>
+                            <View style={styles.notiDot} />
+                        </TouchableOpacity>
                     </View>
-                </LinearGradient>
 
-                {/* banner section */}
-                <View style={styles.banner}>
-                    <Image source={images.agd} style={{ width: _Width - 60, height: 120 }} resizeMode='stretch' />
+                    {/* bottom text */}
+                    <View style={styles.btmMenuWrap}>
+                        <Text style={styles.btmDate}>
+                            {getFullDate()}
+                        </Text>
 
-                    <View style={[commonstyles.fdRow, { position: "absolute" }]}>
-                        {/* left section */}
-                        <View style={styles.bannerLeftWrap}>
-                            <Text style={styles.bannerHead}>Refer a Friend & Earn</Text>
-
-                            <Text style={styles.bannerPara}>
-                                Share Your Joy With Friends & Get Rewarded!
-                            </Text>
-
-                            <TouchableOpacity
-                                style={[styles.bannerBtn, commonstyles.acjc]}
-                            >
-                                <Text style={styles.bannerBtnTxt}>Reffer</Text>
-                            </TouchableOpacity>
-                        </View>
-
-                        {/* right section */}
-                        <View style={[{ position: "relative", flex: 1 }, commonstyles.acjc]}>
-                            <View style={[commonstyles.acjc, styles.eclipseWrap]}>
-                                <View style={styles.eclipse1} />
-                                <View style={styles.eclipse2} />
-                                <Image source={images.jhikimiki} style={styles.jhikimiki} resizeMode='stretch' />
-                            </View>
-
-                            <Image source={icons.trophy} style={styles.trophy} resizeMode='stretch' />
-                        </View>
+                        <Text style={styles.btmWlcmUser} numberOfLines={1}>Welcome {user?.full_name?.split(" ")[0]}</Text>
+                        <Text style={styles.btmWish}>Have a nice day !</Text>
                     </View>
                 </View>
+            </LinearGradient>
 
-                {/* members */}
-                <View style={styles.memberContainer}>
-                    <Text style={styles.memberHeading}>All Members</Text>
+            {/* banner section */}
+            <View style={styles.banner}>
+                <Image source={images.agd} style={{ width: _Width - 60, height: 120 }} resizeMode='stretch' />
 
-                    <View style={[styles.memberWrap, commonstyles.fdRow]}>
-                        {all_member.length ?
-                            <FlatList
-                                data={all_member.slice(0, 4)}
-                                horizontal
-                                showsHorizontalScrollIndicator={false}
-                                keyExtractor={(_, idx) => idx.toString()}
-                                renderItem={({ item, index }) => (
-                                    <TouchableOpacity
-                                        style={styles.member}
-                                    >
-                                        <Image
-                                            source={item?.user?.profile_img ? { uri: getImagUrl(item?.user?.profile_img) } : icons.user_dumy}
-                                            style={styles.memberImg} />
-                                    </TouchableOpacity>
-                                )}
-                            />
-                            :
-                            <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
-                                <Image source={icons.plus} style={[styles.menu]}/>
-                            </TouchableOpacity>
-                        }
+                <View style={[commonstyles.fdRow, { position: "absolute" }]}>
+                    {/* left section */}
+                    <View style={styles.bannerLeftWrap}>
+                        <Text style={styles.bannerHead}>Refer a Friend & Earn</Text>
 
-                        {all_member.length > 4 &&
-                            <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
-                                <Text style={styles.seeAll}>See all</Text>
-                            </TouchableOpacity>
-                        }
+                        <Text style={styles.bannerPara}>
+                            Share Your Joy With Friends & Get Rewarded!
+                        </Text>
+
+                        <TouchableOpacity
+                            style={[styles.bannerBtn, commonstyles.acjc]}
+                        >
+                            <Text style={styles.bannerBtnTxt}>Reffer</Text>
+                        </TouchableOpacity>
                     </View>
-                </View>
 
-                {/* categories */}
-                <View style={styles.categoryContainer}>
-                    <Text style={styles.categoryHeading}>
-                        Categories
-                    </Text>
+                    {/* right section */}
+                    <View style={[{ position: "relative", flex: 1 }, commonstyles.acjc]}>
+                        <View style={[commonstyles.acjc, styles.eclipseWrap]}>
+                            <View style={styles.eclipse1} />
+                            <View style={styles.eclipse2} />
+                            <Image source={images.jhikimiki} style={styles.jhikimiki} resizeMode='stretch' />
+                        </View>
 
-                    <View style={styles.cardWrap}>
-                        <FlatList
-                            data={all_category}
-                            numColumns={2}
-                            showsVerticalScrollIndicator={false}
-                            columnWrapperStyle={[commonstyles.fdRow, { alignItems: "center", justifyContent: "space-between", marginBottom: 15 }]}
-                            keyExtractor={(_, index: number) => index.toString()}
-                            renderItem={({ item, index }) => (
-                                <CategoryCard item={item} navigation={navigation} />
-                            )}
-                        />
+                        <Image source={icons.trophy} style={styles.trophy} resizeMode='stretch' />
                     </View>
                 </View>
             </View>
-        </SafeAreaView>
+
+            {/* members */}
+            <View style={styles.memberContainer}>
+                <Text style={styles.memberHeading}>All Members</Text>
+
+                <View style={[styles.memberWrap, commonstyles.fdRow]}>
+                    {all_member.length ?
+                        <FlatList
+                            data={all_member.slice(0, 4)}
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            keyExtractor={(_, idx) => idx.toString()}
+                            renderItem={({ item, index }) => (
+                                <TouchableOpacity
+                                    style={styles.member}
+                                >
+                                    <Image
+                                        source={item?.user?.profile_img ? { uri: getImagUrl(item?.user?.profile_img) } : icons.user_dumy}
+                                        style={styles.memberImg} />
+                                </TouchableOpacity>
+                            )}
+                        />
+                        :
+                        <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
+                            <Image source={icons.plus} style={[styles.menu]} />
+                        </TouchableOpacity>
+                    }
+
+                    {all_member.length > 4 &&
+                        <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
+                            <Text style={styles.seeAll}>See all</Text>
+                        </TouchableOpacity>
+                    }
+                </View>
+            </View>
+
+            {/* categories */}
+            <View style={styles.categoryContainer}>
+                <Text style={styles.categoryHeading}>
+                    Categories
+                </Text>
+
+                <View style={styles.cardWrap}>
+                    <FlatList
+                        data={all_category}
+                        numColumns={2}
+                        showsVerticalScrollIndicator={false}
+                        columnWrapperStyle={[commonstyles.fdRow, { alignItems: "center", justifyContent: "space-between", marginBottom: 15 }]}
+                        keyExtractor={(_, index: number) => index.toString()}
+                        renderItem={({ item, index }) => (
+                            <CategoryCard item={item} navigation={navigation} />
+                        )}
+                    />
+                </View>
+            </View>
+        </View>
     )
 };
 
@@ -170,10 +168,10 @@ const styles = StyleSheet.create({
         width: "100%",
         ...Platform.select({
             ios: {
-                height: _Height * 0.3,
+                height: _Height * 0.32,
             },
             android: {
-                height: _Height * 0.33,
+                height: _Height * 0.35,
             }
         }),
     },
@@ -191,7 +189,10 @@ const styles = StyleSheet.create({
         })
     },
     topMenuWrap: {
-        marginTop: 30,
+        ...Platform.select({
+            ios: { marginTop: 60, },
+            android: { marginTop: 50, }
+        }),
         alignItems: "center",
         justifyContent: "space-between",
     },

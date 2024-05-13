@@ -29,7 +29,8 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props): JSX.Element => {
     const navigations: any = useNavigation();
 
     const naigateToScreen = (screenName: string, params?: string) => {
-        navigations.navigate("bottomnav", { screen: screenName, params: { screen: params } });
+        if (params) navigations.navigate("bottomnav", { screen: screenName, params: { screen: params } });
+        else navigations.navigate("bottomnav", { screen: screenName });
     };
 
     const retrieveLoginData = async (): Promise<void> => {
@@ -76,7 +77,7 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props): JSX.Element => {
                                     style={[styles.userWrap, commonstyles.acjc]}
                                 >
                                     <Image
-                                        source={user?.profile_img ? { 
+                                        source={user?.profile_img ? {
                                             uri: user?.profile_img.includes("profile_photos") ? getImagUrl(user?.profile_img) : user?.profile_img
                                         } : icons.user_dumy}
                                         style={styles.user_dummy}
@@ -95,7 +96,7 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props): JSX.Element => {
                             <View style={[commonstyles.fdRow, styles.btmWrap]}>
                                 <View style={{ marginLeft: 20, alignItems: "flex-start", rowGap: Platform.OS === "android" ? -8 : 0 }}>
                                     <Text numberOfLines={1} style={styles.sideDrawerHead}>{user?.full_name}</Text>
-                                    <Text style={styles.sideDrawerSubHead}>{user?.email}</Text>
+                                    <Text numberOfLines={1} style={styles.sideDrawerSubHead}>{user?.email}</Text>
                                 </View>
 
                                 <TouchableOpacity
@@ -241,7 +242,7 @@ const styles = StyleSheet.create({
             android: {
                 elevation: 3,
                 shadowColor: colors.drawertop.shadowcolor,
-                height: _Height * 0.28,
+                height: _Height * 0.31,
             }
         }),
     },
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
                 paddingTop: 40,
             },
             android: {
-
+                marginTop: 30,
             }
         })
     },
@@ -268,7 +269,7 @@ const styles = StyleSheet.create({
                 height: _Height * 0.3,
             },
             android: {
-                height: _Height * 0.28,
+                height: _Height * 0.31,
             }
         }),
     },
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
                 height: _Height * 0.3,
             },
             android: {
-                height: _Height * 0.28,
+                height: _Height * 0.31,
             }
         })
     },
@@ -335,6 +336,7 @@ const styles = StyleSheet.create({
         color: colors.white,
         fontSize: 12,
         fontFamily: fonts.regular,
+        width: 175,
     },
     sideMidView: {
         marginTop: 25,
