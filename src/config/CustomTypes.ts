@@ -110,6 +110,7 @@ export type Calendar_Props = {
     currentDay: number;
     onDayPress: Function;
     navigation?: any;
+    monthIndex: number;
 };
 
 export type Date_State = {

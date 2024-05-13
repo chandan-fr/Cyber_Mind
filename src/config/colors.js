@@ -114,6 +114,8 @@ module.exports = {
         weekend: "#007AFF",
         currentday: "#FF6363",
         day: "#2C2C2C",
-        holiday:"#FF271B"
+        holiday:"#FF271B",
+        addeventbg: "#009EF5",
+        eventheading: "#FF5E55",
     },
 };

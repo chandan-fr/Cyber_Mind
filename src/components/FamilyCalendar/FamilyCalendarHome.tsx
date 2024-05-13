@@ -17,10 +17,11 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
         {
             currentMonth: new Date().toLocaleString('en-US', { month: 'long' }),
             currentYear: new Date().getFullYear(),
-            currentMonthIndex: new Date().getMonth()
+            currentMonthIndex: new Date().getMonth(),
         }
     );
-    const monthData = getMonthArray();
+
+    const monthData = getMonthArray(currentDate.currentMonthIndex);
 
     const handleDatePress = (date: number) => {
         console.log("date==>", date);
@@ -66,6 +67,7 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
                     </TouchableOpacity>
                 </View>
 
+                {/* month view */}
                 <View style={[styles.months, commonstyles.fdRow, commonstyles.acjsb]}>
                     <FlatList
                         data={monthsArray}
@@ -73,13 +75,16 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
                         showsHorizontalScrollIndicator={false}
                         initialScrollIndex={currentDate.currentMonthIndex}
                         getItemLayout={getItemLayout}
-                        pagingEnabled
+                        // pagingEnabled
                         keyExtractor={(_, i) => i.toString()}
                         renderItem={({ item, index }) => (
-                            <TouchableOpacity style={{ alignItems: "center", paddingHorizontal: 20, height: 55 }}>
-                                <Text style={[styles.month, {color: item.monthIndex === currentDate.currentMonthIndex ? colors.white : colors.fchome.month }]}>
+                            <TouchableOpacity
+                                style={{ alignItems: "center", paddingHorizontal: 20, height: 55 }}
+                                onPress={() => setCurrentDate({ ...currentDate, currentMonthIndex: index })}
+                            >
+                                <Text style={[styles.month, { color: item.monthIndex === currentDate.currentMonthIndex ? colors.white : colors.fchome.month }]}>
                                     {item.monthName}
-                                    </Text>
+                                </Text>
                                 {item.monthIndex === currentDate.currentMonthIndex ? <View style={styles.underline} /> : null}
                             </TouchableOpacity>
                         )}
@@ -89,7 +94,23 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
 
             {/* calendar */}
             <View style={styles.calendarWrap}>
-                <Calendar data={monthData} currentDay={currentDay} onDayPress={handleDatePress} navigation={navigation} />
+                <Calendar data={monthData} currentDay={currentDay} monthIndex={currentDate.currentMonthIndex} onDayPress={handleDatePress} navigation={navigation} />
+            </View>
+
+            {/* events */}
+            <View style={{ borderWidth: 1, marginTop: 20, }}>
+                <Text style={styles.eventHeading}>
+                    Today Event
+                </Text>
+
+                <TouchableOpacity
+                    style={[styles.addEventBtn, commonstyles.acjc]}
+                >
+                    <Image source={icons.plus} style={styles.plus} />
+                </TouchableOpacity>
+
+                <View style={[commonstyles.fdRow,]}>
+                </View>
             </View>
         </View>
     )
@@ -162,10 +183,10 @@ const styles = StyleSheet.create({
         borderRadius: 70,
         backgroundColor: colors.fchome.underline,
         ...Platform.select({
-            ios:{
+            ios: {
                 marginTop: 5
             },
-            android:{}
+            android: {}
         })
     },
     calendarWrap: {
@@ -176,5 +197,32 @@ const styles = StyleSheet.create({
         borderColor: colors.fchome.calendarborder,
         marginTop: 8,
         marginHorizontal: 4,
+    },
+    addEventBtn: {
+        backgroundColor: colors.fchome.addeventbg,
+        width: 40,
+        height: 40,
+        borderRadius: 30,
+        alignSelf: "flex-end",
+        marginRight: 20,
+        ...Platform.select({
+            ios:{
+                marginTop: -32,
+            },
+            android:{
+                marginTop: -37,
+            }
+        })
+    },
+    plus: {
+        width: 15,
+        height: 15,
+        tintColor: colors.white,
+    },
+    eventHeading: {
+        fontSize: 18,
+        color: colors.fchome.eventheading,
+        fontFamily: fonts.medium,
+        textAlign: "center",
     },
 });

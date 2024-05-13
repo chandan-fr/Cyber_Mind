@@ -8,7 +8,9 @@ import colors from '../../config/colors';
 import { Calendar_Props } from '../../config/CustomTypes';
 
 
-const Calendar = ({ data, currentDay, onDayPress }: Calendar_Props): JSX.Element => {
+const Calendar = ({ data, currentDay, monthIndex, onDayPress, navigation }: Calendar_Props): JSX.Element => {
+    const currentMonthIndex: number = new Date().getMonth();
+    
     useEffect(() => {
         // console.log("caledar render");
 
@@ -28,7 +30,7 @@ const Calendar = ({ data, currentDay, onDayPress }: Calendar_Props): JSX.Element
                         disabled={item?.date === null ? true : false}
                     >
                         <Text style={item?.isHoliday ? styles.dayTxtHldy : styles.dayTxt}>{item?.date}</Text>
-                        {!item.empty && currentDay === item?.date ? <View style={styles.underline} /> : null}
+                        {!item.empty && currentDay === item?.date && currentMonthIndex === monthIndex ? <View style={styles.underline} /> : null}
                     </TouchableOpacity>
                 )}
             />

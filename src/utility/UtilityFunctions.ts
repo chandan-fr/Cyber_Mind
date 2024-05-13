@@ -48,11 +48,11 @@ export const convertToFormData = (data: any): FormData => {
     return formValue;
 };
 
-export const getMonthToDatesArray = (): Array<DayDate> => {
+export const getMonthToDatesArray = (monthIdx: number): Array<DayDate> => {
     const currentDate = new Date();
     const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const startIndex = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
+    const month = monthIdx ? monthIdx : currentDate.getMonth();
+    const startIndex = new Date(currentDate.getFullYear(), month, 1).getDay();
 
     const firstDayOfMonth = new Date(year, month, 1);
     const lastDayOfMonth = new Date(year, month + 1, 0);
@@ -75,9 +75,9 @@ export const getMonthToDatesArray = (): Array<DayDate> => {
     return newDayDateArray;
 };
 
-export const getMonthArray = (): Array<DayDate> => {
+export const getMonthArray = (monthIdx: number): Array<DayDate> => {
     let data: any[] = [];
-    const monthData: Array<DayDate> = getMonthToDatesArray();
+    const monthData: Array<DayDate> = getMonthToDatesArray(monthIdx);
 
     for (let i: number = 0, j: number = 0; i < monthData.length; i++) {
         if (i == 0) {
