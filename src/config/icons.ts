@@ -34,4 +34,5 @@ export const icons = {
     woman: require("../assets/icons/woman.png"),
     send: require("../assets/icons/send.png"),
     plus: require("../assets/icons/plus.png"),
+    timer: require("../assets/icons/timer.png"),
 };

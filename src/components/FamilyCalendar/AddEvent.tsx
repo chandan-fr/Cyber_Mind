@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { commonstyles } from '../../assets/css/CommonStyles';
+import colors from '../../config/colors';
 
-const AddEvent = () => {
+const AddEvent = ({ navigation }: { navigation: any }) => {
     return (
-        <View>
-            <Text>AddEvent</Text>
+        <View style={[commonstyles.parent, { backgroundColor: colors.createevent.bgcolor }]}>
+            <Text>CreateEvent</Text>
         </View>
     )
 };

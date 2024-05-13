@@ -117,5 +117,9 @@ module.exports = {
         holiday:"#FF271B",
         addeventbg: "#009EF5",
         eventheading: "#FF5E55",
+        eventtimeline: "rgba(0, 0, 0, 0.5)",
     },
+    createevent:{
+        bgcolor:"#E2F3F3",
+    }
 };
