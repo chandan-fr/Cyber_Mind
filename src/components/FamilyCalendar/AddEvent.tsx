@@ -548,7 +548,7 @@ const styles = StyleSheet.create({
     },
     saveBtn: {
         backgroundColor: colors.addevent.savebg,
-        paddingHorizontal: 15,
+        paddingHorizontal: 25,
         paddingVertical: 4,
         borderRadius: 21.5,
     },
