@@ -119,7 +119,20 @@ module.exports = {
         eventheading: "#FF5E55",
         eventtimeline: "rgba(0, 0, 0, 0.5)",
     },
-    createevent:{
+    addevent:{
         bgcolor:"#E2F3F3",
-    }
+        placeholder: "#B9B7B7",
+        hr: "#E7E5E5",
+        wrapperbg: "#EFF4F8",
+        wrappershadow: "rgba(62, 255, 243, 0.86)",
+        dropdown: "#009EF5",
+        toggleactive: "#009EF5",
+        toggle: "#B9B7B7",
+        repeatbtnbgactv: "#009EF5",
+        repeatbtnbg: "#CDCDCD",
+        repeatbtnshadow: "rgba(62, 255, 243, 0.86)",
+        repeatbtntxt: "#2B2B2B",
+        close: "#FF5E55",
+        savebg: "#009EF5",
+    },
 };

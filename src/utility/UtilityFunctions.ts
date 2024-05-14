@@ -97,3 +97,22 @@ export const getMonthArray = (monthIdx: number): Array<DayDate> => {
     const modifiedData: any = data
     return modifiedData;
 };
+
+export const getFormatedDateTime = (inputDate: any, mode: string): string => {
+    const date: any = new Date(inputDate);
+
+    const options: { [key: string]: string } = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate: string = date.toLocaleDateString("en-IN", options);
+
+    date.setHours(date.getHours());
+    date.setMinutes(date.getMinutes());
+
+    const timeOptions: { [key: string]: string | boolean } = { hour: "2-digit", minute: "2-digit", hour12: true };
+    const formattedTime: string = date.toLocaleTimeString("en-IN", timeOptions);
+
+    if (mode === "date") {
+        return formattedDate;
+    } else {
+        return formattedTime;
+    }
+};

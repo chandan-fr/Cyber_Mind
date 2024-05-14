@@ -1,4 +1,4 @@
-import { Image, ImageBackground, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useLayoutEffect } from 'react'
 import { _Height } from '../../config/staticVariables';
 import colors from '../../config/colors';
@@ -16,7 +16,7 @@ const AddTodo = ({ navigation }: { navigation: any }) => {
 
 
     return (
-        <View style={[commonstyles.parent, { backgroundColor: colors.createevent.bgcolor }]}>
+        <View style={[commonstyles.parent, { backgroundColor: colors.addevent.bgcolor }]}>
             {/* top content */}
             <ImageBackground
                 style={styles.headerTop}
@@ -42,6 +42,11 @@ const AddTodo = ({ navigation }: { navigation: any }) => {
                     </TouchableOpacity>
                 </View>
             </ImageBackground>
+
+            {/* body */}
+            <View>
+                
+            </View>
         </View>
     )
 };

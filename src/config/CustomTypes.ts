@@ -118,3 +118,9 @@ export type Date_State = {
     currentMonth: string;
     currentMonthIndex: number;
 };
+
+export type Event_State = {
+    date: string;
+    time: string;
+    open: boolean;
+};

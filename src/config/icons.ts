@@ -35,4 +35,6 @@ export const icons = {
     send: require("../assets/icons/send.png"),
     plus: require("../assets/icons/plus.png"),
     timer: require("../assets/icons/timer.png"),
+    checkcircle: require("../assets/icons/checkcircle.png"),
+    checkcirclew: require("../assets/icons/checkcirclew.png"),
 };
