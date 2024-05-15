@@ -1,4 +1,4 @@
-import { Modal, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import colors from '../config/colors';
 import { _Height } from '../config/staticVariables';
@@ -12,22 +12,49 @@ const AlertModal = (): JSX.Element => {
     const { is_modal_visible, modal_msg, modal_type } = useSelector((state: any) => state.utilitySlice);
     const dispatch: any = useDispatch();
 
+    const statusBarHeight = StatusBar.currentHeight ?? 0;
+
     return (
         <Modal
             visible={is_modal_visible}
             animationType='fade'
             transparent={true}
         >
-            <View style={[styles.modalWrap, {backgroundColor: modal_type === "success" ?colors.white : "#f0f"}]}>
-                <Text style={styles.modalHeading}>Cyber Mind</Text>
-                <Text style={styles.modalTxt}>{modal_msg}</Text>
-                <TouchableOpacity
-                    style={[styles.modalButton, commonstyles.acjc]}
-                    onPress={() => dispatch(hideModal())}
+            <TouchableOpacity
+                style={{ backgroundColor: colors.modal.modalbg, flex: 1 }}
+                disabled={true}
+            >
+                <View
+                    style={[
+                        styles.modalWrap,
+                        {
+                            backgroundColor: modal_type === "success" ? colors.modal.bgcolorsuccess : colors.modal.bgcolorerror,
+                            shadowColor: modal_type === "success" ? colors.modal.shadowsuccess : colors.modal.shadowerror,
+                        }
+                    ]}
                 >
-                    <Text style={styles.btnTxt}>OK</Text>
-                </TouchableOpacity>
-            </View>
+                    <Text style={[styles.modalHeading, { color: modal_type === "success" ? colors.modal.txtheadsuccess : colors.modal.txtheaderror }]}>Cyber Mind</Text>
+
+                    <Text
+                        style={[
+                            styles.modalTxt,
+                            {
+                                marginTop: Platform.OS === "android" ? 10 : 15,
+                                color: modal_type === "success" ? colors.modal.parasuccess : colors.modal.paraerror
+                            }
+                        ]}
+                    >
+                        {modal_msg}
+                    </Text>
+
+                    <TouchableOpacity
+                        style={[styles.modalButton, commonstyles.acjc]}
+                        onPress={() => dispatch(hideModal())}
+                    >
+                        <Text style={styles.btnTxt}>Yeah, thanks!</Text>
+                    </TouchableOpacity>
+                </View>
+            </TouchableOpacity>
         </Modal>
     )
 };
@@ -42,44 +69,41 @@ const styles = StyleSheet.create({
         padding: 15,
         ...Platform.select({
             ios: {
-                shadowColor: "",
                 shadowOffset: {
                     width: 0,
                     height: 2,
                 },
-                shadowOpacity: 0.25,
-                shadowRadius: 4,
+                shadowOpacity: 0.3,
+                shadowRadius: 3.84,
                 marginTop: _Height / 2.2,
             },
             android: {
-                elevation: 4,
+                elevation: 5,
                 marginTop: _Height / 2.4,
             },
-        })
+        }),
     },
     modalHeading: {
-        color: colors.black,
-        fontSize: 20,
+        fontSize: 15,
         textAlign: "center",
-        fontFamily: fonts.semibold
+        fontFamily: fonts.semibold,
     },
     modalTxt: {
-        color: colors.black,
-        fontSize: 14,
+        fontSize: 11,
         textAlign: "center",
         fontFamily: fonts.regular
     },
     modalButton: {
-        borderRadius: 5,
-        backgroundColor: "#ff0",
+        borderRadius: 6.07,
+        backgroundColor: colors.modal.btncolor,
         marginTop: 20,
-        paddingVertical: 5,
-        paddingHorizontal: 40,
+        paddingVertical: 10,
+        width: "80%",
     },
     btnTxt: {
-        color: colors.black,
-        fontSize: 16,
+        color: colors.modal.btntxtcolor,
+        fontSize: 10,
         textAlign: "center",
-        fontFamily: fonts.medium
+        fontFamily: fonts.medium,
     },
 });

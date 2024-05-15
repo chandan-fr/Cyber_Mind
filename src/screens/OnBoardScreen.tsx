@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Image, NativeScrollEvent, NativeSyntheticEvent, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useRef, useState } from 'react'
 import { commonstyles } from '../assets/css/CommonStyles';
 import BgGradient from '../utility/BgGradient';
@@ -17,16 +17,18 @@ const OnBoardScreen = ({ navigation }: { navigation: any }) => {
     const [curIdx, setCurIdx] = useState<number>(0);
     const sliderRef = useRef<FlatList>(null);
 
-    const handleSkip = ()=>{
+    const statusBarHeight = StatusBar.currentHeight ?? 0;
+
+    const handleSkip = () => {
         AsyncStorage.setItem("@showOnboard", "1");
         navigation.replace("welcomescreen");
     };
 
     return (
         <SafeAreaView style={[commonstyles.parent]}>
-            <BgGradient colors={colors.onboard.gdcolor} height={_Height} isAngle={true} angle={180} xAxis={0} yAxis={0.6} />
+            <BgGradient colors={colors.onboard.gdcolor} height={_Height + statusBarHeight} isAngle={true} angle={180} xAxis={0} yAxis={0.6} />
 
-            <View style={[styles.body]}>
+            <View style={[styles.body, { marginTop: Platform.OS === "android" ? 40 : 10 }]}>
                 <View style={{ marginHorizontal: 12 }}>
                     <Image style={commonstyles.logoSmall} source={images.logo} />
                 </View>
@@ -82,7 +84,7 @@ export default OnBoardScreen;
 const styles = StyleSheet.create({
     body: {
         flex: 1,
-        marginVertical: 10,
+        marginBottom: 10,
         rowGap: 15,
     },
     footer: {

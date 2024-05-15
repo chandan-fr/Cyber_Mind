@@ -37,11 +37,21 @@ module.exports = {
         bgcolor: "#FFFFFF",
     },
     modal: {
-        bgcolorsuccess: "",
-        bgcolorerror: "",
-        btncolor: "",
-        txthead: "",
-        para: ""
+        bgcolorsuccess: "#E2F3F3",
+        bgcolorerror: "#FFFAFA",
+        btncolor: "#45C6F9",
+        btntxtcolor: "#F5F5F5",
+        btntxtcolorcancel: "#54595E",
+        txtheadsuccess: "#54595E",
+        txtheaderror: "#FA1B1B",
+        paraerror: "rgba(23, 23, 24, 0.6)",
+        parasuccess: "rgba(84, 89, 94, 0.6)",
+        modalbg: "rgba(15, 15, 15, 0.5)",
+        shadowsuccess: "rgba(0, 0, 0, 0.08)",
+        shadowerror: "rgba(238, 1, 1, 0.25)",
+        boder: "#DEE2E6",
+        bodercancel: "#009EF5",
+        close: "#009EF5"
     },
     bottomnav: {
         shadowcolor: "rgba(24, 215, 227, 0.55)",
@@ -101,9 +111,6 @@ module.exports = {
         inputwrapbg: "#EBEFF2",
         sendvoicebg:"#009EF5",
         chattimecolor: "#333232",
-    },
-    promptmodal:{
-        bgcolor: 'rgba(255, 255, 255, 0.5)'
     },
     fchome:{
         gdcolor: ["#49C4FC", "#13CCD9"],

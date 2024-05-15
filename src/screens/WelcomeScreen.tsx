@@ -1,4 +1,4 @@
-import { Image, Platform, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { commonstyles } from '../assets/css/CommonStyles';
 import BgGradient from '../utility/BgGradient';
@@ -16,9 +16,11 @@ const WelcomeScreen = ({ navigation }: { navigation: any }) => {
         setVisible(false)
     };
 
+    const statusBarHeight = StatusBar.currentHeight ?? 0;
+
     return (
         <SafeAreaView style={commonstyles.parent}>
-            <BgGradient height={_Height} colors={colors.welcomescr.gdcolor} />
+            <BgGradient height={_Height+ statusBarHeight} colors={colors.welcomescr.gdcolor} />
 
             <View style={[styles.topBox, commonstyles.acje]}>
                 <Image style={commonstyles.logo} source={images.logo} />
