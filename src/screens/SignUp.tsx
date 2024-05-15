@@ -1,4 +1,4 @@
-import { Image, Keyboard, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Image, Keyboard, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { commonstyles } from '../assets/css/CommonStyles';
 import colors from '../config/colors';
@@ -76,7 +76,7 @@ const SignUp = ({ navigation }: { navigation: any }): JSX.Element => {
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <SafeAreaView style={[commonstyles.parent, { backgroundColor: colors.login.bgcolor }]}>
-                <View style={{ marginTop: 15 }}>
+                <View style={{ marginTop: Platform.OS === "android" ? 50 : 15 }}>
                     <TouchableOpacity
                         style={[commonstyles.fdRow, styles.navBtn]}
                         onPress={() => navigation.navigate("welcomescreen")}
@@ -86,7 +86,7 @@ const SignUp = ({ navigation }: { navigation: any }): JSX.Element => {
                     </TouchableOpacity>
                 </View>
 
-                <View style={{ alignItems: "center", marginTop: 15 }}>
+                <View style={{ alignItems: "center", marginTop: Platform.OS === "android" ? 10 : 15 }}>
                     <Image style={{ width: 130, height: 160 }} source={images.logo} />
                 </View>
 

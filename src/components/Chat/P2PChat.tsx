@@ -13,6 +13,15 @@ const P2PChat = ({ navigation }: { navigation: any }) => {
   const { user } = useSelector((state: any) => state.userSlice);
   const [message, setMessage] = useState<string>("");
 
+  const handleVoice = () => {
+    console.log('voice sent');
+  };
+
+  const handleSend = () => {
+    console.log('message sent');
+    setMessage("");
+  };
+
   return (
     <View style={[commonstyles.parent, { backgroundColor: colors.white }]}>
       {/* top content */}
@@ -87,7 +96,7 @@ const P2PChat = ({ navigation }: { navigation: any }) => {
       <KeyboardAvoidingView
         style={commonstyles.parent}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? -15 : 0}
       >
         <View style={[commonstyles.parent]}>
           {/* chats */}
@@ -171,8 +180,9 @@ const P2PChat = ({ navigation }: { navigation: any }) => {
             </ScrollView>
           </View>
 
-          {/* chat input emoji & link */}
+          {/* chat input emoji, link & voice/ send */}
           <View style={[styles.inputContainer, commonstyles.fdRow, commonstyles.acjsb]}>
+            {/* chat input emoji & link */}
             <View style={[styles.inputWrap, commonstyles.fdRow, commonstyles.parent, commonstyles.acjsb]}>
               <TouchableOpacity
                 style={[styles.emojiLinkBtn, commonstyles.acjc]}
@@ -199,16 +209,18 @@ const P2PChat = ({ navigation }: { navigation: any }) => {
             </View>
 
             {/* send & voice section */}
-            <View style={{ position: "absolute", right: 0, bottom: 5 }}>
+            <View style={{ position: "absolute", right: 0, bottom: 5, zIndex: 1 }}>
               {message.length > 0 ?
                 <TouchableOpacity
                   style={[styles.sendVoiceBtn, commonstyles.acjc]}
+                  onPress={handleSend}
                 >
                   <Image style={styles.sendVoice} source={icons.send} />
                 </TouchableOpacity>
                 :
                 <TouchableOpacity
                   style={[styles.sendVoiceBtn, commonstyles.acjc]}
+                  onPress={handleVoice}
                 >
                   <Image style={styles.sendVoice} source={icons.mic} />
                 </TouchableOpacity>
@@ -321,7 +333,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginHorizontal: 25,
     columnGap: 20,
-    marginBottom: 15,
+    marginBottom: 25,
   },
   inputWrap: {
     columnGap: 5,

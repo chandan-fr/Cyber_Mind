@@ -89,7 +89,7 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
             >
                 <View style={commonstyles.parent}>
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        <View style={{ paddingTop: 25, rowGap: 30 }}>
+                        <View style={{ paddingVertical: 25, rowGap: 30 }}>
                             {/* 1st block */}
                             <View style={styles.wrapper}>
                                 {/* event name */}
@@ -187,8 +187,9 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                                     <Text style={[styles.alert, { flex: 0.3 }]}>Start</Text>
 
                                     <View style={[commonstyles.parent, commonstyles.fdRow, commonstyles.acjsb]}>
+                                        {/* date */}
                                         <TouchableOpacity
-                                            style={[commonstyles.fdRow, { flex: 1, alignItems: "center" }]}
+                                            style={[commonstyles.fdRow, styles.startDateBtn]}
                                             onPress={() => openCalendarModal('date', "start")}
                                         >
                                             <Image style={styles.eventTimeImg} source={icons.calendar} />
@@ -202,8 +203,9 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                                             />
                                         </TouchableOpacity>
 
+                                        {/* time */}
                                         <TouchableOpacity
-                                            style={[commonstyles.fdRow, { flex: 0.6, alignItems: "center" }]}
+                                            style={[commonstyles.fdRow, styles.startTimeBtn]}
                                             onPress={() => openCalendarModal('time', "start")}
                                         >
                                             <Image style={styles.eventTimeImg} source={icons.timer} />
@@ -221,13 +223,31 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
 
                                 <View style={styles.hr} />
 
+                                {/* date time picker */}
+                                {
+                                    startTimeValue.open || endTimeValue.open ?
+                                        <>
+                                            <DateTimePicker
+                                                value={new Date()}
+                                                mode={mode}
+                                                is24Hour={false}
+                                                onChange={onChange}
+                                            />
+
+                                            {Platform.OS === "ios" ? <View style={styles.hr} /> : null}
+                                        </>
+                                        :
+                                        null
+                                }
+
                                 {/* end event */}
                                 <View style={[styles.alertWrap, commonstyles.fdRow, commonstyles.acjsb, { columnGap: 10 }]}>
                                     <Text style={[styles.alert, { flex: 0.3 }]}>End</Text>
 
                                     <View style={[commonstyles.parent, commonstyles.fdRow, commonstyles.acjsb]}>
+                                        {/* date */}
                                         <TouchableOpacity
-                                            style={[commonstyles.fdRow, { flex: 1, alignItems: "center" }]}
+                                            style={[commonstyles.fdRow, styles.startDateBtn]}
                                             onPress={() => openCalendarModal('date', "end")}
                                         >
                                             <Image style={styles.eventTimeImg} source={icons.calendar} />
@@ -241,8 +261,9 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                                             />
                                         </TouchableOpacity>
 
+                                        {/* time */}
                                         <TouchableOpacity
-                                            style={[commonstyles.fdRow, { flex: 0.6, alignItems: "center" }]}
+                                            style={[commonstyles.fdRow, styles.startTimeBtn]}
                                             onPress={() => openCalendarModal('time', "end")}
                                         >
                                             <Image style={styles.eventTimeImg} source={icons.timer} />
@@ -319,28 +340,16 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                                     placeholderTextColor={colors.addevent.placeholder}
                                     style={styles.notesBox}
                                     multiline={true}
-                                    numberOfLines={3}
+                                    numberOfLines={4}
                                 />
                             </View>
-
-                            {
-                                startTimeValue.open || endTimeValue.open ?
-                                    <DateTimePicker
-                                        value={new Date()}
-                                        mode={mode}
-                                        is24Hour={false}
-                                        onChange={onChange}
-                                    />
-                                    :
-                                    null
-                            }
                         </View>
                     </ScrollView>
                 </View>
             </KeyboardAvoidingView>
 
             {/* footer section */}
-            <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginHorizontal: 25, marginTop: 25, marginBottom: Platform.OS === "android" ? 10 : 5 }]}>
+            <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginHorizontal: 25, marginTop: 5, marginBottom: Platform.OS === "android" ? 10 : 25 }]}>
                 <TouchableOpacity
                     style={[styles.closeBtn, commonstyles.acjc]}
                 >
@@ -433,6 +442,10 @@ const styles = StyleSheet.create({
         fontFamily: fonts.regular,
         marginHorizontal: 15,
         textAlignVertical: "top",
+        ...Platform.select({
+            ios: { height: 100, },
+            android: {}
+        }),
     },
     hr: {
         borderWidth: 1,
@@ -482,6 +495,22 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: fonts.medium,
         color: colors.black,
+    },
+    startDateBtn: {
+        alignItems: "center",
+        ...Platform.select({
+            ios: { columnGap: 15 },
+            android: { columnGap: 10, }
+        }),
+        flex: 1,
+    },
+    startTimeBtn: {
+        alignItems: "center",
+        ...Platform.select({
+            ios: { columnGap: 10 },
+            android: { columnGap: 5 }
+        }),
+        flex: 0.6,
     },
     repeatOptnWrap: {
         marginHorizontal: 30,
