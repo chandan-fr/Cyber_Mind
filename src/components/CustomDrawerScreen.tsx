@@ -42,9 +42,7 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props): JSX.Element => {
     const googleSignOut = async (): Promise<void> => {
         try {
             await GoogleSignin.signOut();
-            Alert.alert("Sign Out Successfull!");
         } catch (exc) {
-            // Alert.alert("Sign Out Failed!");
             console.log("Sign Out Failed!");
         }
     };
@@ -73,7 +71,7 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props): JSX.Element => {
                         <View style={styles.sideTopWrap}>
                             {/* profile photo & close */}
                             <View style={[commonstyles.fdRow, styles.topWrap]}>
-                                <TouchableOpacity
+                                <View
                                     style={[styles.userWrap, commonstyles.acjc]}
                                 >
                                     <Image
@@ -82,7 +80,7 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props): JSX.Element => {
                                         } : icons.user_dumy}
                                         style={styles.user_dummy}
                                     />
-                                </TouchableOpacity>
+                                </View>
 
                                 <TouchableOpacity
                                     style={[{ padding: 5 }, commonstyles.acjc]}
@@ -218,11 +216,7 @@ const styles = StyleSheet.create({
                 ...StyleSheet.absoluteFillObject,
                 zIndex: -1,
             },
-            android: {
-                zIndex: -2,
-                ...StyleSheet.absoluteFillObject,
-                opacity: 0.9,
-            }
+            android: {}
         }),
     },
     sideTopView: {

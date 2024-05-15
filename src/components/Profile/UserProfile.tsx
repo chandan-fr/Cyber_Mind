@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, Image, Platform } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Platform } from 'react-native'
 import React from 'react'
 import LinearGradient from 'react-native-linear-gradient';
 import { useSelector } from 'react-redux';
@@ -130,8 +130,8 @@ const UserProfile = ({ navigation }: { navigation: any }): JSX.Element => {
           />
           :
           <LinearGradient
-            colors={["rgba(255, 255, 255, 0.5)", "rgba(255, 255, 255, 0.3)"]}
-            style={{ width: "100%", height: "100%", position: "absolute", zIndex: -2, borderRadius: 16 }}
+            colors={["rgba(0, 158, 245, 0.3)", "rgba(0, 158, 245, 0.3)"]}
+            style={{ width: "100%", height: "100%", position: "absolute", zIndex: -2, borderRadius: 16, opacity: 0.4 }}
           />
         }
       </View>

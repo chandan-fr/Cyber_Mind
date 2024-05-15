@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { StatusBar, StyleSheet, View } from 'react-native'
 import React from 'react'
 import { Loader_Props } from '../config/CustomTypes';
 import { _Height, _Width } from '../config/staticVariables';
@@ -9,9 +9,10 @@ const Loader = ({ visible, source, width, height }: Loader_Props): JSX.Element |
     if (!visible) return null;
 
     const defaultAnimation = source ? source : require("../assets/loaders/loader.json");
+    const statusBarHeight = StatusBar.currentHeight ?? 0;
 
     return (
-        <View style={styles.loader}>
+        <View style={[styles.loader, { height: _Height + statusBarHeight }]}>
             <LottieView
                 style={{ width: width ? width : _Width, height: height ? height : _Height }}
                 source={defaultAnimation}
@@ -30,7 +31,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         width: _Width,
-        height: _Height,
         zIndex: 1,
         backgroundColor: colors.loader.bgcolor,
         elevation: 5,
