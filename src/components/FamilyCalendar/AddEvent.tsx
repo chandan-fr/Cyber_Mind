@@ -13,11 +13,11 @@ import { convertToTimeStamp, getFormatedDateTime } from '../../utility/UtilityFu
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { showModal } from '../../services/slices/UtilitySlice';
-import { getAllEvents } from '../../services/slices/UserSlice';
+import { addEvents, getAllEvents } from '../../services/slices/UserSlice';
 
 
 const AddEvent = ({ navigation }: { navigation: any }) => {
-    const { all_events, token } = useSelector((state: any) => state.userSlice);
+    const { token } = useSelector((state: any) => state.userSlice);
     const [alert, setAlert] = useState<boolean>(false);
     const [repeat, setRepeat] = useState<boolean>(false);
     const [alertOptn, setAlertOptn] = useState<string>("optn1");
@@ -62,7 +62,7 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
 
     const validateEventData = (): Event_Error => {
         const error: Event_Error = {};
-        const { event_name, alert } = eventData;
+        const { event_name } = eventData;
 
         if (!event_name) {
             error.event_name = "Event Name is Required!";
@@ -88,13 +88,11 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
             eventData.alert = alertOptions[alertOptn];
             eventData.event_start_timestamp = convertToTimeStamp(startTimeValue.datetime);
             eventData.event_end_timestamp = convertToTimeStamp(endTimeValue.datetime);
-            console.log(eventData);
+            
+            dispatch(addEvents({ eventData, _Header, navigation }));
+            // setEventData({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
         }
     };
-
-    useEffect(() => {
-        dispatch(getAllEvents({ _Header }));
-    }, [dispatch]);
 
     return (
         <View style={[commonstyles.parent, { backgroundColor: colors.addevent.bgcolor }]}>
@@ -286,8 +284,8 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                                         <>
                                             <DateTimePicker
                                                 value={new Date()}
-                                                mode={mode}
-                                                is24Hour={false}
+                                                mode={'datetime'}
+                                                // is24Hour={false}
                                                 onChange={onChange}
                                             />
 

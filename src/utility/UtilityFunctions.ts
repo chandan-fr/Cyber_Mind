@@ -123,3 +123,17 @@ export const getFormatedDateTime = (inputDate: any, mode: string): string => {
         return formattedTime;
     }
 };
+
+export const getDateTimeFromTimestamp = (timestamp: number, type: string): string => {
+    const date = new Date(timestamp * 1000);
+
+    const optionsDate: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
+    const formattedDate: string = date.toLocaleDateString("en-IN", optionsDate);
+
+    const optionsTime: Intl.DateTimeFormatOptions = { hour: "2-digit", minute: "2-digit", hour12: true };
+    const formattedTime: string = date.toLocaleTimeString("en-US", optionsTime);
+
+    if (type === "date") { return formattedDate; }
+    else if (type === "time") { return formattedTime; }
+    else { return `${formattedDate}, ${formattedTime}` }
+};

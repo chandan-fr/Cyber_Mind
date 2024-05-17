@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ALLCATEGORY, ALLEVENT, ALLMEMBER, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
+import { ADDEVENT, ALLCATEGORY, ALLEVENT, ALLMEMBER, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { showModal } from "./UtilitySlice";
@@ -132,8 +132,21 @@ export const getAllEvents = createAsyncThunk('/get/all/events', async ({ _Header
         const resp: any = await ALLEVENT(_Header);
 
         if (resp.data.success) {
-            console.log(resp.data.data);
-            
+            return resp.data.data;
+        }
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        return rejectWithValue(exc.response.data);
+    }
+});
+
+export const addEvents = createAsyncThunk('/add/event', async ({ eventData, _Header, navigation }: any, { rejectWithValue, dispatch }) => {
+    try {
+        const resp: any = await ADDEVENT(eventData, _Header);
+
+        if (resp.data.success) {
+            dispatch(showModal({ msg: resp.data.message, type: "success" }));
+            navigation.navigate("fchome");
             return resp.data.data;
         }
     } catch (exc: any) {
@@ -283,6 +296,22 @@ const UserSlice = createSlice({
             state.all_events = payload;
         })
         builder.addCase(getAllEvents.rejected, (state, { payload }) => {
+            state.user_loading = false;
+            const err: any | null = payload;
+            state.error = err;
+        })
+
+        /* add events */
+        builder.addCase(addEvents.pending, (state, { payload }) => {
+            state.user_loading = true;
+        })
+        builder.addCase(addEvents.fulfilled, (state, { payload }) => {
+            const newEvents: any = state.all_events;
+            newEvents.push(payload);
+            // state.all_events = newEvents;
+            state.user_loading = false;
+        })
+        builder.addCase(addEvents.rejected, (state, { payload }) => {
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;

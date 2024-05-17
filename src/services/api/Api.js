@@ -49,5 +49,5 @@ export const REGISTER = (userData) => Api.post("/auth/user/register", userData);
 export const ALLMEMBER = (_Header) => Api.get("/get/all/member", _Header);
 export const ALLCATEGORY = (_Header) => Api.get("/get/all/category", _Header);
 export const UPDATEUSER = (_Header, userData) => Api.post("/user/profile/update", userData, _Header);
-export const ADDEVENT = (_Header, eventData) => Api.post("/add/event", eventData, _Header);
+export const ADDEVENT = (eventData, _Header) => Api.post("/add/event", eventData, _Header);
 export const ALLEVENT = (_Header) => Api.get("/get/all/events", _Header);

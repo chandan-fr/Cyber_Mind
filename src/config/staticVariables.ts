@@ -52,3 +52,5 @@ export const alertOptions: { [key: string]: string } = {
     optn3: "1 hour before",
     optn4: "1 day before",
 };
+
+export const eventColor: Array<string> = ["#B0C2FF", "#F6BDFF", "#FF9B96", "#B0C2FF", "#F6BDFF", "#FF9B96"]

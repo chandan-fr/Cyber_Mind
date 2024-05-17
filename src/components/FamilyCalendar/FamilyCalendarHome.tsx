@@ -3,17 +3,19 @@ import React, { useEffect, useState } from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import colors from '../../config/colors';
 import { icons } from '../../config/icons';
-import { _Height, _Width, monthsArray } from '../../config/staticVariables';
+import { _Height, _Width, eventColor, monthsArray } from '../../config/staticVariables';
 import { fonts } from '../../config/fonts';
 import { images } from '../../config/images';
 import Calendar from './Calendar';
 import { Date_State } from '../../config/CustomTypes';
-import { getImagUrl, getMonthArray } from '../../utility/UtilityFunctions';
-import { useSelector } from 'react-redux';
+import { getDateTimeFromTimestamp, getImagUrl, getMonthArray } from '../../utility/UtilityFunctions';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from 'redux';
+import { getAllEvents } from '../../services/slices/UserSlice';
 
 
 const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
-    const { user } = useSelector((state: any) => state.userSlice);
+    const { user, all_events, token } = useSelector((state: any) => state.userSlice);
     const currentDay: number = new Date().getDate();
     const [currentDate, setCurrentDate] = useState<Date_State>(
         {
@@ -22,6 +24,8 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
             currentMonthIndex: new Date().getMonth(),
         }
     );
+    const _Header = { headers: { Authorization: "Bearer " + token } };
+    const dispatch: Dispatch<any> = useDispatch();
 
     const monthData = getMonthArray(currentDate.currentMonthIndex);
 
@@ -38,6 +42,7 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
 
     useEffect(() => {
         // console.log("page rendered==>");
+        dispatch(getAllEvents({ _Header }));
     }, []);
 
     return (
@@ -127,26 +132,31 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
                                 {/* event content */}
                                 <View style={[{ marginTop: 20, marginHorizontal: 20 }]}>
                                     <FlatList
-                                        data={[{ bg: "#B0C2FF", time: "9:30" }, { bg: "#F6BDFF", time: "10:00" }, { bg: "#FF9B96", time: "10:30" }]}
+                                        data={all_events}
                                         keyExtractor={(_, index) => index.toString()}
+                                        inverted
                                         renderItem={({ item, index }) => (
                                             <>
                                                 <View style={[commonstyles.fdRow, { columnGap: 20 }]}>
                                                     <View style={{ marginTop: -10 }}>
-                                                        <Text style={styles.hour}>{item.time}</Text>
-                                                        <Text style={styles.hourFormat}>am</Text>
+                                                        <Text style={styles.hour}>{getDateTimeFromTimestamp(item?.event_start_timestamp, "time").slice(0, -2)}</Text>
+                                                        <Text style={styles.hourFormat}>{getDateTimeFromTimestamp(item?.event_start_timestamp, "time").slice(-2)}</Text>
                                                     </View>
 
                                                     <View style={{ rowGap: 15, flex: 1 }}>
                                                         <View style={styles.topLine} />
 
-                                                        <View style={[styles.contentBox, { backgroundColor: item.bg }]}>
-
+                                                        <View style={[styles.contentBox, { backgroundColor: eventColor[index] }]}>
+                                                            <Text>{item?.event_name}</Text>
+                                                            <Text>{item?.location}</Text>
+                                                            <Text>Start : {getDateTimeFromTimestamp(item?.event_start_timestamp, "datetime")}</Text>
+                                                            <Text>End : {getDateTimeFromTimestamp(item?.event_end_timestamp, "datetime")}</Text>
+                                                            <Text>Repeat : {item?.repeat ? item?.repeat : "None"}</Text>
                                                         </View>
                                                     </View>
                                                 </View>
 
-                                                {index === 2 ? null : <View style={{ marginBottom: 40 }} />}
+                                                {index === all_events.length - 1 ? null : <View style={{ marginBottom: 40 }} />}
                                             </>
                                         )}
                                     />
@@ -354,5 +364,6 @@ const styles = StyleSheet.create({
     contentBox: {
         minHeight: 80,
         borderRadius: 10,
+        padding: 6,
     },
 });
