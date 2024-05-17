@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ALLCATEGORY, ALLMEMBER, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
+import { ALLCATEGORY, ALLEVENT, ALLMEMBER, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { showModal } from "./UtilitySlice";
@@ -109,14 +109,7 @@ export const getAllMember = createAsyncThunk("/get/all/member", async ({ _Header
             return resp.data.data;
         }
     } catch (exc: any) {
-        if (exc.response.data.error === "jwt expired") {
-            AsyncStorage.removeItem("@user");
-            AsyncStorage.removeItem("token");
-            dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
-            navigation.replace("welcomescreen");
-        } else {
-            dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
-        }
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
         return rejectWithValue(exc.response.data);
     }
 });
@@ -129,14 +122,22 @@ export const getAllCategory = createAsyncThunk("/get/all/category", async ({ _He
             return resp.data.data;
         }
     } catch (exc: any) {
-        if (exc.response.data.error === "jwt expired") {
-            AsyncStorage.removeItem("@user");
-            AsyncStorage.removeItem("token");
-            dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
-            navigation.replace("welcomescreen");
-        } else {
-            dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        return rejectWithValue(exc.response.data);
+    }
+});
+
+export const getAllEvents = createAsyncThunk('/get/all/events', async ({ _Header }: any, { rejectWithValue, dispatch }) => {
+    try {
+        const resp: any = await ALLEVENT(_Header);
+
+        if (resp.data.success) {
+            console.log(resp.data.data);
+            
+            return resp.data.data;
         }
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
         return rejectWithValue(exc.response.data);
     }
 });
@@ -151,17 +152,18 @@ const UserSlice = createSlice({
         saved_user: {},
         all_member: [],
         all_category: [],
+        all_events: [],
     },
     reducers: {
         saveUserCred(state, { payload }) {
             state.saved_user = payload
         },
-        logOut(state, { payload }) {
+        logOut(state) {
+            console.log("called");
             state.user = null;
             state.token = null;
             AsyncStorage.removeItem("@user");
             AsyncStorage.removeItem("token");
-            payload.replace("welcomescreen");
         },
         loginByAsyncStorage(state, { payload }) {
             state.user = payload.user;
@@ -256,10 +258,6 @@ const UserSlice = createSlice({
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;
-            if (err?.error === "jwt expired") {
-                state.user = null;
-                state.token = null;
-            }
         })
 
         /* all category */
@@ -274,10 +272,20 @@ const UserSlice = createSlice({
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;
-            if (err?.error === "jwt expired") {
-                state.user = null;
-                state.token = null;
-            }
+        })
+
+        /* all events */
+        builder.addCase(getAllEvents.pending, (state, { payload }) => {
+            state.user_loading = true;
+        })
+        builder.addCase(getAllEvents.fulfilled, (state, { payload }) => {
+            state.user_loading = false;
+            state.all_events = payload;
+        })
+        builder.addCase(getAllEvents.rejected, (state, { payload }) => {
+            state.user_loading = false;
+            const err: any | null = payload;
+            state.error = err;
         })
     }
 });

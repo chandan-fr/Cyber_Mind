@@ -98,6 +98,13 @@ export const getMonthArray = (monthIdx: number): Array<DayDate> => {
     return modifiedData;
 };
 
+export const convertToTimeStamp = (date: Date | undefined): number => {
+    const data = date ?? new Date();
+    const isoDateString: string = data?.toISOString();
+    const timestamp: number = Math.floor(Date.parse(isoDateString) / 1000);
+    return timestamp;
+};
+
 export const getFormatedDateTime = (inputDate: any, mode: string): string => {
     const date: any = new Date(inputDate);
 

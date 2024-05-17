@@ -1,41 +1,49 @@
 import { Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import colors from '../../config/colors';
 import { images } from '../../config/images';
-import { _Height } from '../../config/staticVariables';
+import { _Height, alertOptions } from '../../config/staticVariables';
 import { icons } from '../../config/icons';
 import { fonts } from '../../config/fonts';
 import ToggleSwitch from 'toggle-switch-react-native';
-import { Event_State } from '../../config/CustomTypes';
+import { Event_Data, Event_Error, Event_State } from '../../config/CustomTypes';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { getFormatedDateTime } from '../../utility/UtilityFunctions';
+import { convertToTimeStamp, getFormatedDateTime } from '../../utility/UtilityFunctions';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from 'redux';
+import { showModal } from '../../services/slices/UtilitySlice';
+import { getAllEvents } from '../../services/slices/UserSlice';
 
 
 const AddEvent = ({ navigation }: { navigation: any }) => {
+    const { all_events, token } = useSelector((state: any) => state.userSlice);
     const [alert, setAlert] = useState<boolean>(false);
     const [repeat, setRepeat] = useState<boolean>(false);
-    const [toggle, setToggle] = useState<boolean>(false);
     const [alertOptn, setAlertOptn] = useState<string>("optn1");
-    const [repeatOptn, setRepeatOptn] = useState<string>("Daily");
     const [mode, setMode] = useState<any>("");
-    const [startTimeValue, setStartTimeValue] = useState<Event_State>({ date: "", time: "", open: false });
-    const [endTimeValue, setEndTimeValue] = useState<Event_State>({ date: "", time: "", open: false });
+    const [startTimeValue, setStartTimeValue] = useState<Event_State>({ date: "", time: "", open: false, datetime: new Date() });
+    const [endTimeValue, setEndTimeValue] = useState<Event_State>({ date: "", time: "", open: false, datetime: new Date() });
+    const [eventData, setEventData] = useState<Event_Data>({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
+    const [eventError, setEventError] = useState<Event_Error>({});
+    const _Header = { headers: { Authorization: "Bearer " + token } };
+
+    const dispatch: Dispatch<any> = useDispatch();
 
     const onChange = (event: DateTimePickerEvent, date: Date | undefined) => {
         if (mode === "date") {
             if (startTimeValue.open) {
-                setStartTimeValue({ ...startTimeValue, date: getFormatedDateTime(date, mode), open: false });
+                setStartTimeValue({ ...startTimeValue, date: getFormatedDateTime(date, mode), open: false, datetime: date });
             }
             if (endTimeValue.open) {
-                setEndTimeValue({ ...endTimeValue, date: getFormatedDateTime(date, mode), open: false });
+                setEndTimeValue({ ...endTimeValue, date: getFormatedDateTime(date, mode), open: false, datetime: date });
             }
         } else {
             if (startTimeValue.open) {
-                setStartTimeValue({ ...startTimeValue, time: getFormatedDateTime(date, mode), open: false });
+                setStartTimeValue({ ...startTimeValue, time: getFormatedDateTime(date, mode), open: false, datetime: date });
             }
             if (endTimeValue.open) {
-                setEndTimeValue({ ...endTimeValue, time: getFormatedDateTime(date, mode), open: false });
+                setEndTimeValue({ ...endTimeValue, time: getFormatedDateTime(date, mode), open: false, datetime: date });
             }
         }
     };
@@ -52,6 +60,41 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
         }
     };
 
+    const validateEventData = (): Event_Error => {
+        const error: Event_Error = {};
+        const { event_name, alert } = eventData;
+
+        if (!event_name) {
+            error.event_name = "Event Name is Required!";
+            dispatch(showModal({ msg: "Event Name is Required!", type: "error" }));
+        }
+        if (!(startTimeValue.date && startTimeValue.time)) {
+            error.event_start_timestamp = "Please Select a Date & Time for Event!";
+            dispatch(showModal({ msg: "Please Select a Date & Time for Event!", type: "error" }));
+        }
+        if (!(endTimeValue.date && endTimeValue.time)) {
+            error.event_end_timestamp = "Please Select a Date & Time for Event to End!";
+            dispatch(showModal({ msg: "Please Select a Date & Time for Event to End!", type: "error" }));
+        }
+
+        return error;
+    };
+
+    const handleEvent = () => {
+        const validationErrors: any = validateEventData();
+        setEventError(validationErrors);
+
+        if (Object.keys(validationErrors).length === 0) {
+            eventData.alert = alertOptions[alertOptn];
+            eventData.event_start_timestamp = convertToTimeStamp(startTimeValue.datetime);
+            eventData.event_end_timestamp = convertToTimeStamp(endTimeValue.datetime);
+            console.log(eventData);
+        }
+    };
+
+    useEffect(() => {
+        dispatch(getAllEvents({ _Header }));
+    }, [dispatch]);
 
     return (
         <View style={[commonstyles.parent, { backgroundColor: colors.addevent.bgcolor }]}>
@@ -94,9 +137,11 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                             <View style={styles.wrapper}>
                                 {/* event name */}
                                 <TextInput
-                                    placeholder='Event Name'
-                                    placeholderTextColor={colors.addevent.placeholder}
+                                    placeholder={eventError.event_name ? eventError.event_name : 'Event Name'}
+                                    placeholderTextColor={eventError.event_name ? colors.addevent.error : colors.addevent.placeholder}
                                     style={styles.inputBox}
+                                    value={eventData.event_name}
+                                    onChangeText={value => setEventData({ ...eventData, event_name: value })}
                                 />
 
                                 <View style={styles.hr} />
@@ -106,6 +151,8 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                                     placeholder='Location'
                                     placeholderTextColor={colors.addevent.placeholder}
                                     style={styles.inputBox}
+                                    value={eventData.location}
+                                    onChangeText={value => setEventData({ ...eventData, location: value })}
                                 />
 
                                 <View style={styles.hr} />
@@ -172,10 +219,10 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                                     <Text style={styles.alert}>All-Day</Text>
 
                                     <ToggleSwitch
-                                        isOn={toggle}
+                                        isOn={eventData.is_allDay}
                                         onColor={colors.addevent.toggleactive}
                                         offColor={colors.addevent.toggle}
-                                        onToggle={isOn => setToggle(isOn)}
+                                        onToggle={isOn => setEventData({ ...eventData, is_allDay: isOn })}
                                         size="medium"
                                     />
                                 </View>
@@ -184,7 +231,17 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
 
                                 {/* start event */}
                                 <View style={[styles.alertWrap, commonstyles.fdRow, commonstyles.acjsb, { columnGap: 10 }]}>
-                                    <Text style={[styles.alert, { flex: 0.3 }]}>Start</Text>
+                                    <Text
+                                        style={[
+                                            styles.alert,
+                                            {
+                                                flex: 0.3,
+                                                color: eventError.event_start_timestamp ? colors.addevent.error : colors.addevent.placeholder,
+                                            }
+                                        ]}
+                                    >
+                                        Start
+                                    </Text>
 
                                     <View style={[commonstyles.parent, commonstyles.fdRow, commonstyles.acjsb]}>
                                         {/* date */}
@@ -242,7 +299,17 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
 
                                 {/* end event */}
                                 <View style={[styles.alertWrap, commonstyles.fdRow, commonstyles.acjsb, { columnGap: 10 }]}>
-                                    <Text style={[styles.alert, { flex: 0.3 }]}>End</Text>
+                                    <Text
+                                        style={[
+                                            styles.alert,
+                                            {
+                                                flex: 0.3,
+                                                color: eventError.event_end_timestamp ? colors.addevent.error : colors.addevent.placeholder
+                                            }
+                                        ]}
+                                    >
+                                        End
+                                    </Text>
 
                                     <View style={[commonstyles.parent, commonstyles.fdRow, commonstyles.acjsb]}>
                                         {/* date */}
@@ -300,24 +367,24 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                                 {repeat && <View style={[styles.repeatOptnWrap]}>
                                     <View style={[commonstyles.fdRow, commonstyles.acjsb, {}]}>
                                         <TouchableOpacity
-                                            style={[repeatOptn === "Daily" ? styles.repeatOptionActv : styles.repeatOption, commonstyles.fdRow, commonstyles.acjc]}
-                                            onPress={() => setRepeatOptn("Daily")}
+                                            style={[eventData.repeat === "Daily" ? styles.repeatOptionActv : styles.repeatOption, commonstyles.fdRow, commonstyles.acjc]}
+                                            onPress={() => setEventData({ ...eventData, repeat: "Daily" })}
                                         >
-                                            <Text style={repeatOptn === "Daily" ? styles.repeatOptnTxtActv : styles.repeatOptnTxt}>Daily</Text>
+                                            <Text style={eventData.repeat === "Daily" ? styles.repeatOptnTxtActv : styles.repeatOptnTxt}>Daily</Text>
                                         </TouchableOpacity>
 
                                         <TouchableOpacity
-                                            style={[repeatOptn === "Weekly" ? styles.repeatOptionActv : styles.repeatOption, commonstyles.fdRow, commonstyles.acjc]}
-                                            onPress={() => setRepeatOptn("Weekly")}
+                                            style={[eventData.repeat === "Weekly" ? styles.repeatOptionActv : styles.repeatOption, commonstyles.fdRow, commonstyles.acjc]}
+                                            onPress={() => setEventData({ ...eventData, repeat: "Weekly" })}
                                         >
-                                            <Text style={repeatOptn === "Weekly" ? styles.repeatOptnTxtActv : styles.repeatOptnTxt}>Weekly</Text>
+                                            <Text style={eventData.repeat === "Weekly" ? styles.repeatOptnTxtActv : styles.repeatOptnTxt}>Weekly</Text>
                                         </TouchableOpacity>
 
                                         <TouchableOpacity
-                                            style={[repeatOptn === "Monthly" ? styles.repeatOptionActv : styles.repeatOption, commonstyles.fdRow, commonstyles.acjc]}
-                                            onPress={() => setRepeatOptn("Monthly")}
+                                            style={[eventData.repeat === "Monthly" ? styles.repeatOptionActv : styles.repeatOption, commonstyles.fdRow, commonstyles.acjc]}
+                                            onPress={() => setEventData({ ...eventData, repeat: "Monthly" })}
                                         >
-                                            <Text style={repeatOptn === "Monthly" ? styles.repeatOptnTxtActv : styles.repeatOptnTxt}>Monthly</Text>
+                                            <Text style={eventData.repeat === "Monthly" ? styles.repeatOptnTxtActv : styles.repeatOptnTxt}>Monthly</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>}
@@ -330,6 +397,8 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                                     placeholder='URL'
                                     placeholderTextColor={colors.addevent.placeholder}
                                     style={styles.inputBox}
+                                    value={eventData.url}
+                                    onChangeText={value => setEventData({ ...eventData, url: value })}
                                 />
 
                                 <View style={styles.hr} />
@@ -341,6 +410,8 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
                                     style={styles.notesBox}
                                     multiline={true}
                                     numberOfLines={4}
+                                    value={eventData.note}
+                                    onChangeText={value => setEventData({ ...eventData, note: value })}
                                 />
                             </View>
                         </View>
@@ -358,6 +429,7 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
 
                 <TouchableOpacity
                     style={[styles.saveBtn, commonstyles.acjc]}
+                    onPress={handleEvent}
                 >
                     <Text style={styles.save}>Save</Text>
                 </TouchableOpacity>

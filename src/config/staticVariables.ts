@@ -31,7 +31,7 @@ export const numericRegex: RegExp = /^[0-9]+$/;
 export const Gallery_Permission: Permission = Number(Platform.Version) >= 33 ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
 
 export const _CellWidth: number = (_Width - 44.46) / 7;
-export const monthsArray = [
+export const monthsArray: Array<{ [key: string]: string | number }> = [
     { monthIndex: 0, monthName: "Jan" },
     { monthIndex: 1, monthName: "Feb" },
     { monthIndex: 2, monthName: "Mar" },
@@ -45,3 +45,10 @@ export const monthsArray = [
     { monthIndex: 10, monthName: "Nov" },
     { monthIndex: 11, monthName: "Dec" }
 ];
+
+export const alertOptions: { [key: string]: string } = {
+    optn1: "At time of event",
+    optn2: "10 mins before",
+    optn3: "1 hour before",
+    optn4: "1 day before",
+};

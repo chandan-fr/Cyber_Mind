@@ -123,4 +123,27 @@ export type Event_State = {
     date: string;
     time: string;
     open: boolean;
+    datetime: Date | undefined;
+};
+
+export type Event_Data = {
+    event_name: string;
+    location?: string;
+    alert: string;
+    event_start_timestamp: number;
+    event_end_timestamp: number;
+    repeat?: string;
+    url?: string;
+    note?: string;
+    is_allDay: boolean;
+};
+export type Event_Error = {
+    event_name?: string;
+    location?: string;
+    alert?: string;
+    event_start_timestamp?: string;
+    event_end_timestamp?: string;
+    repeat?: string;
+    url?: string;
+    note?: string;
 };

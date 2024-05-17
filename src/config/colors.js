@@ -140,6 +140,7 @@ module.exports = {
         repeatbtnshadow: "rgba(62, 255, 243, 0.86)",
         repeatbtntxt: "#2B2B2B",
         close: "#FF5E55",
+        error: "#FF5E55",
         savebg: "#009EF5",
     },
 };

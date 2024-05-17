@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View, SafeAreaView, Platform, ImageBackground, TouchableOpacity, Image, ScrollView, Alert } from 'react-native'
+import { StyleSheet, Text, View, Platform, ImageBackground, TouchableOpacity, Image, ScrollView } from 'react-native'
 import React from 'react'
-import { DrawerNavigationState, ParamListBase, useNavigation } from '@react-navigation/native';
+import { CommonActions, DrawerNavigationState, ParamListBase, useNavigation } from '@react-navigation/native';
 import { DrawerDescriptorMap, DrawerNavigationHelpers } from '@react-navigation/drawer/lib/typescript/src/types';
 import { commonstyles } from '../assets/css/CommonStyles';
 import { BlurView } from '@react-native-community/blur';
@@ -51,7 +51,13 @@ const CustomDrawerScreen = ({ navigation }: CDS_Props): JSX.Element => {
         if (user.auth_type !== "regular") await googleSignOut();
 
         await retrieveLoginData();
-        dispatch(logOut(navigation));
+        dispatch(logOut());
+        navigations.dispatch(
+            CommonActions.reset({
+                index: 0,
+                routes: [{name: "welcomescreen"}]
+            })
+        )
     };
 
     return (
