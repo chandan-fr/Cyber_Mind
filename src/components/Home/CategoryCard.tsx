@@ -7,11 +7,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import { getImagUrl } from '../../utility/UtilityFunctions';
 
 const CategoryCard = ({ item, navigation }: { item: any, navigation: any }) => {
-    
+
     return (
         <TouchableOpacity
             style={styles.cardWrap}
-        // onPress={()=>{}}
+            onPress={() => navigation.navigate(item.screen_name)}
         >
             <LinearGradient
                 useAngle={true}

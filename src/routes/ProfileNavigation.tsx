@@ -5,7 +5,7 @@ import EditProfile from '../components/Profile/EditProfile';
 
 const ProfileStack = createNativeStackNavigator();
 
-const ProfileNav = () => {
+const ProfileNav = (): JSX.Element => {
     return (
         <ProfileStack.Navigator
             initialRouteName='userprofile'

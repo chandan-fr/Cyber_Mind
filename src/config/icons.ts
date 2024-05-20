@@ -37,4 +37,6 @@ export const icons = {
     timer: require("../assets/icons/timer.png"),
     checkcircle: require("../assets/icons/checkcircle.png"),
     checkcirclew: require("../assets/icons/checkcirclew.png"),
+    uparrow: require("../assets/icons/uparrow.png"),
+    fatplus: require("../assets/icons/fatplus.png"),
 };

@@ -147,3 +147,9 @@ export type Event_Error = {
     url?: string;
     note?: string;
 };
+
+export type DotsMenu_Props = {
+    onEdit?: Function;
+    onDelete?: Function;
+    onClose?: Function;
+};

@@ -7,6 +7,7 @@ import Login from '../screens/Login';
 import OnBoardScreen from '../screens/OnBoardScreen';
 import ForgetPassword from '../screens/ForgetPassword';
 import DrawerNavigation from './DrawerNavigation';
+import FinancialManagementNavigation from './FinancialManagementNavigation';
 
 
 const RootStack = createNativeStackNavigator();
@@ -21,6 +22,7 @@ const RootNavigation = (): JSX.Element => {
             <RootStack.Screen name='login' component={Login} />
             <RootStack.Screen name='forgetpassword' component={ForgetPassword} />
             <RootStack.Screen name='drawernav' component={DrawerNavigation} />
+            <RootStack.Screen name='finman' component={FinancialManagementNavigation} />
         </RootStack.Navigator>
     )
 };
