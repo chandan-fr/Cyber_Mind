@@ -307,8 +307,8 @@ const UserSlice = createSlice({
         })
         builder.addCase(addEvents.fulfilled, (state, { payload }) => {
             const newEvents: any = state.all_events;
-            newEvents.push(payload);
-            // state.all_events = newEvents;
+            newEvents.push(payload)
+            state.all_events = newEvents;
             state.user_loading = false;
         })
         builder.addCase(addEvents.rejected, (state, { payload }) => {

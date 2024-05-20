@@ -1,4 +1,4 @@
-import { FlatList, Image, ImageBackground, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, ImageBackground, Platform, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import colors from '../../config/colors';
@@ -24,6 +24,7 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
             currentMonthIndex: new Date().getMonth(),
         }
     );
+    const [refreshing, setRefreshing] = useState<boolean>(false)
     const _Header = { headers: { Authorization: "Bearer " + token } };
     const dispatch: Dispatch<any> = useDispatch();
 
@@ -39,6 +40,14 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
         offset: 90 * index,
         index
     });
+
+    const onRefresh = () => {
+        setRefreshing(true);
+
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }
 
     useEffect(() => {
         // console.log("page rendered==>");
@@ -100,21 +109,25 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
             </ImageBackground>
 
             {/* body */}
-            <View style={commonstyles.parent}>
+            <View style={[commonstyles.parent]}>
                 <FlatList
                     data={[1]}
                     scrollEnabled
                     showsVerticalScrollIndicator={false}
-                    keyExtractor={(_, index) => index.toString()}
-                    renderItem={() => (
-                        <View>
+                    refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} colors={["#00f", "#0f0", "#f00"]} />}
+                    ListHeaderComponent={
+                        <>
                             {/* calendar */}
                             <View style={styles.calendarWrap}>
                                 <Calendar data={monthData} currentDay={currentDay} monthIndex={currentDate.currentMonthIndex} onDayPress={handleDatePress} navigation={navigation} />
                             </View>
-
+                        </>
+                    }
+                    keyExtractor={(_, index) => index.toString()}
+                    renderItem={() => (
+                        <View>
                             {/* events */}
-                            <View style={{ marginTop: 30, flex: 1 }}>
+                            <View style={{ marginTop: 30 }}>
                                 {/* head */}
                                 <View>
                                     <Text style={[styles.eventHeading, { textAlign: "center", }]}>
@@ -133,6 +146,8 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
                                 <View style={[{ marginTop: 20, marginHorizontal: 20 }]}>
                                     <FlatList
                                         data={all_events}
+                                        scrollEnabled
+                                        showsVerticalScrollIndicator={false}
                                         keyExtractor={(_, index) => index.toString()}
                                         inverted
                                         renderItem={({ item, index }) => (
@@ -148,7 +163,7 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
 
                                                         <View style={[styles.contentBox, { backgroundColor: eventColor[index] }]}>
                                                             <Text>{item?.event_name}</Text>
-                                                            <Text>{item?.location}</Text>
+                                                            <Text>Location: {item?.location ? item?.location : "None"}</Text>
                                                             <Text>Start : {getDateTimeFromTimestamp(item?.event_start_timestamp, "datetime")}</Text>
                                                             <Text>End : {getDateTimeFromTimestamp(item?.event_end_timestamp, "datetime")}</Text>
                                                             <Text>Repeat : {item?.repeat ? item?.repeat : "None"}</Text>
@@ -164,7 +179,7 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
                             </View>
 
                             {/* Remainder & todo */}
-                            <View style={{ marginTop: 20, }}>
+                            <View style={{ marginTop: 20 }}>
                                 {/* head */}
                                 <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginHorizontal: 20, }]}>
                                     <View>
@@ -181,7 +196,7 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
                                 </View>
 
                                 {/* todo content */}
-                                <View style={{ marginHorizontal: 20, marginTop: 15, }}>
+                                <View style={{ marginHorizontal: 20, marginTop: 15 }}>
                                     <FlatList
                                         data={["#C5FFB0", "#BDEAFF", "#C5FFB0"]}
                                         keyExtractor={(_, index) => index.toString()}
