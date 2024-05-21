@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ADDEVENT, ALLCATEGORY, ALLEVENT, ALLMEMBER, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
+import { ADDEVENT, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTRANSACTION, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { showModal } from "./UtilitySlice";
@@ -155,6 +155,19 @@ export const addEvents = createAsyncThunk('/add/event', async ({ eventData, _Hea
     }
 });
 
+export const getAllTransaction = createAsyncThunk('/get/all/transactions', async ({ _Header }: any, { rejectWithValue, dispatch }) => {
+    try {
+        const resp: any = await ALLTRANSACTION(_Header);
+
+        if (resp.data.success) {
+            return resp.data.data;
+        }
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        return rejectWithValue(exc.response.data);
+    }
+});
+
 const UserSlice = createSlice({
     name: "userSlice",
     initialState: {
@@ -166,6 +179,7 @@ const UserSlice = createSlice({
         all_member: [],
         all_category: [],
         all_events: [],
+        all_transactions: [],
     },
     reducers: {
         saveUserCred(state, { payload }) {
@@ -312,6 +326,20 @@ const UserSlice = createSlice({
             state.user_loading = false;
         })
         builder.addCase(addEvents.rejected, (state, { payload }) => {
+            state.user_loading = false;
+            const err: any | null = payload;
+            state.error = err;
+        })
+
+        /* all transactions */
+        builder.addCase(getAllTransaction.pending, (state, { payload }) => {
+            state.user_loading = true;
+        })
+        builder.addCase(getAllTransaction.fulfilled, (state, { payload }) => {
+            state.all_transactions = payload;
+            state.user_loading = false;
+        })
+        builder.addCase(getAllTransaction.rejected, (state, { payload }) => {
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;

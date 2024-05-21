@@ -39,4 +39,8 @@ export const icons = {
     checkcirclew: require("../assets/icons/checkcirclew.png"),
     uparrow: require("../assets/icons/uparrow.png"),
     fatplus: require("../assets/icons/fatplus.png"),
+    money: require("../assets/icons/money.png"),
+    shopping: require("../assets/icons/shopping.png"),
+    entertainment: require("../assets/icons/entertainment.png"),
+    food: require("../assets/icons/food.png"),
 };

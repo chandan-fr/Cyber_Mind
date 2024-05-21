@@ -153,3 +153,20 @@ export type DotsMenu_Props = {
     onDelete?: Function;
     onClose?: Function;
 };
+
+export type Transactions_Data = {
+    _id: string;
+    user: string;
+    tnx_amout: number;
+    category: {
+        _id: string;
+        transaction_category_name: string;
+        is_delete: boolean;
+    },
+    note: string;
+    date_time: number;
+    tnx_type: string;
+    is_delete: boolean;
+    createdAt: string;
+    updatedAt: string;
+}

@@ -1,5 +1,5 @@
 import { FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DotsMenu from '../DotsMenu';
 import { commonstyles } from '../../assets/css/CommonStyles';
 import colors from '../../config/colors';
@@ -8,14 +8,30 @@ import LinearGradient from 'react-native-linear-gradient';
 import { icons } from '../../config/icons';
 import { fonts } from '../../config/fonts';
 import { images } from '../../config/images';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from 'redux';
+import { getAllTransaction } from '../../services/slices/UserSlice';
+import { Transactions_Data } from '../../config/CustomTypes';
 
 
 const FinManHome = ({ navigation }: { navigation: any }) => {
+    const { all_transactions, token } = useSelector((state: any) => state.userSlice);
     const [isMenu, setIsMenu] = useState<boolean>(false);
+    const _Header = { headers: { Authorization: "Bearer " + token } };
+    const dispatch: Dispatch<any> = useDispatch();
 
     const onClose = () => {
         setIsMenu(false);
     };
+
+    const getRecentTransactions = <T extends Array<Transactions_Data>>(tnxData: T): T => {
+        const limitedData: Array<Transactions_Data> = tnxData.slice().reverse().slice(0, 10);
+        return limitedData as T;
+    };
+
+    useEffect(() => {
+        dispatch(getAllTransaction({ _Header }));
+    }, [dispatch]);
 
     return (
         <View style={[commonstyles.parent, { backgroundColor: colors.finmanhome.bgcolor }]}>
@@ -120,38 +136,64 @@ const FinManHome = ({ navigation }: { navigation: any }) => {
 
                 {/* recent transactions */}
                 <View style={{ marginTop: 6, flex: 1, paddingTop: 10 }}>
-                    <FlatList
-                        data={[1, 1, 1, 1, 1, 1]}
-                        showsVerticalScrollIndicator={false}
-                        keyExtractor={(_, index) => index.toString()}
-                        renderItem={({ item }) => (
-                            <View style={[styles.tnx, commonstyles.fdRow, commonstyles.acjsb]}>
-                                <View style={[commonstyles.fdRow, { columnGap: 20, alignItems: "center" }]}>
-                                    <View style={styles.shadowWrap}>
-                                        <LinearGradient
-                                            colors={colors.finmanhome.tnximgwrapbg}
-                                            style={[styles.tnxTypeImgWrap, commonstyles.acjc]}
-                                            useAngle={true}
-                                            angle={-45}
-                                            angleCenter={{ x: 0.8, y: 0.3 }}
-                                        >
-                                            <Image
-                                                style={styles.tnxTypeImg}
-                                                source={icons.smile}
-                                            />
-                                        </LinearGradient>
+                    {all_transactions.length > 0 ?
+                        <FlatList
+                            data={getRecentTransactions(all_transactions)}
+                            showsVerticalScrollIndicator={false}
+                            keyExtractor={(_, index) => index.toString()}
+                            renderItem={({ item }) => (
+                                <View style={[styles.tnx, commonstyles.fdRow, commonstyles.acjsb]}>
+                                    <View style={[commonstyles.fdRow, { columnGap: 20, alignItems: "center" }]}>
+                                        <View style={styles.shadowWrap}>
+                                            <LinearGradient
+                                                colors={colors.finmanhome.tnximgwrapbg}
+                                                style={[styles.tnxTypeImgWrap, commonstyles.acjc]}
+                                                useAngle={true}
+                                                angle={-45}
+                                                angleCenter={{ x: 0.8, y: 0.3 }}
+                                            >
+                                                <Image
+                                                    style={styles.tnxTypeImg}
+                                                    source={
+                                                        item.category.transaction_category_name === "Food" ?
+                                                            icons.food
+                                                            :
+                                                            item.category.transaction_category_name === "Salary" ?
+                                                                icons.money
+                                                                :
+                                                                item.category.transaction_category_name === "Shopping" ?
+                                                                    icons.shopping
+                                                                    :
+                                                                    item.category.transaction_category_name === "Entertainment" ?
+                                                                        icons.entertainment
+                                                                        : null
+                                                    }
+                                                />
+                                            </LinearGradient>
+                                        </View>
+
+                                        <Text style={styles.tnxType}>{item.category.transaction_category_name}</Text>
                                     </View>
 
-                                    <Text style={styles.tnxType}>Food</Text>
+                                    <View style={{ alignItems: "flex-end" }}>
+                                        <Text
+                                            style={[
+                                                styles.tnxAmount,
+                                                { color: item.tnx_type === "Expenses" ? colors.finmanhome.tnxexpns : colors.finmanhome.tnxincm }
+                                            ]}
+                                        >
+                                            {item.tnx_type === "Expenses" ? "-" : "+"}${item.tnx_amount}
+                                        </Text>
+                                        <Text style={styles.tnxTime}>Today</Text>
+                                    </View>
                                 </View>
-
-                                <View style={{ alignItems: "flex-end" }}>
-                                    <Text style={[styles.tnxAmount, { color: colors.finmanhome.tnxexpns }]}>-$45.00</Text>
-                                    <Text style={styles.tnxTime}>Today</Text>
-                                </View>
-                            </View>
-                        )}
-                    />
+                            )}
+                        />
+                        :
+                        <View style={[commonstyles.parent, commonstyles.acjc]}>
+                            <Text>No Transaction So Far!!</Text>
+                        </View>
+                    }
                 </View>
             </View>
         </View>

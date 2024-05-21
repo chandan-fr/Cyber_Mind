@@ -1,9 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { commonstyles } from '../../assets/css/CommonStyles';
+import colors from '../../config/colors';
 
 const SendMoney = () => {
     return (
-        <View>
+        <View style={[commonstyles.parent, {backgroundColor: colors.sendmoney.bgcolor}]}>
             <Text>SendMoney</Text>
         </View>
     )

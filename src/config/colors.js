@@ -166,4 +166,11 @@ module.exports = {
         tnxexpns: "#EE0101",
         tnxincm: "#21B51E",
     },
+    sendmoney:{
+        bgcolor: "#E2F3F3",
+        nav: "#12BBC8",
+        headingtop: "#494848",
+        placeholder: "#AEACAC",
+        savebtnbg: "#009EF5",
+    },
 };
