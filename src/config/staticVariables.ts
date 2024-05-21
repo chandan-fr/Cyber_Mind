@@ -53,4 +53,9 @@ export const alertOptions: { [key: string]: string } = {
     optn4: "1 day before",
 };
 
-export const eventColor: Array<string> = ["#B0C2FF", "#F6BDFF", "#FF9B96", "#B0C2FF", "#F6BDFF", "#FF9B96"]
+export const eventColor: Array<string> = ["#B0C2FF", "#F6BDFF", "#FF9B96", "#B0C2FF", "#F6BDFF", "#FF9B96"];
+
+export const _TransactionType: Array<{ label: string, value: string }> = [
+    { label: "Income", value: "Income" },
+    { label: "Expense", value: "Expense" }
+];

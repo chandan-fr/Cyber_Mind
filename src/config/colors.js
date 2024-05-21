@@ -172,5 +172,6 @@ module.exports = {
         headingtop: "#494848",
         placeholder: "#AEACAC",
         savebtnbg: "#009EF5",
+        amount: "#686666",
     },
 };

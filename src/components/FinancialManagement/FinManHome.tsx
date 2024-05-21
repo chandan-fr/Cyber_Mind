@@ -31,7 +31,7 @@ const FinManHome = ({ navigation }: { navigation: any }) => {
 
     useEffect(() => {
         dispatch(getAllTransaction({ _Header }));
-    }, [dispatch]);
+    }, []);
 
     return (
         <View style={[commonstyles.parent, { backgroundColor: colors.finmanhome.bgcolor }]}>

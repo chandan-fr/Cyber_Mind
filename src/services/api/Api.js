@@ -55,3 +55,4 @@ export const UPDATEUSER = (_Header, userData) => Api.post("/user/profile/update"
 export const ADDEVENT = (eventData, _Header) => Api.post("/add/event", eventData, _Header);
 export const ALLEVENT = (_Header) => Api.get("/get/all/events", _Header);
 export const ALLTRANSACTION = (_Header) => Api.get("/get/all/transactions", _Header);
+export const ALLTRANSACTIONCATEGORY = (_Header) => Api.get("/get/all/tnx/category", _Header);

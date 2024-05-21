@@ -169,4 +169,14 @@ export type Transactions_Data = {
     is_delete: boolean;
     createdAt: string;
     updatedAt: string;
-}
+};
+
+export interface Transaction_Form {
+    tnx_amount?: string;
+    category?: string;
+    note?: string;
+    date_time?: number;
+    tnx_type?: string;
+};
+
+export interface Transaction_Error extends Transaction_Form { };

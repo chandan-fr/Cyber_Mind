@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ADDEVENT, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTRANSACTION, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
+import { ADDEVENT, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTRANSACTION, ALLTRANSACTIONCATEGORY, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { showModal } from "./UtilitySlice";
@@ -168,6 +168,22 @@ export const getAllTransaction = createAsyncThunk('/get/all/transactions', async
     }
 });
 
+export const getAllTransactionCategory = createAsyncThunk('/get/all/tnx/category', async ({ _Header }: any, { rejectWithValue, dispatch }) => {
+    try {
+        const resp: any = await ALLTRANSACTIONCATEGORY(_Header);
+
+        if (resp.data.success) {
+            const tnxCatData: Array<{ [key: string]: string }> = resp.data.data.length && resp.data.data.map((item: { [key: string]: string }) => {
+                return { label: item.transaction_category_name, value: item._id }
+            });
+            return tnxCatData;
+        }
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        return rejectWithValue(exc.response.data);
+    }
+});
+
 const UserSlice = createSlice({
     name: "userSlice",
     initialState: {
@@ -180,6 +196,7 @@ const UserSlice = createSlice({
         all_category: [],
         all_events: [],
         all_transactions: [],
+        transaction_category: [],
     },
     reducers: {
         saveUserCred(state, { payload }) {
@@ -203,9 +220,9 @@ const UserSlice = createSlice({
             state.user_loading = true;
         })
         builder.addCase(userLogin.fulfilled, (state, { payload }) => {
-            state.user_loading = false;
             state.user = payload?.user;
             state.token = payload?.token;
+            state.user_loading = false;
         })
         builder.addCase(userLogin.rejected, (state, { payload }) => {
             state.user_loading = false;
@@ -218,9 +235,9 @@ const UserSlice = createSlice({
             state.user_loading = true;
         })
         builder.addCase(userSocialLogin.fulfilled, (state, { payload }) => {
-            state.user_loading = false;
             state.user = payload?.user;
             state.token = payload?.token;
+            state.user_loading = false;
         })
         builder.addCase(userSocialLogin.rejected, (state, { payload }) => {
             state.user_loading = false;
@@ -233,9 +250,9 @@ const UserSlice = createSlice({
             state.user_loading = true;
         })
         builder.addCase(userRegister.fulfilled, (state, { payload }) => {
-            state.user_loading = false;
             state.user = payload?.user;
             state.token = payload?.token;
+            state.user_loading = false;
         })
         builder.addCase(userRegister.rejected, (state, { payload }) => {
             state.user_loading = false;
@@ -248,9 +265,9 @@ const UserSlice = createSlice({
             state.user_loading = true;
         })
         builder.addCase(userDataUpdate.fulfilled, (state, { payload }) => {
-            state.user_loading = false;
             state.user = payload?.user;
             state.token = payload?.token;
+            state.user_loading = false;
         })
         builder.addCase(userDataUpdate.rejected, (state, { payload }) => {
             state.user_loading = false;
@@ -263,9 +280,9 @@ const UserSlice = createSlice({
             state.user_loading = true;
         })
         builder.addCase(userImageUpdate.fulfilled, (state, { payload }) => {
-            state.user_loading = false;
             state.user = payload?.user;
             state.token = payload?.token;
+            state.user_loading = false;
         })
         builder.addCase(userImageUpdate.rejected, (state, { payload }) => {
             state.user_loading = false;
@@ -278,8 +295,8 @@ const UserSlice = createSlice({
             state.user_loading = true;
         })
         builder.addCase(getAllMember.fulfilled, (state, { payload }) => {
-            state.user_loading = false;
             state.all_member = payload;
+            state.user_loading = false;
         })
         builder.addCase(getAllMember.rejected, (state, { payload }) => {
             state.user_loading = false;
@@ -292,8 +309,8 @@ const UserSlice = createSlice({
             state.user_loading = true;
         })
         builder.addCase(getAllCategory.fulfilled, (state, { payload }) => {
-            state.user_loading = false;
             state.all_category = payload;
+            state.user_loading = false;
         })
         builder.addCase(getAllCategory.rejected, (state, { payload }) => {
             state.user_loading = false;
@@ -306,8 +323,8 @@ const UserSlice = createSlice({
             state.user_loading = true;
         })
         builder.addCase(getAllEvents.fulfilled, (state, { payload }) => {
-            state.user_loading = false;
             state.all_events = payload;
+            state.user_loading = false;
         })
         builder.addCase(getAllEvents.rejected, (state, { payload }) => {
             state.user_loading = false;
@@ -340,6 +357,21 @@ const UserSlice = createSlice({
             state.user_loading = false;
         })
         builder.addCase(getAllTransaction.rejected, (state, { payload }) => {
+            state.user_loading = false;
+            const err: any | null = payload;
+            state.error = err;
+        })
+
+        /* all transaction category */
+        builder.addCase(getAllTransactionCategory.pending, (state, { payload }) => {
+            state.user_loading = true;
+        })
+        builder.addCase(getAllTransactionCategory.fulfilled, (state, { payload }) => {
+            const modifiedTnxData: any = payload;
+            state.transaction_category = modifiedTnxData;
+            state.user_loading = false;
+        })
+        builder.addCase(getAllTransactionCategory.rejected, (state, { payload }) => {
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;
