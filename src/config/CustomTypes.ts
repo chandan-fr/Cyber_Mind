@@ -180,3 +180,9 @@ export interface Transaction_Form {
 };
 
 export interface Transaction_Error extends Transaction_Form { };
+
+export type BarChart_Props = {
+    data: { [key: string]: number };
+    filterType?: string;
+
+};

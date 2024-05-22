@@ -59,3 +59,8 @@ export const _TransactionType: Array<{ label: string, value: string }> = [
     { label: "Income", value: "Income" },
     { label: "Expense", value: "Expense" }
 ];
+
+export const _ExpenseFilterType: Array<{ label: string, value: string }> = [
+    { label: "Weekly", value: "Weekly" },
+    { label: "Monthly", value: "Monthly" }
+];
