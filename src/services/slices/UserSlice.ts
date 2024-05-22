@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ADDEVENT, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTRANSACTION, ALLTRANSACTIONCATEGORY, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
+import { ADDEVENT, ADDTRANSACTION, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTRANSACTION, ALLTRANSACTIONCATEGORY, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { showModal } from "./UtilitySlice";
@@ -177,6 +177,22 @@ export const getAllTransactionCategory = createAsyncThunk('/get/all/tnx/category
                 return { label: item.transaction_category_name, value: item._id }
             });
             return tnxCatData;
+        }
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        return rejectWithValue(exc.response.data);
+    }
+});
+
+export const AddTransaction = createAsyncThunk('/add/new/transaction', async ({ tnxData, _Header, navigation }: any, { rejectWithValue, dispatch }) => {
+    try {
+        const resp: any = await ADDTRANSACTION(tnxData, _Header);
+
+        if (resp.data.success) {
+            dispatch(getAllTransaction({ _Header }));
+            dispatch(showModal({ msg: resp.data.message, type: "success" }));
+            navigation.navigate("finhome");
+            return resp.data;
         }
     } catch (exc: any) {
         dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
@@ -372,6 +388,19 @@ const UserSlice = createSlice({
             state.user_loading = false;
         })
         builder.addCase(getAllTransactionCategory.rejected, (state, { payload }) => {
+            state.user_loading = false;
+            const err: any | null = payload;
+            state.error = err;
+        })
+
+        /* add transaction */
+        builder.addCase(AddTransaction.pending, (state, { payload }) => {
+            state.user_loading = true;
+        })
+        builder.addCase(AddTransaction.fulfilled, (state, { payload }) => {
+            state.user_loading = false;
+        })
+        builder.addCase(AddTransaction.rejected, (state, { payload }) => {
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;

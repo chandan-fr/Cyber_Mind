@@ -173,5 +173,6 @@ module.exports = {
         placeholder: "#AEACAC",
         savebtnbg: "#009EF5",
         amount: "#686666",
+        error: "#FA1B1B",
     },
 };

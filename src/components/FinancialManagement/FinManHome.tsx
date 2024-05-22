@@ -25,7 +25,7 @@ const FinManHome = ({ navigation }: { navigation: any }) => {
     };
 
     const getRecentTransactions = <T extends Array<Transactions_Data>>(tnxData: T): T => {
-        const limitedData: Array<Transactions_Data> = tnxData.slice().reverse().slice(0, 10);
+        const limitedData: Array<Transactions_Data> = tnxData.slice().slice(0, 10);
         return limitedData as T;
     };
 
@@ -179,10 +179,10 @@ const FinManHome = ({ navigation }: { navigation: any }) => {
                                         <Text
                                             style={[
                                                 styles.tnxAmount,
-                                                { color: item.tnx_type === "Expenses" ? colors.finmanhome.tnxexpns : colors.finmanhome.tnxincm }
+                                                { color: item.tnx_type === "Expense" ? colors.finmanhome.tnxexpns : colors.finmanhome.tnxincm }
                                             ]}
                                         >
-                                            {item.tnx_type === "Expenses" ? "-" : "+"}${item.tnx_amount}
+                                            {item.tnx_type === "Expense" ? "-" : "+"}${item.tnx_amount}
                                         </Text>
                                         <Text style={styles.tnxTime}>Today</Text>
                                     </View>

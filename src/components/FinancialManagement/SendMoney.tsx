@@ -9,7 +9,7 @@ import { Dispatch } from 'redux';
 import { _TransactionType, _Width, numericRegex } from '../../config/staticVariables';
 import { Transaction_Error, Transaction_Form } from '../../config/CustomTypes';
 import { Dropdown } from 'react-native-element-dropdown';
-import { getAllTransactionCategory } from '../../services/slices/UserSlice';
+import { AddTransaction, getAllTransactionCategory } from '../../services/slices/UserSlice';
 import { showModal } from '../../services/slices/UtilitySlice';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { convertToTimeStamp, getDateTimeFromTimestamp, getFormatedDateTime } from '../../utility/UtilityFunctions';
@@ -34,8 +34,14 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
             error.tnx_amount = "Only Numerics are allowed!";
             dispatch(showModal({ msg: "Only Numerics are allowed!", type: "error" }));
         } else if (!category) {
-            error.tnx_amount = "Transaction Amount is Required!";
-            dispatch(showModal({ msg: "Transaction Amount is Required!", type: "error" }));
+            error.category = "Please Select a Category!";
+            dispatch(showModal({ msg: "Please Select a Category!", type: "error" }));
+        } else if (!date_time) {
+            error.date_time = 1;
+            dispatch(showModal({ msg: "Please Select a Date & Time!", type: "error" }));
+        } else if (!tnx_type) {
+            error.tnx_type = "Please Select Transaction Type!";
+            dispatch(showModal({ msg: "Please Select Transaction Type!", type: "error" }));
         }
 
         return error;
@@ -44,6 +50,7 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
     const onChange = (event: DateTimePickerEvent, date: Date | undefined) => {
         setTnxData({ ...tnxData, date_time: convertToTimeStamp(date) });
         setOpenDateModal(false);
+        setTnxError({ ...tnxError, date_time: 0 });
     };
 
     const handleAddTransaction = () => {
@@ -51,7 +58,7 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
         setTnxError(validationErrors);
 
         if (Object.keys(validationErrors).length === 0) {
-            // dispatch()
+            dispatch(AddTransaction({ tnxData, _Header, navigation }));
         }
     };
 
@@ -83,16 +90,18 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
                     activeOpacity={0.9}
                     onPress={() => amountRef && amountRef.current?.focus()}
                 >
-                    <Text style={styles.dollar}>$</Text>
+                    <Text style={[styles.dollar, { color: tnxError.tnx_amount ? colors.sendmoney.error : colors.sendmoney.amount }]}>$</Text>
+
                     <TextInput
                         ref={amountRef}
-                        style={styles.inputAmount}
-                        placeholder='0'
-                        placeholderTextColor={colors.sendmoney.amount}
+                        style={[styles.inputAmount, { color: tnxError.tnx_amount ? colors.sendmoney.error : colors.sendmoney.amount }]}
+                        placeholder={'0'}
+                        placeholderTextColor={tnxError.tnx_amount ? colors.sendmoney.error : colors.sendmoney.amount}
                         keyboardType='decimal-pad'
                         value={tnxData.tnx_amount}
                         maxLength={10}
                         onChangeText={value => setTnxData({ ...tnxData, tnx_amount: value })}
+                        onFocus={() => setTnxError({ ...tnxError, tnx_amount: "" })}
                     />
                 </TouchableOpacity>
 
@@ -101,7 +110,7 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
                     {/* category */}
                     <View style={{ backgroundColor: colors.white, borderRadius: 12 }}>
                         <Dropdown
-                            style={styles.dropdownBox}
+                            style={[styles.dropdownBox, tnxError.category ? { borderWidth: 0.5, borderColor: colors.sendmoney.error } : null]}
                             data={transaction_category}
                             placeholder='Select...'
                             placeholderStyle={{ color: colors.sendmoney.placeholder, fontSize: 15, fontFamily: fonts.medium }}
@@ -112,7 +121,10 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
                             labelField='label'
                             valueField='value'
                             value={tnxData.category}
-                            onChange={(item: { label: string, value: string }) => setTnxData({ ...tnxData, category: item.value })}
+                            onChange={(item: { label: string, value: string }) => {
+                                setTnxData({ ...tnxData, category: item.value });
+                                setTnxError({ ...tnxError, category: "" });
+                            }}
                         />
                     </View>
 
@@ -129,7 +141,13 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
 
                     {/* date & time */}
                     <View style={{ backgroundColor: colors.white, borderRadius: 12, justifyContent: "center" }}>
-                        <View style={[commonstyles.fdRow, { alignItems: "center", height: 50, paddingLeft: 10, paddingRight: 5 }]}>
+                        <View
+                            style={[
+                                commonstyles.fdRow,
+                                styles.dateTime,
+                                tnxError.date_time ? { borderWidth: 0.5, borderColor: colors.sendmoney.error } : null
+                            ]}
+                        >
                             <Text style={[styles.inputDate, { color: tnxData.date_time ? colors.sendmoney.amount : colors.sendmoney.placeholder }]}>
                                 {tnxData.date_time ? getDateTimeFromTimestamp(tnxData.date_time, "datetime") : "Select Date"}
                             </Text>
@@ -154,7 +172,7 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
                     {/* type */}
                     <View style={{ backgroundColor: colors.white, borderRadius: 12 }}>
                         <Dropdown
-                            style={styles.dropdownBox}
+                            style={[styles.dropdownBox, tnxError.tnx_type ? { borderWidth: 0.5, borderColor: colors.sendmoney.error } : null]}
                             data={_TransactionType}
                             placeholder='Select...'
                             placeholderStyle={{ color: colors.sendmoney.placeholder, fontSize: 15, fontFamily: fonts.medium }}
@@ -165,7 +183,10 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
                             labelField='label'
                             valueField='value'
                             value={tnxData.tnx_type}
-                            onChange={(item: { label: string, value: string }) => setTnxData({ ...tnxData, tnx_type: item.value })}
+                            onChange={(item: { label: string, value: string }) => {
+                                setTnxData({ ...tnxData, tnx_type: item.value });
+                                setTnxError({ ...tnxError, tnx_type: "" });
+                            }}
                         />
                     </View>
 
@@ -219,11 +240,9 @@ const styles = StyleSheet.create({
     dollar: {
         fontSize: 40,
         fontFamily: fonts.medium,
-        color: colors.sendmoney.amount,
     },
     inputAmount: {
         maxWidth: _Width / 2,
-        color: colors.sendmoney.amount,
         fontFamily: fonts.medium,
         ...Platform.select({
             ios: {
@@ -250,6 +269,13 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         paddingRight: 5,
         paddingLeft: 10,
+    },
+    dateTime: {
+        alignItems: "center",
+        height: 50,
+        paddingLeft: 10,
+        paddingRight: 5,
+        borderRadius: 12,
     },
     save: {
         backgroundColor: colors.sendmoney.savebtnbg,
