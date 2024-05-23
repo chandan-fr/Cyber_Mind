@@ -44,4 +44,5 @@ export const icons = {
     entertainment: require("../assets/icons/entertainment.png"),
     food: require("../assets/icons/food.png"),
     dollar: require("../assets/icons/dollar.png"),
+    save: require("../assets/icons/save.png"),
 };

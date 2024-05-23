@@ -193,4 +193,7 @@ module.exports = {
         nestedtnxviewbg: "#FBFBFB",
         nestedtnxviewshadow: "#009EF5",
     },
+    alltnx:{
+        downloadbg:"#009EF5",
+    }
 };
