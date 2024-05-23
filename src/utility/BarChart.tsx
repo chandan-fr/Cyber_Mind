@@ -1,12 +1,11 @@
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import colors from '../config/colors';
-import { _Height, _Width } from '../config/staticVariables';
+import { _Width } from '../config/staticVariables';
 import { fonts } from '../config/fonts';
 import { BarChart_Props } from '../config/CustomTypes';
-import Svg, { Line } from 'react-native-svg';
 
-const BarChart = ({ data }: BarChart_Props) => {
+const BarChart = ({ data, height }: BarChart_Props) => {
     // Extract values and labels from the expense object
     const values = Object.values(data);
     const labels = Object.keys(data);
@@ -15,20 +14,21 @@ const BarChart = ({ data }: BarChart_Props) => {
     const maxExpense = Math.max(...values);
 
     // Normalize data to fit within the view's height
-    const normalizedData = values.map(value => (value / maxExpense) * (_Height / 3.8));
+    const normalizedData = values.map(value => (value / maxExpense) * (height));
 
     // Number of dotted lines
     const numDottedLines = 5;
-    const lineGap = (_Height / 3.8) / numDottedLines;
 
     // Function to determine bar color based on value
     const getBarColor = (value: number) => {
-        if (value <= ((lineGap * 1) / maxExpense) * 10000) {
-            return colors.transaction.lowbar; // less than 60
-        } else if (value <= ((lineGap * 2) / maxExpense) * 10000) {
-            return colors.transaction.midbar; // less than 100
+        const percentage = (value / maxExpense) * 100;
+
+        if (percentage < 50) {
+            return colors.transaction.lowbar;
+        } else if (percentage <= 80) {
+            return colors.transaction.midbar;
         } else {
-            return colors.transaction.highbar; // 100 or more
+            return colors.transaction.highbar;
         }
     };
 
@@ -37,7 +37,7 @@ const BarChart = ({ data }: BarChart_Props) => {
             {/* bar chart */}
             <View>
                 {/* bar */}
-                <View style={styles.chartContainer}>
+                <View style={[styles.chartContainer, { height: height }]}>
                     {Array.from({ length: numDottedLines }).map((_, index) => (
                         <View key={index} style={[styles.dottedLine, { bottom: `${(index / numDottedLines) * 100}%` }]} />
                     ))}
@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end',
-        height: _Height / 3.8,
         marginBottom: 8,
         borderTopWidth: 1,
         borderColor: colors.transaction.xaxisdotline,
@@ -82,7 +81,6 @@ const styles = StyleSheet.create({
     barContainer: {
         alignItems: 'center',
         flex: 1,
-        width: 45.78,
     },
     bar: {
         width: 25,
@@ -98,7 +96,6 @@ const styles = StyleSheet.create({
         flex: 1,
         fontFamily: fonts.medium,
         color: colors.transaction.label,
-        width: 45.78,
     },
     dottedLine: {
         position: 'absolute',

@@ -166,7 +166,7 @@ module.exports = {
         tnxexpns: "#EE0101",
         tnxincm: "#21B51E",
     },
-    sendmoney:{
+    sendmoney: {
         bgcolor: "#E2F3F3",
         nav: "#12BBC8",
         headingtop: "#494848",
@@ -175,7 +175,7 @@ module.exports = {
         amount: "#686666",
         error: "#FA1B1B",
     },
-    transaction:{
+    transaction: {
         gdcolor: ["#49C4FC", "#13CCD9"],
         bgcolor: "#E2F3F3",
         expnstxt: "#F54C4C",
@@ -184,9 +184,13 @@ module.exports = {
         label: "#4F4F4F",
         lowbar: "#F29783",
         midbar: "#CECECE",
-        highbar:"#56B2AA",
+        highbar: "#56B2AA",
         xaxisdotline: "#D1D1D1",
         chartshadow: "#009EF5",
         expnsfilter: "#1B1B1B",
+        tnxcatmenubg: "#009EF5",
+        seemorebg: "#009EF5",
+        nestedtnxviewbg: "#FBFBFB",
+        nestedtnxviewshadow: "#009EF5",
     },
 };

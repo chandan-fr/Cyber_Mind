@@ -157,7 +157,7 @@ export type DotsMenu_Props = {
 export type Transactions_Data = {
     _id: string;
     user: string;
-    tnx_amout: number;
+    tnx_amount: number;
     category: {
         _id: string;
         transaction_category_name: string;
@@ -184,5 +184,5 @@ export interface Transaction_Error extends Transaction_Form { };
 export type BarChart_Props = {
     data: { [key: string]: number };
     filterType?: string;
-
+    height: number;
 };
