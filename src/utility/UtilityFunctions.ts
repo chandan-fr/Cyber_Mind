@@ -135,7 +135,21 @@ export const getDateTimeFromTimestamp = (timestamp: number, type: string): strin
 
     if (type === "date") { return formattedDate; }
     else if (type === "time") { return formattedTime; }
-    else { return `${formattedDate}, ${formattedTime}` }
+    else if (type === "shortdate") {
+        const today = new Date();
+        const yesterday = new Date(today);
+        yesterday.setDate(today.getDate() - 1);
+
+        const isSameDay = (d1: Date, d2: Date): boolean => d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+
+        if (isSameDay(date, today)) {
+            return "Today";
+        } else if (isSameDay(date, yesterday)) {
+            return "Yesterday";
+        } else {
+            return dateFNS(date);
+        }
+    } else { return `${formattedDate}, ${formattedTime}` }
 };
 
 export const dateFNS = (date: Date): string => {

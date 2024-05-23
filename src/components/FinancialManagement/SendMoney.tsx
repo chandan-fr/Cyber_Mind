@@ -62,6 +62,13 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
         }
     };
 
+    const getDynamicMargin = (): number | null => {
+        if (Platform.OS === 'android') {
+            return -25;
+        }
+        return null;
+    };
+
     useEffect(() => {
         dispatch(getAllTransactionCategory({ _Header }));
     }, []);
@@ -90,11 +97,17 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
                     activeOpacity={0.9}
                     onPress={() => amountRef && amountRef.current?.focus()}
                 >
-                    <Text style={[styles.dollar, { color: tnxError.tnx_amount ? colors.sendmoney.error : colors.sendmoney.amount }]}>$</Text>
+                    <Image style={[styles.dollar, { tintColor: tnxError.tnx_amount ? colors.sendmoney.error : colors.sendmoney.amount }]} source={icons.dollar} />
 
                     <TextInput
                         ref={amountRef}
-                        style={[styles.inputAmount, { color: tnxError.tnx_amount ? colors.sendmoney.error : colors.sendmoney.amount }]}
+                        style={[
+                            styles.inputAmount,
+                            {
+                                color: tnxError.tnx_amount ? colors.sendmoney.error : colors.sendmoney.amount,
+                                marginBottom: getDynamicMargin(),
+                            }
+                        ]}
                         placeholder={'0'}
                         placeholderTextColor={tnxError.tnx_amount ? colors.sendmoney.error : colors.sendmoney.amount}
                         keyboardType='decimal-pad'
@@ -152,12 +165,12 @@ const SendMoney = ({ navigation }: { navigation: any }) => {
                                 {tnxData.date_time ? getDateTimeFromTimestamp(tnxData.date_time, "datetime") : "Select Date"}
                             </Text>
 
-                            <TouchableOpacity
+                            {!openDateModal && <TouchableOpacity
                                 style={[commonstyles.acjc, { paddingHorizontal: 5, paddingVertical: 3 }]}
                                 onPress={() => setOpenDateModal(true)}
                             >
                                 <Image style={styles.calendar} source={icons.calendar} />
-                            </TouchableOpacity>
+                            </TouchableOpacity>}
                         </View>
 
                         {openDateModal && <DateTimePicker
@@ -236,24 +249,30 @@ const styles = StyleSheet.create({
         marginHorizontal: 40,
         borderRadius: 39,
         marginTop: 20,
+        height: 52,
+        overflow: "hidden",
     },
     dollar: {
-        fontSize: 40,
-        fontFamily: fonts.medium,
+        ...Platform.select({
+            ios: {
+                width: 35,
+                height: 35,
+            },
+            android: {
+                width: 30,
+                height: 30,
+            }
+        })
     },
     inputAmount: {
         maxWidth: _Width / 2,
         fontFamily: fonts.medium,
+        fontSize: 40,
         ...Platform.select({
             ios: {
-                fontSize: 40,
                 height: 45,
             },
-            android: {
-                // height: 45,
-                fontSize: 40,
-                paddingVertical: 0,
-            }
+            android: {}
         }),
     },
     inputBox: {

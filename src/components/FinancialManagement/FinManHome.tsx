@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { getAllTransaction } from '../../services/slices/UserSlice';
 import { Transactions_Data } from '../../config/CustomTypes';
+import { getDateTimeFromTimestamp } from '../../utility/UtilityFunctions';
 
 
 const FinManHome = ({ navigation }: { navigation: any }) => {
@@ -174,7 +175,8 @@ const FinManHome = ({ navigation }: { navigation: any }) => {
 
                                         <Text style={styles.tnxType}>{item.category.transaction_category_name}</Text>
                                     </View>
-
+                                    
+                                    {/* amount & date */}
                                     <View style={{ alignItems: "flex-end" }}>
                                         <Text
                                             style={[
@@ -184,7 +186,7 @@ const FinManHome = ({ navigation }: { navigation: any }) => {
                                         >
                                             {item.tnx_type === "Expense" ? "-" : "+"}${item.tnx_amount}
                                         </Text>
-                                        <Text style={styles.tnxTime}>Today</Text>
+                                        <Text style={styles.tnxTime}>{getDateTimeFromTimestamp(item.date_time, "shortdate")}</Text>
                                     </View>
                                 </View>
                             )}

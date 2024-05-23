@@ -39,24 +39,7 @@ const BarChart = ({ data }: BarChart_Props) => {
                 {/* bar */}
                 <View style={styles.chartContainer}>
                     {Array.from({ length: numDottedLines }).map((_, index) => (
-                        <>
-                            {/* {Platform.OS === "ios" ?
-                                <Svg key={index} height={2}>
-                                    <Line
-                                        x1="0"
-                                        y1={2 / 2}
-                                        // x2={"100%"}
-                                        y2={2 / 2}
-                                        stroke={colors.transaction.xaxisdotline}
-                                        strokeWidth={2}
-                                        strokeDasharray={[4, 2]} // This creates the dotted effect
-                                    />
-                                </Svg>
-                                :
-                                <View key={index} style={[styles.dottedLine, { bottom: `${(index / numDottedLines) * 100}%` }]} />
-                            } */}
-                            <View key={index} style={[styles.dottedLine, { bottom: `${(index / numDottedLines) * 100}%` }]} />
-                        </>
+                        <View key={index} style={[styles.dottedLine, { bottom: `${(index / numDottedLines) * 100}%` }]} />
                     ))}
                     {normalizedData.map((height, index) => (
                         <View key={index} style={[styles.barContainer, { width: Platform.OS === "ios" ? 48.14 : 43.42 }]}>
