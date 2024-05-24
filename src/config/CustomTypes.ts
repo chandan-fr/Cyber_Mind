@@ -186,3 +186,11 @@ export type BarChart_Props = {
     filterType?: string;
     height: number;
 };
+
+export type EmptyData_Props = {
+    msg: string;
+    width?: number;
+    height?: number;
+    size?: number;
+    lifted?: boolean;
+};

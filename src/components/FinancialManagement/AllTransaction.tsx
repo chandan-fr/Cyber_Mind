@@ -12,6 +12,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 import { Dispatch } from 'redux';
 import { useDispatch } from 'react-redux';
 import { showModal } from '../../services/slices/UtilitySlice';
+import EmptyData from '../../utility/EmptyData';
 
 
 const AllTransaction = ({ navigation }: { navigation: any }): JSX.Element => {
@@ -77,85 +78,89 @@ const AllTransaction = ({ navigation }: { navigation: any }): JSX.Element => {
             </LinearGradient>
 
             {/* body */}
-            <View style={[commonstyles.parent, { marginBottom: Platform.OS === "android" ? 5 : 20, marginHorizontal: 10, backgroundColor: colors.alltnx.bgcolor }]}>
-                <View style={[commonstyles.parent, { marginTop: 25 }]}>
-                    <FlatList
-                        data={[1, 1, 1, 1, 1, 1]}
-                        showsVerticalScrollIndicator={false}
-                        keyExtractor={(_, index) => index.toString()}
-                        // ListFooterComponent={
-                        //     <TouchableOpacity
-                        //         style={[commonstyles.acjc, styles.seeMore]}
-                        //         onPress={() => navigation.navigate("alltnx")}
-                        //     >
-                        //         <Text style={styles.seeMoreTxt}>See More</Text>
-                        //     </TouchableOpacity>
-                        // }
-                        renderItem={({ item }) => (
-                            <View style={{ rowGap: 10, marginBottom: 25, marginHorizontal: 15 }}>
-                                {/* date */}
-                                <Text style={[styles.today, { alignSelf: "flex-start", color: colors.black }]}>{dateFNS(new Date())}</Text>
+            <View style={[commonstyles.parent, { marginBottom: Platform.OS === "android" ? 5 : 20, paddingHorizontal: 10, backgroundColor: colors.alltnx.bgcolor }]}>
+                {tnxdata.length ?
+                    <View style={[commonstyles.parent, { marginTop: 25 }]}>
+                        <FlatList
+                            data={[1, 1, 1, 1, 1, 1]}
+                            showsVerticalScrollIndicator={false}
+                            keyExtractor={(_, index) => index.toString()}
+                            // ListFooterComponent={
+                            //     <TouchableOpacity
+                            //         style={[commonstyles.acjc, styles.seeMore]}
+                            //         onPress={() => navigation.navigate("alltnx")}
+                            //     >
+                            //         <Text style={styles.seeMoreTxt}>See More</Text>
+                            //     </TouchableOpacity>
+                            // }
+                            renderItem={({ item }) => (
+                                <View style={{ rowGap: 10, marginBottom: 25, marginHorizontal: 15 }}>
+                                    {/* date */}
+                                    <Text style={[styles.today, { alignSelf: "flex-start", color: colors.black }]}>{dateFNS(new Date())}</Text>
 
-                                {/* transaction */}
-                                <View style={[styles.tnxContainer, {}]}>
-                                    <FlatList
-                                        data={tnxdata}
-                                        keyExtractor={(_, index) => index.toString()}
-                                        renderItem={({ item, index }) => (
-                                            <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginBottom: 10 }]}>
-                                                {/* image & transaction category */}
-                                                <View style={[commonstyles.fdRow, { columnGap: 20, alignItems: "center" }]}>
-                                                    {/* tnx type image with gradient */}
-                                                    <View style={styles.shadowWrap}>
-                                                        <LinearGradient
-                                                            colors={colors.finmanhome.tnximgwrapbg}
-                                                            style={[styles.tnxTypeImgWrap, commonstyles.acjc]}
-                                                            useAngle={true}
-                                                            angle={-45}
-                                                            angleCenter={{ x: 0.8, y: 0.3 }}
-                                                        >
-                                                            <Image
-                                                                style={styles.tnxTypeImg}
-                                                                source={
-                                                                    item.category.transaction_category_name === "Food" ?
-                                                                        icons.food
-                                                                        :
-                                                                        item.category.transaction_category_name === "Salary" ?
-                                                                            icons.money
+                                    {/* transaction */}
+                                    <View style={[styles.tnxContainer, {}]}>
+                                        <FlatList
+                                            data={tnxdata}
+                                            keyExtractor={(_, index) => index.toString()}
+                                            renderItem={({ item, index }) => (
+                                                <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginBottom: 10 }]}>
+                                                    {/* image & transaction category */}
+                                                    <View style={[commonstyles.fdRow, { columnGap: 20, alignItems: "center" }]}>
+                                                        {/* tnx type image with gradient */}
+                                                        <View style={styles.shadowWrap}>
+                                                            <LinearGradient
+                                                                colors={colors.finmanhome.tnximgwrapbg}
+                                                                style={[styles.tnxTypeImgWrap, commonstyles.acjc]}
+                                                                useAngle={true}
+                                                                angle={-45}
+                                                                angleCenter={{ x: 0.8, y: 0.3 }}
+                                                            >
+                                                                <Image
+                                                                    style={styles.tnxTypeImg}
+                                                                    source={
+                                                                        item.category.transaction_category_name === "Food" ?
+                                                                            icons.food
                                                                             :
-                                                                            item.category.transaction_category_name === "Shopping" ?
-                                                                                icons.shopping
+                                                                            item.category.transaction_category_name === "Salary" ?
+                                                                                icons.money
                                                                                 :
-                                                                                item.category.transaction_category_name === "Entertainment" ?
-                                                                                    icons.entertainment
-                                                                                    : null
-                                                                }
-                                                            />
-                                                        </LinearGradient>
+                                                                                item.category.transaction_category_name === "Shopping" ?
+                                                                                    icons.shopping
+                                                                                    :
+                                                                                    item.category.transaction_category_name === "Entertainment" ?
+                                                                                        icons.entertainment
+                                                                                        : null
+                                                                    }
+                                                                />
+                                                            </LinearGradient>
+                                                        </View>
+
+                                                        <Text style={styles.tnxType}>{item.category.transaction_category_name}</Text>
                                                     </View>
 
-                                                    <Text style={styles.tnxType}>{item.category.transaction_category_name}</Text>
+                                                    {/* amount & date */}
+                                                    <View style={{ alignItems: "flex-end" }}>
+                                                        <Text
+                                                            style={[
+                                                                styles.tnxAmount,
+                                                                { color: item.tnx_type === "Expense" ? colors.finmanhome.tnxexpns : colors.finmanhome.tnxincm }
+                                                            ]}
+                                                        >
+                                                            {item.tnx_type === "Expense" ? "-" : "+"}${item.tnx_amount}
+                                                        </Text>
+                                                    </View>
                                                 </View>
-
-                                                {/* amount & date */}
-                                                <View style={{ alignItems: "flex-end" }}>
-                                                    <Text
-                                                        style={[
-                                                            styles.tnxAmount,
-                                                            { color: item.tnx_type === "Expense" ? colors.finmanhome.tnxexpns : colors.finmanhome.tnxincm }
-                                                        ]}
-                                                    >
-                                                        {item.tnx_type === "Expense" ? "-" : "+"}${item.tnx_amount}
-                                                    </Text>
-                                                </View>
-                                            </View>
-                                        )}
-                                    />
+                                            )}
+                                        />
+                                    </View>
                                 </View>
-                            </View>
-                        )}
-                    />
-                </View>
+                            )}
+                        />
+                    </View>
+                    :
+                    <EmptyData msg={"No Transaction Found!"} lifted={true} />
+                }
             </View>
 
             {/* Download Button */}

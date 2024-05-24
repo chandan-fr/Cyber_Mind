@@ -13,6 +13,7 @@ import { Dispatch } from 'redux';
 import { getAllTransaction } from '../../services/slices/UserSlice';
 import { Transactions_Data } from '../../config/CustomTypes';
 import { getDateTimeFromTimestamp } from '../../utility/UtilityFunctions';
+import EmptyData from '../../utility/EmptyData';
 
 
 const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
@@ -137,7 +138,7 @@ const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
 
                 {/* recent transactions */}
                 <View style={{ marginTop: 6, flex: 1, paddingTop: 10 }}>
-                    {all_transactions.length > 0 ?
+                    {all_transactions.length ?
                         <FlatList
                             data={getRecentTransactions(all_transactions)}
                             showsVerticalScrollIndicator={false}
@@ -192,9 +193,7 @@ const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
                             )}
                         />
                         :
-                        <View style={[commonstyles.parent, commonstyles.acjc]}>
-                            <Text>No Transaction So Far!!</Text>
-                        </View>
+                        <EmptyData msg={"No Transaction Found!"} size={16} width={181} height={140} lifted={true} />
                     }
                 </View>
             </View>

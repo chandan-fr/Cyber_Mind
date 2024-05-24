@@ -8,4 +8,5 @@ export const images = {
     jhikimiki: require("../assets/images/jhikimiki.png"),
     fchbg: require("../assets/images/fchbg.png"),
     fmtimgbg: require("../assets/images/fmtimgbg.png"),
+    errorscrn: require("../assets/images/errorscrn.png"),
 };

@@ -199,5 +199,8 @@ module.exports = {
         gdcolor: ["#49C4FC", "#13CCD9"],
         bgcolor: "#E2F3F3",
         today: "#4B4B4B",
-    }
+    },
+    emptydata:{
+        txt: "#CCCCCC",
+    },
 };

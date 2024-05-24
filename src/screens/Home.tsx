@@ -11,6 +11,7 @@ import { getFullDate, getImagUrl } from '../utility/UtilityFunctions';
 import { fonts } from '../config/fonts';
 import { getAllCategory, getAllMember } from '../services/slices/UserSlice';
 import CategoryCard from '../components/Home/CategoryCard';
+import EmptyData from '../utility/EmptyData';
 
 
 const Home = ({ navigation }: { navigation: any }): JSX.Element => {
@@ -144,18 +145,22 @@ const Home = ({ navigation }: { navigation: any }): JSX.Element => {
                     Categories
                 </Text>
 
-                <View style={styles.cardWrap}>
-                    <FlatList
-                        data={all_category}
-                        numColumns={2}
-                        showsVerticalScrollIndicator={false}
-                        columnWrapperStyle={[commonstyles.fdRow, { alignItems: "center", justifyContent: "space-between", marginBottom: 15 }]}
-                        keyExtractor={(_, index: number) => index.toString()}
-                        renderItem={({ item, index }) => (
-                            <CategoryCard item={item} navigation={navigation} />
-                        )}
-                    />
-                </View>
+                {all_category.length ?
+                    <View style={styles.cardWrap}>
+                        <FlatList
+                            data={all_category}
+                            numColumns={2}
+                            showsVerticalScrollIndicator={false}
+                            columnWrapperStyle={[commonstyles.fdRow, { alignItems: "center", justifyContent: "space-between", marginBottom: 15 }]}
+                            keyExtractor={(_, index: number) => index.toString()}
+                            renderItem={({ item, index }) => (
+                                <CategoryCard item={item} navigation={navigation} />
+                            )}
+                        />
+                    </View>
+                    :
+                    <EmptyData msg={"No Category Found!"} size={16} width={181} height={140} />
+                }
             </View>
         </View>
     )

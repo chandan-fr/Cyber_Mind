@@ -12,6 +12,7 @@ import { getDateTimeFromTimestamp, getImagUrl, getMonthArray } from '../../utili
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { getAllEvents } from '../../services/slices/UserSlice';
+import EmptyData from '../../utility/EmptyData';
 
 
 const FamilyCalendarHome = ({ navigation }: { navigation: any }): JSX.Element => {
@@ -50,7 +51,6 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }): JSX.Element =>
     }
 
     useEffect(() => {
-        // console.log("page rendered==>");
         dispatch(getAllEvents({ _Header }));
     }, []);
 
@@ -143,39 +143,43 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }): JSX.Element =>
                                 </View>
 
                                 {/* event content */}
-                                <View style={[{ marginTop: 20, marginHorizontal: 20 }]}>
-                                    <FlatList
-                                        data={all_events}
-                                        scrollEnabled
-                                        showsVerticalScrollIndicator={false}
-                                        keyExtractor={(_, index) => index.toString()}
-                                        inverted
-                                        renderItem={({ item, index }) => (
-                                            <>
-                                                <View style={[commonstyles.fdRow, { columnGap: 20 }]}>
-                                                    <View style={{ marginTop: -10 }}>
-                                                        <Text style={styles.hour}>{getDateTimeFromTimestamp(item?.event_start_timestamp, "time").slice(0, -2)}</Text>
-                                                        <Text style={styles.hourFormat}>{getDateTimeFromTimestamp(item?.event_start_timestamp, "time").slice(-2)}</Text>
-                                                    </View>
+                                {all_events.length ?
+                                    <View style={[{ marginTop: 20, marginHorizontal: 20 }]}>
+                                        <FlatList
+                                            data={all_events}
+                                            scrollEnabled
+                                            showsVerticalScrollIndicator={false}
+                                            keyExtractor={(_, index) => index.toString()}
+                                            inverted
+                                            renderItem={({ item, index }) => (
+                                                <>
+                                                    <View style={[commonstyles.fdRow, { columnGap: 20 }]}>
+                                                        <View style={{ marginTop: -10 }}>
+                                                            <Text style={styles.hour}>{getDateTimeFromTimestamp(item?.event_start_timestamp, "time").slice(0, -2)}</Text>
+                                                            <Text style={styles.hourFormat}>{getDateTimeFromTimestamp(item?.event_start_timestamp, "time").slice(-2)}</Text>
+                                                        </View>
 
-                                                    <View style={{ rowGap: 15, flex: 1 }}>
-                                                        <View style={styles.topLine} />
+                                                        <View style={{ rowGap: 15, flex: 1 }}>
+                                                            <View style={styles.topLine} />
 
-                                                        <View style={[styles.contentBox, { backgroundColor: eventColor[index] }]}>
-                                                            <Text>{item?.event_name}</Text>
-                                                            <Text>Location: {item?.location ? item?.location : "None"}</Text>
-                                                            <Text>Start : {getDateTimeFromTimestamp(item?.event_start_timestamp, "datetime")}</Text>
-                                                            <Text>End : {getDateTimeFromTimestamp(item?.event_end_timestamp, "datetime")}</Text>
-                                                            <Text>Repeat : {item?.repeat ? item?.repeat : "None"}</Text>
+                                                            <View style={[styles.contentBox, { backgroundColor: eventColor[index] }]}>
+                                                                <Text>{item?.event_name}</Text>
+                                                                <Text>Location: {item?.location ? item?.location : "None"}</Text>
+                                                                <Text>Start : {getDateTimeFromTimestamp(item?.event_start_timestamp, "datetime")}</Text>
+                                                                <Text>End : {getDateTimeFromTimestamp(item?.event_end_timestamp, "datetime")}</Text>
+                                                                <Text>Repeat : {item?.repeat ? item?.repeat : "None"}</Text>
+                                                            </View>
                                                         </View>
                                                     </View>
-                                                </View>
 
-                                                {index === all_events.length - 1 ? null : <View style={{ marginBottom: 40 }} />}
-                                            </>
-                                        )}
-                                    />
-                                </View>
+                                                    {index === all_events.length - 1 ? null : <View style={{ marginBottom: 40 }} />}
+                                                </>
+                                            )}
+                                        />
+                                    </View>
+                                    :
+                                    <EmptyData msg={"No Event Found!"} size={14} width={141} height={100} />
+                                }
                             </View>
 
                             {/* Remainder & todo */}
@@ -196,30 +200,34 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }): JSX.Element =>
                                 </View>
 
                                 {/* todo content */}
-                                <View style={{ marginHorizontal: 20, marginTop: 15 }}>
-                                    <FlatList
-                                        data={["#C5FFB0", "#BDEAFF", "#C5FFB0"]}
-                                        keyExtractor={(_, index) => index.toString()}
-                                        renderItem={({ item, index }) => (
-                                            <TouchableOpacity
-                                                style={[styles.remTodoWrap, commonstyles.fdRow, { backgroundColor: item }]}
-                                            >
-                                                <Image style={styles.reminderImg} source={user?.profile_img ? { uri: getImagUrl(user?.profile_img) } : icons.man} />
+                                {1 ?
+                                    <View style={{ marginHorizontal: 20, marginTop: 15 }}>
+                                        <FlatList
+                                            data={["#C5FFB0", "#BDEAFF", "#C5FFB0"]}
+                                            keyExtractor={(_, index) => index.toString()}
+                                            renderItem={({ item, index }) => (
+                                                <TouchableOpacity
+                                                    style={[styles.remTodoWrap, commonstyles.fdRow, { backgroundColor: item }]}
+                                                >
+                                                    <Image style={styles.reminderImg} source={user?.profile_img ? { uri: getImagUrl(user?.profile_img) } : icons.man} />
 
-                                                <View style={[commonstyles.parent, { rowGap: Platform.OS === "android" ? 4 : 8 }]}>
-                                                    <Text style={styles.reminderTodoHeading} numberOfLines={1}>
-                                                        Helping a local business reinvent itself
-                                                    </Text>
+                                                    <View style={[commonstyles.parent, { rowGap: Platform.OS === "android" ? 4 : 8 }]}>
+                                                        <Text style={styles.reminderTodoHeading} numberOfLines={1}>
+                                                            Helping a local business reinvent itself
+                                                        </Text>
 
-                                                    <View style={[commonstyles.fdRow, { alignItems: "center", columnGap: 6 }]}>
-                                                        <Image style={styles.timer} source={icons.timer} />
-                                                        <Text style={styles.time}>12:30 pm - 2:00 pm</Text>
+                                                        <View style={[commonstyles.fdRow, { alignItems: "center", columnGap: 6 }]}>
+                                                            <Image style={styles.timer} source={icons.timer} />
+                                                            <Text style={styles.time}>12:30 pm - 2:00 pm</Text>
+                                                        </View>
                                                     </View>
-                                                </View>
-                                            </TouchableOpacity>
-                                        )}
-                                    />
-                                </View>
+                                                </TouchableOpacity>
+                                            )}
+                                        />
+                                    </View>
+                                    :
+                                    <EmptyData msg={"No Task Found!"} size={14} width={141} height={100} />
+                                }
                             </View>
                         </View>
                     )}
