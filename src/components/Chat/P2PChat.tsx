@@ -9,7 +9,7 @@ import { icons } from '../../config/icons';
 import { fonts } from '../../config/fonts';
 
 
-const P2PChat = ({ navigation }: { navigation: any }) => {
+const P2PChat = ({ navigation }: { navigation: any }): JSX.Element => {
   const { user } = useSelector((state: any) => state.userSlice);
   const [message, setMessage] = useState<string>("");
 

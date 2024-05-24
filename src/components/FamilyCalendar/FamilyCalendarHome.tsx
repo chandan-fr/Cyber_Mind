@@ -14,7 +14,7 @@ import { Dispatch } from 'redux';
 import { getAllEvents } from '../../services/slices/UserSlice';
 
 
-const FamilyCalendarHome = ({ navigation }: { navigation: any }) => {
+const FamilyCalendarHome = ({ navigation }: { navigation: any }): JSX.Element => {
     const { user, all_events, token } = useSelector((state: any) => state.userSlice);
     const currentDay: number = new Date().getDate();
     const [currentDate, setCurrentDate] = useState<Date_State>(

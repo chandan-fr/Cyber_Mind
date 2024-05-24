@@ -16,7 +16,7 @@ import { showModal } from '../../services/slices/UtilitySlice';
 import { addEvents, getAllEvents } from '../../services/slices/UserSlice';
 
 
-const AddEvent = ({ navigation }: { navigation: any }) => {
+const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
     const { token } = useSelector((state: any) => state.userSlice);
     const [alert, setAlert] = useState<boolean>(false);
     const [repeat, setRepeat] = useState<boolean>(false);
@@ -88,7 +88,7 @@ const AddEvent = ({ navigation }: { navigation: any }) => {
             eventData.alert = alertOptions[alertOptn];
             eventData.event_start_timestamp = convertToTimeStamp(startTimeValue.datetime);
             eventData.event_end_timestamp = convertToTimeStamp(endTimeValue.datetime);
-            
+
             dispatch(addEvents({ eventData, _Header, navigation }));
             // setEventData({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
         }

@@ -29,6 +29,7 @@ export const passRegex: RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-
 export const nameRegex: RegExp = /^[a-zA-Z ]+$/;
 export const numericRegex: RegExp = /^[0-9]+$/;
 export const Gallery_Permission: Permission = Number(Platform.Version) >= 33 ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+export const Storage_Permission: Permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE;
 
 export const _CellWidth: number = (_Width - 44.46) / 7;
 export const monthsArray: Array<{ [key: string]: string | number }> = [

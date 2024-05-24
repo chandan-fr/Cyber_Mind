@@ -1,5 +1,5 @@
-import { PermissionsAndroid } from "react-native";
-import { Gallery_Permission, _Image_Url } from "../config/staticVariables";
+import { PermissionsAndroid, Platform } from "react-native";
+import { Gallery_Permission, Storage_Permission, _Image_Url } from "../config/staticVariables";
 import { showModal } from "../services/slices/UtilitySlice";
 import { DayDate } from "../config/CustomTypes";
 
@@ -30,12 +30,37 @@ export const getImagUrl = (url: string): string => {
 
 export const hasGalleryPermission = async (dispatch: any): Promise<boolean> => {
     try {
-        const hasPermission = await PermissionsAndroid.check(Gallery_Permission);
-        if (!hasPermission) {
-            const granted = await PermissionsAndroid.request(Gallery_Permission);
-            return granted === "granted";
+        if (Platform.OS === "ios") {
+            return true;
+        } else {
+            const hasPermission = await PermissionsAndroid.check(Gallery_Permission);
+            if (!hasPermission) {
+                const granted = await PermissionsAndroid.request(Gallery_Permission);
+                return granted === "granted";
+            }
+            return true;
         }
-        return true;
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc?.message, type: "error" }));
+        return false;
+    }
+};
+
+export const hasStoragePermission = async (dispatch: any): Promise<boolean> => {
+    try {
+        if (Platform.OS === "ios") {
+            return true;
+        } else {
+            if (Number(Platform.Version) < 33) {
+                const hasPermission = await PermissionsAndroid.check(Storage_Permission);
+                if (!hasPermission) {
+                    const granted = await PermissionsAndroid.request(Storage_Permission);
+                    return granted === "granted";
+                }
+                return true;
+            }
+            return true;
+        }
     } catch (exc: any) {
         dispatch(showModal({ msg: exc?.message, type: "error" }));
         return false;
@@ -157,4 +182,18 @@ export const dateFNS = (date: Date): string => {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
+};
+
+export const generateRandomFileName = (mimeType: string, date?: Date): string => {
+    // Get the current date and time
+    const now = date ? date : new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    const fileName = `${year}${month}${day}_${hours}${minutes}${seconds}${mimeType}`;
+
+    return fileName;
 };

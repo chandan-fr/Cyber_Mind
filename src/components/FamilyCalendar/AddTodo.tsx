@@ -7,7 +7,7 @@ import { commonstyles } from '../../assets/css/CommonStyles';
 import { images } from '../../config/images';
 import { icons } from '../../config/icons';
 
-const AddTodo = ({ navigation }: { navigation: any }) => {
+const AddTodo = ({ navigation }: { navigation: any }): JSX.Element => {
     useLayoutEffect(() => {
         navigation.setOptions({
             tabBarVisible: false,
@@ -45,7 +45,7 @@ const AddTodo = ({ navigation }: { navigation: any }) => {
 
             {/* body */}
             <View>
-                
+
             </View>
         </View>
     )

@@ -7,7 +7,7 @@ import { _Height } from '../config/staticVariables';
 import { commonstyles } from '../assets/css/CommonStyles';
 import { icons } from '../config/icons';
 
-const PromptModal = ({ visible, msg, onPressOK, onPressCancel }: Prompt_Modal_Props) => {
+const PromptModal = ({ visible, msg, onPressOK, onPressCancel }: Prompt_Modal_Props): JSX.Element => {
     return (
         <Modal
             visible={visible}

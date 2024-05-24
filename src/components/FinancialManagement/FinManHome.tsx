@@ -15,7 +15,7 @@ import { Transactions_Data } from '../../config/CustomTypes';
 import { getDateTimeFromTimestamp } from '../../utility/UtilityFunctions';
 
 
-const FinManHome = ({ navigation }: { navigation: any }) => {
+const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
     const { all_transactions, token } = useSelector((state: any) => state.userSlice);
     const [isMenu, setIsMenu] = useState<boolean>(false);
     const _Header = { headers: { Authorization: "Bearer " + token } };
@@ -175,7 +175,7 @@ const FinManHome = ({ navigation }: { navigation: any }) => {
 
                                         <Text style={styles.tnxType}>{item.category.transaction_category_name}</Text>
                                     </View>
-                                    
+
                                     {/* amount & date */}
                                     <View style={{ alignItems: "flex-end" }}>
                                         <Text

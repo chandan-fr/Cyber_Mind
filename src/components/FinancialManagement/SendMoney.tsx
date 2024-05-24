@@ -14,7 +14,7 @@ import { showModal } from '../../services/slices/UtilitySlice';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { convertToTimeStamp, getDateTimeFromTimestamp, getFormatedDateTime } from '../../utility/UtilityFunctions';
 
-const SendMoney = ({ navigation }: { navigation: any }) => {
+const SendMoney = ({ navigation }: { navigation: any }): JSX.Element => {
     const { transaction_category, token } = useSelector((state: any) => state.userSlice);
     const [tnxData, setTnxData] = useState<Transaction_Form>({ tnx_amount: "", category: "", note: "", date_time: 0, tnx_type: "" });
     const [openDateModal, setOpenDateModal] = useState<boolean>(false);

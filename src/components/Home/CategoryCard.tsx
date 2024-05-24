@@ -6,7 +6,7 @@ import { fonts } from '../../config/fonts';
 import LinearGradient from 'react-native-linear-gradient';
 import { getImagUrl } from '../../utility/UtilityFunctions';
 
-const CategoryCard = ({ item, navigation }: { item: any, navigation: any }) => {
+const CategoryCard = ({ item, navigation }: { item: any, navigation: any }): JSX.Element => {
 
     return (
         <TouchableOpacity

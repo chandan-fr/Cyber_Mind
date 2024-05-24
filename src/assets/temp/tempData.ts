@@ -82,3 +82,6 @@ export const tnxdata: Array<Transactions_Data> = [
         "updatedAt": "2024-05-23T07:54:37.211Z"
     }
 ];
+
+export const expenses = { Sun: 476, Mon: 776, Tue: 334, Wed: 224, Thu: 123, Fri: 998, Sat: 550 };
+export const expensesmonth = { "Jan": 476, "Feb": 776, "Mar": 334, "Apr": 224, "May": 123, "Jun": 998, "Jul": 550, "Aug": 476, "Sep": 776, "Oct": 334, "Nov": 224, "Dec": 123 };

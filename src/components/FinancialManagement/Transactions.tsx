@@ -6,17 +6,14 @@ import colors from '../../config/colors';
 import { icons } from '../../config/icons';
 import { fonts } from '../../config/fonts';
 import { _ExpenseFilterType, _Height, _Width } from '../../config/staticVariables';
-import { dateFNS, getDateTimeFromTimestamp } from '../../utility/UtilityFunctions';
+import { dateFNS } from '../../utility/UtilityFunctions';
 import { Dropdown } from 'react-native-element-dropdown';
 import BarChart from '../../utility/BarChart';
-import { tnxdata } from '../../assets/temp/tempData';
+import { expenses, expensesmonth, tnxdata } from '../../assets/temp/tempData';
 
-const Transactions = ({ navigation }: { navigation: any }) => {
+const Transactions = ({ navigation }: { navigation: any }): JSX.Element => {
     const [expenseFilterView, setExpenseFilterView] = useState<string>("Weekly");
     const [transactionCat, setTransactionCat] = useState<string>("All");
-
-    const expenses = { Sun: 476, Mon: 776, Tue: 334, Wed: 224, Thu: 123, Fri: 998, Sat: 550 };
-    const expensesmonth = { "Jan": 476, "Feb": 776, "Mar": 334, "Apr": 224, "May": 123, "Jun": 998, "Jul": 550, "Aug": 476, "Sep": 776, "Oct": 334, "Nov": 224, "Dec": 123 };
 
     return (
         <View style={commonstyles.parent}>
@@ -96,27 +93,29 @@ const Transactions = ({ navigation }: { navigation: any }) => {
                             style={[styles.tnxCatMenu, commonstyles.acjc, { backgroundColor: transactionCat === "All" ? colors.transaction.tnxcatmenubg : "transparent" }]}
                             onPress={() => setTransactionCat("All")}
                         >
-                            <Text style={[styles.tnxCatMenuTxt, { color: transactionCat === "All" ? colors.white : colors.black }]}>All</Text>
+                            <Text style={[styles.tnxCatMenuTxt, { color: transactionCat === "All" ? colors.white : colors.transaction.tnxcatmenutxt }]}>All</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             style={[styles.tnxCatMenu, commonstyles.acjc, { backgroundColor: transactionCat === "Income" ? colors.transaction.tnxcatmenubg : "transparent" }]}
                             onPress={() => setTransactionCat("Income")}
                         >
-                            <Text style={[styles.tnxCatMenuTxt, { color: transactionCat === "Income" ? colors.white : colors.black }]}>Income</Text>
+                            <Text style={[styles.tnxCatMenuTxt, { color: transactionCat === "Income" ? colors.white : colors.transaction.tnxcatmenutxt }]}>Income</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             style={[styles.tnxCatMenu, commonstyles.acjc, { backgroundColor: transactionCat === "Expense" ? colors.transaction.tnxcatmenubg : "transparent" }]}
                             onPress={() => setTransactionCat("Expense")}
                         >
-                            <Text style={[styles.tnxCatMenuTxt, { color: transactionCat === "Expense" ? colors.white : colors.black }]}>Expense</Text>
+                            <Text style={[styles.tnxCatMenuTxt, { color: transactionCat === "Expense" ? colors.white : colors.transaction.tnxcatmenutxt }]}>Expense</Text>
                         </TouchableOpacity>
                     </View>
 
-                    <View style={[commonstyles.parent, { marginTop: 25 }]}>
+                    {/* transaction */}
+                    <View style={[commonstyles.parent, { marginTop: 15 }]}>
                         <FlatList
                             data={[1, 1, 1]}
+                            style={{ paddingTop: 10 }}
                             showsVerticalScrollIndicator={false}
                             keyExtractor={(_, index) => index.toString()}
                             ListFooterComponent={
@@ -316,7 +315,7 @@ const styles = StyleSheet.create({
         borderRadius: 53,
         paddingVertical: 8,
         backgroundColor: colors.transaction.seemorebg,
-        marginBottom: 10,
+        marginBottom: 15,
         marginHorizontal: 20,
     },
     seeMoreTxt: {

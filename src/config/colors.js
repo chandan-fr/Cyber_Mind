@@ -189,11 +189,15 @@ module.exports = {
         chartshadow: "#009EF5",
         expnsfilter: "#1B1B1B",
         tnxcatmenubg: "#009EF5",
+        tnxcatmenutxt: "rgba(0, 0, 0, 0.15)",
         seemorebg: "#009EF5",
         nestedtnxviewbg: "#FBFBFB",
         nestedtnxviewshadow: "#009EF5",
     },
     alltnx:{
         downloadbg:"#009EF5",
+        gdcolor: ["#49C4FC", "#13CCD9"],
+        bgcolor: "#E2F3F3",
+        today: "#4B4B4B",
     }
 };
