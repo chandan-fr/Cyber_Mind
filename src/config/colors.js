@@ -207,5 +207,13 @@ module.exports = {
         gdcolor: ["#2695E5", "#4AE7FC"],
         taskcatmenubg: "#009EF5",
         tick: "#33363F",
-    }
+    },
+    addtask:{
+        gdcolor: ["#49C4FC", "#13CCD9"],
+        label: "#666464",
+        seeall: "#49C4FC",
+        calendar: "#009EF5",
+        bgcolor: "#E2F3F3",
+        prtcatmenubg: "#009EF5",
+    },
 };

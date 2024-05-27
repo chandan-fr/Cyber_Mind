@@ -52,24 +52,24 @@ const TaskAndChoreHome = ({ navigation }: { navigation: any }): JSX.Element => {
                 {/* header menu */}
                 <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginHorizontal: 30 }]}>
                     <TouchableOpacity
-                        style={[styles.tnxCatMenu, commonstyles.acjc, { backgroundColor: taskCat === "Today" ? colors.tcmhome.taskcatmenubg : "transparent" }]}
+                        style={[styles.taskCatMenu, commonstyles.acjc, { backgroundColor: taskCat === "Today" ? colors.tcmhome.taskcatmenubg : "transparent" }]}
                         onPress={() => setTaskCat("Today")}
                     >
-                        <Text style={[styles.tnxCatMenuTxt, { color: taskCat === "Today" ? colors.white : colors.black }]}>Today</Text>
+                        <Text style={[styles.taskCatMenuTxt, { color: taskCat === "Today" ? colors.white : colors.black }]}>Today</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={[styles.tnxCatMenu, commonstyles.acjc, { backgroundColor: taskCat === "Upcoming" ? colors.tcmhome.taskcatmenubg : "transparent" }]}
+                        style={[styles.taskCatMenu, commonstyles.acjc, { backgroundColor: taskCat === "Upcoming" ? colors.tcmhome.taskcatmenubg : "transparent" }]}
                         onPress={() => setTaskCat("Upcoming")}
                     >
-                        <Text style={[styles.tnxCatMenuTxt, { color: taskCat === "Upcoming" ? colors.white : colors.black }]}>Upcoming</Text>
+                        <Text style={[styles.taskCatMenuTxt, { color: taskCat === "Upcoming" ? colors.white : colors.black }]}>Upcoming</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={[styles.tnxCatMenu, commonstyles.acjc, { backgroundColor: taskCat === "Done" ? colors.tcmhome.taskcatmenubg : "transparent" }]}
+                        style={[styles.taskCatMenu, commonstyles.acjc, { backgroundColor: taskCat === "Done" ? colors.tcmhome.taskcatmenubg : "transparent" }]}
                         onPress={() => setTaskCat("Done")}
                     >
-                        <Text style={[styles.tnxCatMenuTxt, { color: taskCat === "Done" ? colors.white : colors.black }]}>Done</Text>
+                        <Text style={[styles.taskCatMenuTxt, { color: taskCat === "Done" ? colors.white : colors.black }]}>Done</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -174,12 +174,12 @@ const styles = StyleSheet.create({
         position: "absolute",
         borderRadius: 20,
     },
-    tnxCatMenu: {
+    taskCatMenu: {
         borderRadius: 20,
         paddingHorizontal: 20,
         paddingVertical: 5,
     },
-    tnxCatMenuTxt: {
+    taskCatMenuTxt: {
         fontSize: 15,
         fontFamily: fonts.medium,
     },
