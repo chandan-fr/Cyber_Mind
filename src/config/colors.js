@@ -203,4 +203,9 @@ module.exports = {
     emptydata:{
         txt: "#CCCCCC",
     },
+    tcmhome:{
+        gdcolor: ["#2695E5", "#4AE7FC"],
+        taskcatmenubg: "#009EF5",
+        tick: "#33363F",
+    }
 };

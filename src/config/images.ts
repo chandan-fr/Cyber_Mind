@@ -1,4 +1,6 @@
-export const images = {
+import { ImageSourcePropType } from "react-native";
+
+export const images: { [key: string]: ImageSourcePropType } = {
     logo: require("../assets/images/logo.png"),
     wlcm1: require("../assets/images/wlcm1.png"),
     wlcm2: require("../assets/images/wlcm2.png"),
@@ -9,4 +11,5 @@ export const images = {
     fchbg: require("../assets/images/fchbg.png"),
     fmtimgbg: require("../assets/images/fmtimgbg.png"),
     errorscrn: require("../assets/images/errorscrn.png"),
+    tcmnavbg: require("../assets/images/tcmnavbg.png"),
 };

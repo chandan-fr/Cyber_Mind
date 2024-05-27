@@ -194,3 +194,8 @@ export type EmptyData_Props = {
     size?: number;
     lifted?: boolean;
 };
+
+export type TaskCard_Props = {
+    item: any;
+    navigation: any;
+};
