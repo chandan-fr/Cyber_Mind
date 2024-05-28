@@ -199,3 +199,11 @@ export type TaskCard_Props = {
     item: any;
     navigation: any;
 };
+
+export type TaskData = {
+    task_title?: string,
+    task_time?: number,
+    location?: string,
+    task_partner?: Array<string>,
+    priority?: string,
+};

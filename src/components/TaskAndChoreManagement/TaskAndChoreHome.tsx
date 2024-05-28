@@ -1,5 +1,5 @@
 import { FlatList, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import colors from '../../config/colors';
 import { _Height } from '../../config/staticVariables';
@@ -9,10 +9,21 @@ import LinearGradient from 'react-native-linear-gradient';
 import { fonts } from '../../config/fonts';
 import EmptyData from '../../utility/EmptyData';
 import TaskCard from './TaskCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { Dispatch } from 'redux';
+import { getAllTask } from '../../services/slices/UserSlice';
 
 
 const TaskAndChoreHome = ({ navigation }: { navigation: any }): JSX.Element => {
+    const { all_task, token } = useSelector((state: any) => state.userSlice);
     const [taskCat, setTaskCat] = useState<string>("Today");
+    const _Header = { headers: { Authorization: "Bearer " + token } };
+
+    const dispatch: Dispatch<any> = useDispatch();
+
+    useEffect(() => {
+        dispatch(getAllTask({ _Header }));
+    }, []);
 
     return (
         <View style={[commonstyles.parent]}>
@@ -88,10 +99,10 @@ const TaskAndChoreHome = ({ navigation }: { navigation: any }): JSX.Element => {
                     </View>
 
                     {/* all tasks */}
-                    {1 ?
+                    {all_task.length ?
                         <View style={[commonstyles.parent, { marginHorizontal: 5, marginTop: 15, marginBottom: Platform.OS === "ios" ? 25 : 5 }]}>
                             <FlatList
-                                data={[1, 1, 1, 1, 1]}
+                                data={all_task}
                                 style={{ paddingTop: 15 }}
                                 numColumns={2}
                                 showsVerticalScrollIndicator={false}

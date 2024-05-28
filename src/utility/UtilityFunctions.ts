@@ -149,7 +149,7 @@ export const getFormatedDateTime = (inputDate: any, mode: string): string => {
     }
 };
 
-export const getDateTimeFromTimestamp = (timestamp: number, type: string): string => {
+export const getDateTimeFromTimestamp = (timestamp: number | any, type: string): string => {
     const date = new Date(timestamp * 1000);
 
     const optionsDate: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };

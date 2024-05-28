@@ -57,3 +57,5 @@ export const ALLEVENT = (_Header) => Api.get("/get/all/events", _Header);
 export const ALLTRANSACTION = (_Header) => Api.get("/get/all/transactions", _Header);
 export const ALLTRANSACTIONCATEGORY = (_Header) => Api.get("/get/all/tnx/category", _Header);
 export const ADDTRANSACTION = (tnxData, _Header) => Api.post("/add/new/transaction", tnxData, _Header);
+export const ALLTASK = (_Header) => Api.get("/get/all/task", _Header);
+export const ADDTASK = (taskData, _Header) => Api.post("/add/task", taskData, _Header);

@@ -208,6 +208,9 @@ module.exports = {
         taskcatmenubg: "#009EF5",
         tick: "#33363F",
     },
+    taskcard:{
+        gdcolor: ["#81CCD7", "#7E7BFF"]
+    },
     addtask:{
         gdcolor: ["#49C4FC", "#13CCD9"],
         label: "#666464",

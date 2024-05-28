@@ -30,7 +30,7 @@ const TaskCard = ({ item, navigation }: TaskCard_Props): JSX.Element => {
                     useAngle={true}
                     angle={-45}
                     angleCenter={{ x: 0.8, y: 0.5 }}
-                    colors={["#D389FF", "#6D70C9"].reverse()}
+                    colors={colors.taskcard.gdcolor.reverse()}
                     style={{
                         width: "100%",
                         height: "100%",
@@ -50,24 +50,24 @@ const TaskCard = ({ item, navigation }: TaskCard_Props): JSX.Element => {
 
                         {/* members */}
                         <View style={[commonstyles.fdRow, { alignItems: "center", alignSelf: "flex-start", marginTop: -20 }]}>
-                            {["man", "woman", "man"].map((value: string, i) => (
+                            {item?.task_partner?.map((value: any, i: number) => (
                                 <View key={i}>
-                                    <Image style={[styles.memberImg, { marginLeft: i > 0 ? -12 : 0 }]} source={icons.man} />
+                                    <Image style={[styles.memberImg, { marginLeft: i > 0 ? -12 : 0 }]} source={value?.profile_img ? { uri: getImagUrl(value?.profile_img) } : icons.user_dumy} />
                                 </View>
                             ))}
                         </View>
 
                         {/* task */}
-                        <Text numberOfLines={2} style={styles.taskTxt}>Clean the Floor</Text>
+                        <Text numberOfLines={2} style={styles.taskTxt}>{item?.task_title}</Text>
 
                         {/* date & status */}
                         <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginLeft: 7, marginRight: 10 }]}>
                             <Text style={styles.dateTime}>
                                 {
-                                    getDateTimeFromTimestamp(1716815104, "time") < curTime ?
+                                    getDateTimeFromTimestamp(item.task_time, "time") < curTime ?
                                         "Running late"
                                         :
-                                        `${getDateTimeFromTimestamp(1716815104, "shortdate")} by ${getDateTimeFromTimestamp(1716815104, "time")}`
+                                        `${getDateTimeFromTimestamp(item.task_time, "shortdate")} by ${getDateTimeFromTimestamp(item.task_time, "time")}`
                                 }
                             </Text>
 

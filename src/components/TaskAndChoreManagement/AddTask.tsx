@@ -6,19 +6,68 @@ import colors from '../../config/colors';
 import { _Height, _Width } from '../../config/staticVariables';
 import LinearGradient from 'react-native-linear-gradient';
 import { icons } from '../../config/icons';
-import { useSelector } from 'react-redux';
-import { getImagUrl } from '../../utility/UtilityFunctions';
+import { useDispatch, useSelector } from 'react-redux';
+import { convertToTimeStamp, getDateTimeFromTimestamp, getImagUrl } from '../../utility/UtilityFunctions';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import { TaskData } from '../../config/CustomTypes';
+import { Dispatch } from 'redux';
+import { showModal } from '../../services/slices/UtilitySlice';
+import { addUserTask } from '../../services/slices/UserSlice';
 
 const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
-  const { all_member } = useSelector((state: any) => state.userSlice);
+  const { all_member, token } = useSelector((state: any) => state.userSlice);
   const [openDateModal, setOpenDateModal] = useState<boolean>(false);
-  const [priorityCat, setPriorityCat] = useState<string>("Never");
+  const [taskData, setTaskData] = useState<TaskData>({ task_title: "", task_time: 0, location: "", task_partner: [], priority: "Never" });
+  const [taskError, setTaskError] = useState<TaskData>({});
+  const _Header = { headers: { Authorization: "Bearer " + token } };
+
+  const dispatch: Dispatch<any> = useDispatch();
+
+  const validateTaskData = (): TaskData => {
+    const error: TaskData = {};
+    const { task_title, task_time, task_partner } = taskData;
+
+    if (!task_title) {
+      error.task_title = "Task Name is Required!";
+      dispatch(showModal({ msg: "Task Name is Required!", type: "error" }));
+    }
+    else if (!task_time) {
+      error.task_time = 1;
+      dispatch(showModal({ msg: "Please Select a Date & Time for Task!", type: "error" }));
+    }
+    else if (!task_partner) {
+      // error.task_partner = "Please Select a Date & Time for Event to End!";
+      dispatch(showModal({ msg: "Please Select a Date & Time for Event to End!", type: "error" }));
+    }
+
+    return error;
+  };
+
+  const handleTask = () => {
+    const validationErrors: any = validateTaskData();
+    setTaskError(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      dispatch(addUserTask({ taskData, _Header, navigation }));
+      // setEventData({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
+    }
+  };
 
   const onChange = (event: DateTimePickerEvent, date: Date | undefined) => {
-    // setTnxData({ ...tnxData, date_time: convertToTimeStamp(date) });
+    setTaskData({ ...taskData, task_time: convertToTimeStamp(date) });
     setOpenDateModal(false);
-    // setTnxError({ ...tnxError, date_time: 0 });
+    setTaskError({ ...taskData, task_time: 0 });
+  };
+
+  const assignMenber = (id: string) => {
+    let data: Array<string> | undefined = taskData.task_partner;
+    if (!data?.includes(id)) {
+      data?.push(id);
+      setTaskData({ ...taskData, task_partner: data });
+    } else {
+      const newArray = data?.filter((element: string) => element !== id);
+      setTaskData({ ...taskData, task_partner: newArray });
+    }
   };
 
   return (
@@ -61,6 +110,8 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
           <View style={[styles.inputGrp]}>
             <TextInput
               style={styles.inputBox}
+              value={taskData.task_title}
+              onChangeText={value => setTaskData({ ...taskData, task_title: value })}
             />
           </View>
         </View>
@@ -73,6 +124,7 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
             <TextInput
               style={[styles.inputBox, commonstyles.parent]}
               editable={false}
+              value={taskData?.task_time ? getDateTimeFromTimestamp(taskData?.task_time, "date") + ", " + getDateTimeFromTimestamp(taskData?.task_time, "time") : undefined}
             />
 
             {!openDateModal && <TouchableOpacity
@@ -99,6 +151,8 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
           <View style={[styles.inputGrp]}>
             <TextInput
               style={styles.inputBox}
+              value={taskData.location}
+              onChangeText={value => setTaskData({ ...taskData, location: value })}
             />
           </View>
         </View>
@@ -117,16 +171,20 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
                 renderItem={({ item, index }) => (
                   <TouchableOpacity
                     style={styles.member}
+                    onPress={() => assignMenber(item?.user?._id)}
                   >
                     <Image
                       source={item?.user?.profile_img ? { uri: getImagUrl(item?.user?.profile_img) } : icons.user_dumy}
-                      style={styles.memberImg} />
+                      style={styles.memberImg}
+                    />
+
+                    {taskData.task_partner?.includes(item?.user?._id) && <Image style={styles.selected} source={icons.checkcircle} />}
                   </TouchableOpacity>
                 )}
               />
               :
               <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
-                <Image source={icons.plus} style={[styles.menu]} />
+                <Image source={icons.plus} style={[styles.plusImg]} />
               </TouchableOpacity>
             }
 
@@ -145,31 +203,31 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
           {/* menu */}
           <View style={[commonstyles.fdRow, commonstyles.acjsb, styles.priorityMenuWrap]}>
             <TouchableOpacity
-              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: priorityCat === "Never" ? colors.addtask.prtcatmenubg : "transparent" }]}
-              onPress={() => setPriorityCat("Never")}
+              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Never" ? colors.addtask.prtcatmenubg : "transparent" }]}
+              onPress={() => setTaskData({ ...taskData, priority: "Never" })}
             >
-              <Text style={[styles.priorityCatMenuTxt, { color: priorityCat === "Never" ? colors.white : colors.black }]}>Never</Text>
+              <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Never" ? colors.white : colors.black }]}>Never</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: priorityCat === "Daily" ? colors.addtask.prtcatmenubg : "transparent" }]}
-              onPress={() => setPriorityCat("Daily")}
+              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Daily" ? colors.addtask.prtcatmenubg : "transparent" }]}
+              onPress={() => setTaskData({ ...taskData, priority: "Daily" })}
             >
-              <Text style={[styles.priorityCatMenuTxt, { color: priorityCat === "Daily" ? colors.white : colors.black }]}>Daily</Text>
+              <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Daily" ? colors.white : colors.black }]}>Daily</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: priorityCat === "Weekly" ? colors.addtask.prtcatmenubg : "transparent" }]}
-              onPress={() => setPriorityCat("Weekly")}
+              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Weekly" ? colors.addtask.prtcatmenubg : "transparent" }]}
+              onPress={() => setTaskData({ ...taskData, priority: "Weekly" })}
             >
-              <Text style={[styles.priorityCatMenuTxt, { color: priorityCat === "Weekly" ? colors.white : colors.black }]}>Weekly</Text>
+              <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Weekly" ? colors.white : colors.black }]}>Weekly</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: priorityCat === "Monthly" ? colors.addtask.prtcatmenubg : "transparent" }]}
-              onPress={() => setPriorityCat("Monthly")}
+              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Monthly" ? colors.addtask.prtcatmenubg : "transparent" }]}
+              onPress={() => setTaskData({ ...taskData, priority: "Monthly" })}
             >
-              <Text style={[styles.priorityCatMenuTxt, { color: priorityCat === "Monthly" ? colors.white : colors.black }]}>Monthly</Text>
+              <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Monthly" ? colors.white : colors.black }]}>Monthly</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -184,7 +242,7 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
 
           <TouchableOpacity
             style={[styles.saveBtn, commonstyles.acjc]}
-          // onPress={handleEvent}
+            onPress={handleTask}
           >
             <Text style={styles.save}>Save</Text>
           </TouchableOpacity>
@@ -281,6 +339,11 @@ const styles = StyleSheet.create({
       }
     })
   },
+  plusImg: {
+    width: 25,
+    height: 25,
+    tintColor: colors.white,
+  },
   seeAll: {
     fontFamily: fonts.medium,
     color: colors.white,
@@ -305,7 +368,11 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: { height: 45 },
       android: {}
-    })
+    }),
+    paddingLeft: 15,
+    color: colors.black,
+    fontSize: 15,
+    fontFamily: fonts.regular,
   },
   inputGrp: {
     backgroundColor: colors.white,
@@ -352,5 +419,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 13,
     paddingHorizontal: 10,
+  },
+  selected: {
+    width: 15,
+    height: 15,
+    position: "absolute",
+    right: 0,
   },
 });
