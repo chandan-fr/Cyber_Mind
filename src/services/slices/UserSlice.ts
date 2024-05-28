@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ADDEVENT, ADDTASK, ADDTRANSACTION, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTASK, ALLTRANSACTION, ALLTRANSACTIONCATEGORY, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATEUSER } from "../api/Api";
+import { ADDEVENT, ADDTASK, ADDTRANSACTION, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTASK, ALLTRANSACTION, ALLTRANSACTIONCATEGORY, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATETASK, UPDATEUSER } from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { showModal } from "./UtilitySlice";
@@ -202,7 +202,7 @@ export const AddTransaction = createAsyncThunk('/add/new/transaction', async ({ 
 
 export const getAllTask = createAsyncThunk('/get/all/task', async ({ _Header }: any, { rejectWithValue, dispatch }) => {
     try {
-        const resp: any = await ALLTASK( _Header);
+        const resp: any = await ALLTASK(_Header);
 
         if (resp.data.success) {
             return resp.data.data;
@@ -221,6 +221,21 @@ export const addUserTask = createAsyncThunk('/add/task', async ({ taskData, _Hea
             dispatch(getAllTask({ _Header }));
             dispatch(showModal({ msg: resp.data.message, type: "success" }));
             navigation.navigate("t&chome");
+            return resp.data;
+        }
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        return rejectWithValue(exc.response.data);
+    }
+});
+
+export const updateUserTask = createAsyncThunk('/complete/task', async ({ id, _Header }: any, { rejectWithValue, dispatch }) => {
+    try {
+        const resp: any = await UPDATETASK(id, _Header);
+
+        if (resp.data.success) {
+            dispatch(getAllTask({ _Header }));
+            dispatch(showModal({ msg: resp.data.message, type: "success" }));
             return resp.data;
         }
     } catch (exc: any) {
@@ -458,6 +473,19 @@ const UserSlice = createSlice({
             state.user_loading = false;
         })
         builder.addCase(addUserTask.rejected, (state, { payload }) => {
+            state.user_loading = false;
+            const err: any | null = payload;
+            state.error = err;
+        })
+
+        /* update task */
+        builder.addCase(updateUserTask.pending, (state, { payload }) => {
+            state.user_loading = true;
+        })
+        builder.addCase(updateUserTask.fulfilled, (state, { payload }) => {
+            state.user_loading = false;
+        })
+        builder.addCase(updateUserTask.rejected, (state, { payload }) => {
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;

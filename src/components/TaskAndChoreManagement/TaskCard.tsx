@@ -9,15 +9,19 @@ import { _Width } from '../../config/staticVariables';
 import { commonstyles } from '../../assets/css/CommonStyles';
 import { icons } from '../../config/icons';
 import DotsMenu from '../DotsMenu';
+import { updateUserTask } from '../../services/slices/UserSlice';
 
 
-const TaskCard = ({ item, navigation }: TaskCard_Props): JSX.Element => {
-    const [isCompleted, setIsCompleted] = useState<boolean>(false);
+const TaskCard = ({ item, navigation, _Header, dispatch }: TaskCard_Props): JSX.Element => {
     const curTime = getFormatedDateTime(new Date(), "time");
     const [isMenu, setIsMenu] = useState<boolean>(false);
 
     const onClose = () => {
         setIsMenu(false);
+    };
+
+    const handleTask = (id: string) => {
+        dispatch(updateUserTask({ id, _Header }));
     };
 
     return (
@@ -64,18 +68,18 @@ const TaskCard = ({ item, navigation }: TaskCard_Props): JSX.Element => {
                         <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginLeft: 7, marginRight: 10 }]}>
                             <Text style={styles.dateTime}>
                                 {
-                                    getDateTimeFromTimestamp(item.task_time, "time") < curTime ?
+                                    getDateTimeFromTimestamp(item?.task_time, "time") < curTime ?
                                         "Running late"
                                         :
-                                        `${getDateTimeFromTimestamp(item.task_time, "shortdate")} by ${getDateTimeFromTimestamp(item.task_time, "time")}`
+                                        `${getDateTimeFromTimestamp(item?.task_time, "shortdate")} by ${getDateTimeFromTimestamp(item?.task_time, "time")}`
                                 }
                             </Text>
 
                             <TouchableOpacity
                                 style={{}}
-                                onPress={() => setIsCompleted(!isCompleted)}
+                                onPress={() => handleTask(item?._id)}
                             >
-                                {isCompleted ?
+                                {item?.is_complete ?
                                     <Image style={styles.complete} source={icons.taskdone} />
                                     :
                                     <View style={styles.circle} />

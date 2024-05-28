@@ -1,3 +1,5 @@
+import { Dispatch } from "redux";
+
 export type BgGradient_Props = {
     height?: number;
     width?: number;
@@ -198,6 +200,8 @@ export type EmptyData_Props = {
 export type TaskCard_Props = {
     item: any;
     navigation: any;
+    _Header: any;
+    dispatch: Dispatch<any>;
 };
 
 export type TaskData = {

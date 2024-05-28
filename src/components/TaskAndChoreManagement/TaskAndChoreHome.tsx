@@ -109,7 +109,7 @@ const TaskAndChoreHome = ({ navigation }: { navigation: any }): JSX.Element => {
                                 columnWrapperStyle={[commonstyles.fdRow, { alignItems: "center", justifyContent: "space-between", marginBottom: 15 }]}
                                 keyExtractor={(_, index: number) => index.toString()}
                                 renderItem={({ item, index }) => (
-                                    <TaskCard item={item} navigation={navigation} />
+                                    <TaskCard item={item} navigation={navigation} _Header={_Header} dispatch={dispatch} />
                                 )}
                             />
                         </View>
