@@ -1,6 +1,6 @@
 import { ImageSourcePropType } from "react-native";
 
-export const icons: { [key: string]: ImageSourcePropType } = {
+export const icons = {
     arrow: require("../assets/icons/left.png"),
     facebook: require("../assets/icons/facebook.png"),
     google: require("../assets/icons/google.png"),

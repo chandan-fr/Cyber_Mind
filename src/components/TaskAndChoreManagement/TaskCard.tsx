@@ -1,4 +1,4 @@
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useState } from 'react'
 import LinearGradient from 'react-native-linear-gradient';
 import { getDateTimeFromTimestamp, getFormatedDateTime, getImagUrl } from '../../utility/UtilityFunctions';
@@ -8,75 +8,86 @@ import colors from '../../config/colors';
 import { _Width } from '../../config/staticVariables';
 import { commonstyles } from '../../assets/css/CommonStyles';
 import { icons } from '../../config/icons';
+import DotsMenu from '../DotsMenu';
 
 
 const TaskCard = ({ item, navigation }: TaskCard_Props): JSX.Element => {
     const [isCompleted, setIsCompleted] = useState<boolean>(false);
     const curTime = getFormatedDateTime(new Date(), "time");
+    const [isMenu, setIsMenu] = useState<boolean>(false);
+
+    const onClose = () => {
+        setIsMenu(false);
+    };
 
     return (
-        <View
-            style={styles.cardWrap}
-        // onPress={() => navigation.navigate(item.screen_name)}
-        >
-            <LinearGradient
-                useAngle={true}
-                angle={-45}
-                angleCenter={{ x: 0.8, y: 0.5 }}
-                colors={["#D389FF", "#6D70C9"].reverse()}
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    position: "absolute",
-                    zIndex: -1,
-                    borderRadius: 13,
-                }}
+        <TouchableWithoutFeedback onPress={onClose}>
+            <View
+                style={styles.cardWrap}
+            // onPress={() => navigation.navigate(item.screen_name)}
             >
-                <View style={{ flex: 1, paddingLeft: 8, paddingTop: 8 }}>
-                    {/* dot menu */}
-                    <TouchableOpacity
-                        style={[styles.menu, commonstyles.acjc]}
-                    >
-                        <Image source={icons.dots} style={styles.menuImg} />
-                    </TouchableOpacity>
-
-                    {/* members */}
-                    <View style={[commonstyles.fdRow, { alignItems: "center", alignSelf: "flex-start", marginTop: -20 }]}>
-                        {["man", "woman", "man"].map((value: string, i) => (
-                            <View key={i}>
-                                <Image style={[styles.memberImg, { marginLeft: i > 0 ? -12 : 0 }]} source={icons[value]} />
-                            </View>
-                        ))}
-                    </View>
-
-                    {/* task */}
-                    <Text numberOfLines={2} style={styles.taskTxt}>Clean the Floor</Text>
-
-                    {/* date & status */}
-                    <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginLeft: 7, marginRight: 10 }]}>
-                        <Text style={styles.dateTime}>
-                            {
-                                getDateTimeFromTimestamp(1716815104, "time") < curTime ?
-                                    "Running late"
-                                    :
-                                    `${getDateTimeFromTimestamp(1716815104, "shortdate")} by ${getDateTimeFromTimestamp(1716815104, "time")}`
-                            }
-                        </Text>
-
+                <LinearGradient
+                    useAngle={true}
+                    angle={-45}
+                    angleCenter={{ x: 0.8, y: 0.5 }}
+                    colors={["#D389FF", "#6D70C9"].reverse()}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        position: "absolute",
+                        zIndex: -1,
+                        borderRadius: 13,
+                    }}
+                >
+                    <View style={{ flex: 1, paddingLeft: 8, paddingTop: 8 }}>
+                        {/* dot menu */}
                         <TouchableOpacity
-                            style={{}}
-                            onPress={() => setIsCompleted(!isCompleted)}
+                            style={[styles.menu, commonstyles.acjc]}
+                            onPress={() => setIsMenu(true)}
                         >
-                            {isCompleted ?
-                                <Image style={styles.complete} source={icons.taskdone} />
-                                :
-                                <View style={styles.circle} />
-                            }
+                            <Image source={icons.dots} style={styles.menuImg} />
                         </TouchableOpacity>
+
+                        {/* members */}
+                        <View style={[commonstyles.fdRow, { alignItems: "center", alignSelf: "flex-start", marginTop: -20 }]}>
+                            {["man", "woman", "man"].map((value: string, i) => (
+                                <View key={i}>
+                                    <Image style={[styles.memberImg, { marginLeft: i > 0 ? -12 : 0 }]} source={icons.man} />
+                                </View>
+                            ))}
+                        </View>
+
+                        {/* task */}
+                        <Text numberOfLines={2} style={styles.taskTxt}>Clean the Floor</Text>
+
+                        {/* date & status */}
+                        <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginLeft: 7, marginRight: 10 }]}>
+                            <Text style={styles.dateTime}>
+                                {
+                                    getDateTimeFromTimestamp(1716815104, "time") < curTime ?
+                                        "Running late"
+                                        :
+                                        `${getDateTimeFromTimestamp(1716815104, "shortdate")} by ${getDateTimeFromTimestamp(1716815104, "time")}`
+                                }
+                            </Text>
+
+                            <TouchableOpacity
+                                style={{}}
+                                onPress={() => setIsCompleted(!isCompleted)}
+                            >
+                                {isCompleted ?
+                                    <Image style={styles.complete} source={icons.taskdone} />
+                                    :
+                                    <View style={styles.circle} />
+                                }
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-            </LinearGradient>
-        </View>
+                </LinearGradient>
+
+                {isMenu && <View style={styles.dotmenuWrap}><DotsMenu onClose={onClose} /></View>}
+            </View>
+        </TouchableWithoutFeedback>
     )
 };
 
@@ -161,5 +172,10 @@ const styles = StyleSheet.create({
         width: 25,
         height: 25,
         borderRadius: 25,
+    },
+    dotmenuWrap: {
+        position: "absolute",
+        right: 10,
+        top: 10,
     },
 });
