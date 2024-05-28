@@ -218,5 +218,6 @@ module.exports = {
         calendar: "#009EF5",
         bgcolor: "#E2F3F3",
         prtcatmenubg: "#009EF5",
+        error: "#FA1B1B",
     },
 };

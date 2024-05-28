@@ -1,4 +1,4 @@
-import { FlatList, Image, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, Keyboard, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useState } from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import { fonts } from '../../config/fonts';
@@ -35,8 +35,8 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
       error.task_time = 1;
       dispatch(showModal({ msg: "Please Select a Date & Time for Task!", type: "error" }));
     }
-    else if (!task_partner) {
-      // error.task_partner = "Please Select a Date & Time for Event to End!";
+    else if (!task_partner?.length) {
+      error.task_partner = ["1"];
       dispatch(showModal({ msg: "Please Select a Date & Time for Event to End!", type: "error" }));
     }
 
@@ -71,184 +71,187 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
   };
 
   return (
-    <View style={[commonstyles.parent, { backgroundColor: colors.addtask.bgcolor }]}>
-      {/* top header section */}
-      <LinearGradient
-        useAngle={true}
-        angle={90}
-        angleCenter={{ x: 0.5, y: 0 }}
-        colors={colors.addtask.gdcolor}
-        style={styles.lgStyle}
-      >
-        {/* navigation */}
-        <View style={[styles.navWrap, commonstyles.fdRow]}>
-          <TouchableOpacity
-            style={[styles.nav, commonstyles.acjc]}
-            onPress={() => navigation.goBack()}
-          >
-            <Image source={icons.arrow} style={styles.navImg} />
-          </TouchableOpacity>
-
-          <View style={commonstyles.parent}>
-            <Text numberOfLines={2} style={styles.pageHeading}>New Task</Text>
-          </View>
-
-          <TouchableOpacity
-            style={[styles.menu, commonstyles.acjc]}
-          >
-            <Image source={icons.dots} style={styles.menuImg} />
-          </TouchableOpacity>
-        </View>
-      </LinearGradient>
-
-      {/* body */}
-      <View style={[commonstyles.parent, { rowGap: 20, marginHorizontal: 25, marginTop: 30 }]}>
-        {/* title */}
-        <View style={[styles.inputWrap,]}>
-          <Text style={styles.label}>Enter a Title</Text>
-
-          <View style={[styles.inputGrp]}>
-            <TextInput
-              style={styles.inputBox}
-              value={taskData.task_title}
-              onChangeText={value => setTaskData({ ...taskData, task_title: value })}
-            />
-          </View>
-        </View>
-
-        {/* time */}
-        <View style={[styles.inputWrap,]}>
-          <Text style={styles.label}>Select a Time</Text>
-
-          <View style={[styles.inputGrp, commonstyles.fdRow, commonstyles.acjsb, { columnGap: 6 }]}>
-            <TextInput
-              style={[styles.inputBox, commonstyles.parent]}
-              editable={false}
-              value={taskData?.task_time ? getDateTimeFromTimestamp(taskData?.task_time, "date") + ", " + getDateTimeFromTimestamp(taskData?.task_time, "time") : undefined}
-            />
-
-            {!openDateModal && <TouchableOpacity
-              style={[commonstyles.acjc, { marginHorizontal: 8 }]}
-              onPress={() => setOpenDateModal(true)}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={[commonstyles.parent, { backgroundColor: colors.addtask.bgcolor }]}>
+        {/* top header section */}
+        <LinearGradient
+          useAngle={true}
+          angle={90}
+          angleCenter={{ x: 0.5, y: 0 }}
+          colors={colors.addtask.gdcolor}
+          style={styles.lgStyle}
+        >
+          {/* navigation */}
+          <View style={[styles.navWrap, commonstyles.fdRow]}>
+            <TouchableOpacity
+              style={[styles.nav, commonstyles.acjc]}
+              onPress={() => navigation.goBack()}
             >
-              <Image style={styles.calendar} source={icons.calendar} />
-            </TouchableOpacity>}
+              <Image source={icons.arrow} style={styles.navImg} />
+            </TouchableOpacity>
 
-            {openDateModal && <DateTimePicker
-              value={new Date()}
-              mode={'date'}
-              is24Hour={false}
-              onChange={onChange}
-              style={{ position: "absolute", right: 3 }}
-            />}
+            <View style={commonstyles.parent}>
+              <Text numberOfLines={2} style={styles.pageHeading}>New Task</Text>
+            </View>
+
+            <TouchableOpacity
+              style={[styles.menu, commonstyles.acjc]}
+            >
+              <Image source={icons.dots} style={styles.menuImg} />
+            </TouchableOpacity>
           </View>
-        </View>
+        </LinearGradient>
 
-        {/* location */}
-        <View style={[styles.inputWrap,]}>
-          <Text style={styles.label}>Enter a Location (Optional)</Text>
+        {/* body */}
+        <View style={[commonstyles.parent, { rowGap: 20, marginHorizontal: 25, marginTop: 30 }]}>
+          {/* title */}
+          <View style={[styles.inputWrap,]}>
+            <Text style={styles.label}>Enter a Title</Text>
 
-          <View style={[styles.inputGrp]}>
-            <TextInput
-              style={styles.inputBox}
-              value={taskData.location}
-              onChangeText={value => setTaskData({ ...taskData, location: value })}
-            />
-          </View>
-        </View>
-
-        {/* members */}
-        <View style={[]}>
-          <Text style={styles.label}>Add Task Partner</Text>
-
-          <View style={[styles.memberWrap, commonstyles.fdRow]}>
-            {all_member.length ?
-              <FlatList
-                data={all_member.slice(0, 4)}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(_, idx) => idx.toString()}
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity
-                    style={styles.member}
-                    onPress={() => assignMenber(item?.user?._id)}
-                  >
-                    <Image
-                      source={item?.user?.profile_img ? { uri: getImagUrl(item?.user?.profile_img) } : icons.user_dumy}
-                      style={styles.memberImg}
-                    />
-
-                    {taskData.task_partner?.includes(item?.user?._id) && <Image style={styles.selected} source={icons.checkcircle} />}
-                  </TouchableOpacity>
-                )}
+            <View style={[styles.inputGrp, { borderColor: taskError.task_title ? colors.addtask.error : colors.white }]}>
+              <TextInput
+                style={styles.inputBox}
+                value={taskData.task_title}
+                onChangeText={value => setTaskData({ ...taskData, task_title: value })}
+                onFocus={() => setTaskError({ ...taskData, task_title: "" })}
               />
-              :
-              <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
-                <Image source={icons.plus} style={[styles.plusImg]} />
-              </TouchableOpacity>
-            }
-
-            {all_member.length > 4 &&
-              <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
-                <Text style={styles.seeAll}>See all</Text>
-              </TouchableOpacity>
-            }
+            </View>
           </View>
-        </View>
 
-        {/* priority */}
-        <View style={styles.inputWrap}>
-          <Text style={styles.label}>Set Priority</Text>
+          {/* time */}
+          <View style={[styles.inputWrap,]}>
+            <Text style={styles.label}>Select a Time</Text>
 
-          {/* menu */}
-          <View style={[commonstyles.fdRow, commonstyles.acjsb, styles.priorityMenuWrap]}>
+            <View style={[styles.inputGrp, commonstyles.fdRow, commonstyles.acjsb, { columnGap: 6, borderColor: taskError.task_time ? colors.addtask.error : colors.white }]}>
+              <TextInput
+                style={[styles.inputBox, commonstyles.parent]}
+                editable={false}
+                value={taskData?.task_time ? getDateTimeFromTimestamp(taskData?.task_time, "date") + ", " + getDateTimeFromTimestamp(taskData?.task_time, "time") : undefined}
+              />
+
+              {!openDateModal && <TouchableOpacity
+                style={[commonstyles.acjc, { marginHorizontal: 8 }]}
+                onPress={() => setOpenDateModal(true)}
+              >
+                <Image style={styles.calendar} source={icons.calendar} />
+              </TouchableOpacity>}
+
+              {openDateModal && <DateTimePicker
+                value={new Date()}
+                mode={'date'}
+                is24Hour={false}
+                onChange={onChange}
+                style={{ position: "absolute", right: 3 }}
+              />}
+            </View>
+          </View>
+
+          {/* location */}
+          <View style={[styles.inputWrap,]}>
+            <Text style={styles.label}>Enter a Location (Optional)</Text>
+
+            <View style={[styles.inputGrp, {borderColor: taskError.location ? colors.addtask.error : colors.white}]}>
+              <TextInput
+                style={styles.inputBox}
+                value={taskData.location}
+                onChangeText={value => setTaskData({ ...taskData, location: value })}
+              />
+            </View>
+          </View>
+
+          {/* members */}
+          <View style={[]}>
+            <Text style={[styles.label, {color: taskError.task_partner?.length ? colors.addtask.error : colors.addtask.label}]}>Add Task Partner</Text>
+
+            <View style={[styles.memberWrap, commonstyles.fdRow]}>
+              {all_member.length ?
+                <FlatList
+                  data={all_member.slice(0, 4)}
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  keyExtractor={(_, idx) => idx.toString()}
+                  renderItem={({ item, index }) => (
+                    <TouchableOpacity
+                      style={styles.member}
+                      onPress={() => assignMenber(item?.user?._id)}
+                    >
+                      <Image
+                        source={item?.user?.profile_img ? { uri: getImagUrl(item?.user?.profile_img) } : icons.user_dumy}
+                        style={styles.memberImg}
+                      />
+
+                      {taskData.task_partner?.includes(item?.user?._id) && <Image style={styles.selected} source={icons.checkcircle} />}
+                    </TouchableOpacity>
+                  )}
+                />
+                :
+                <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
+                  <Image source={icons.plus} style={[styles.plusImg]} />
+                </TouchableOpacity>
+              }
+
+              {all_member.length > 4 &&
+                <TouchableOpacity style={[commonstyles.acjc, styles.seeAllWrap]}>
+                  <Text style={styles.seeAll}>See all</Text>
+                </TouchableOpacity>
+              }
+            </View>
+          </View>
+
+          {/* priority */}
+          <View style={styles.inputWrap}>
+            <Text style={styles.label}>Set Priority</Text>
+
+            {/* menu */}
+            <View style={[commonstyles.fdRow, commonstyles.acjsb, styles.priorityMenuWrap]}>
+              <TouchableOpacity
+                style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Never" ? colors.addtask.prtcatmenubg : "transparent" }]}
+                onPress={() => setTaskData({ ...taskData, priority: "Never" })}
+              >
+                <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Never" ? colors.white : colors.black }]}>Never</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Daily" ? colors.addtask.prtcatmenubg : "transparent" }]}
+                onPress={() => setTaskData({ ...taskData, priority: "Daily" })}
+              >
+                <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Daily" ? colors.white : colors.black }]}>Daily</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Weekly" ? colors.addtask.prtcatmenubg : "transparent" }]}
+                onPress={() => setTaskData({ ...taskData, priority: "Weekly" })}
+              >
+                <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Weekly" ? colors.white : colors.black }]}>Weekly</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Monthly" ? colors.addtask.prtcatmenubg : "transparent" }]}
+                onPress={() => setTaskData({ ...taskData, priority: "Monthly" })}
+              >
+                <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Monthly" ? colors.white : colors.black }]}>Monthly</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* save */}
+          <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginTop: 40 }]}>
             <TouchableOpacity
-              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Never" ? colors.addtask.prtcatmenubg : "transparent" }]}
-              onPress={() => setTaskData({ ...taskData, priority: "Never" })}
+              style={[styles.closeBtn, commonstyles.acjc]}
             >
-              <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Never" ? colors.white : colors.black }]}>Never</Text>
+              <Image style={styles.close} source={icons.close} />
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Daily" ? colors.addtask.prtcatmenubg : "transparent" }]}
-              onPress={() => setTaskData({ ...taskData, priority: "Daily" })}
+              style={[styles.saveBtn, commonstyles.acjc]}
+              onPress={handleTask}
             >
-              <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Daily" ? colors.white : colors.black }]}>Daily</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Weekly" ? colors.addtask.prtcatmenubg : "transparent" }]}
-              onPress={() => setTaskData({ ...taskData, priority: "Weekly" })}
-            >
-              <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Weekly" ? colors.white : colors.black }]}>Weekly</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[styles.priorityCatMenu, commonstyles.acjc, { backgroundColor: taskData.priority === "Monthly" ? colors.addtask.prtcatmenubg : "transparent" }]}
-              onPress={() => setTaskData({ ...taskData, priority: "Monthly" })}
-            >
-              <Text style={[styles.priorityCatMenuTxt, { color: taskData.priority === "Monthly" ? colors.white : colors.black }]}>Monthly</Text>
+              <Text style={styles.save}>Save</Text>
             </TouchableOpacity>
           </View>
-        </View>
-
-        {/* save */}
-        <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginTop: 40 }]}>
-          <TouchableOpacity
-            style={[styles.closeBtn, commonstyles.acjc]}
-          >
-            <Image style={styles.close} source={icons.close} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.saveBtn, commonstyles.acjc]}
-            onPress={handleTask}
-          >
-            <Text style={styles.save}>Save</Text>
-          </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   )
 };
 
@@ -377,6 +380,7 @@ const styles = StyleSheet.create({
   inputGrp: {
     backgroundColor: colors.white,
     borderRadius: 13,
+    borderWidth: 1,
   },
   calendar: {
     width: 30,
