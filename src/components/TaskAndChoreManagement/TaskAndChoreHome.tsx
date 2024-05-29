@@ -12,6 +12,8 @@ import TaskCard from './TaskCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
 import { getAllTask } from '../../services/slices/UserSlice';
+import { Task_Data, User_Data } from '../../config/CustomTypes';
+import { convertToTimeStamp } from '../../utility/UtilityFunctions';
 
 
 const TaskAndChoreHome = ({ navigation }: { navigation: any }): JSX.Element => {
@@ -21,8 +23,23 @@ const TaskAndChoreHome = ({ navigation }: { navigation: any }): JSX.Element => {
 
     const dispatch: Dispatch<any> = useDispatch();
 
-    const getFilterData=()=>{
-
+    const getFilterData = () => {
+        if (taskCat === "Today") {
+            let data: Array<Task_Data<User_Data>> = all_task.filter((item: Task_Data<User_Data>) => {
+                const date = new Date(item.task_time * 1000);
+                const isSameDay = (d1: Date, d2: Date): boolean => d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+                if (isSameDay(date, new Date()) && !item.is_complete) {
+                    return item;
+                }
+            });
+            return data;
+        } else if (taskCat === "Upcoming") {
+            let data: Array<Task_Data<User_Data>> = all_task.filter((item: Task_Data<User_Data>) => item.task_time > convertToTimeStamp(new Date()) && !item.is_complete);
+            return data;
+        } else if (taskCat === "Done") {
+            let data: Array<Task_Data<User_Data>> = all_task.filter((item: Task_Data<User_Data>) => item.is_complete);
+            return data;
+        }
     };
 
     useEffect(() => {
@@ -103,10 +120,10 @@ const TaskAndChoreHome = ({ navigation }: { navigation: any }): JSX.Element => {
                     </View>
 
                     {/* all tasks */}
-                    {all_task?.length ?
+                    {getFilterData()?.length ?
                         <View style={[commonstyles.parent, { marginHorizontal: 5, marginTop: 15, marginBottom: Platform.OS === "ios" ? 25 : 5 }]}>
                             <FlatList
-                                data={all_task}
+                                data={getFilterData()}
                                 style={{ paddingTop: 15 }}
                                 numColumns={2}
                                 showsVerticalScrollIndicator={false}
