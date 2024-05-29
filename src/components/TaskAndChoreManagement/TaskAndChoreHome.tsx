@@ -21,6 +21,10 @@ const TaskAndChoreHome = ({ navigation }: { navigation: any }): JSX.Element => {
 
     const dispatch: Dispatch<any> = useDispatch();
 
+    const getFilterData=()=>{
+
+    };
+
     useEffect(() => {
         dispatch(getAllTask({ _Header }));
     }, []);
@@ -99,7 +103,7 @@ const TaskAndChoreHome = ({ navigation }: { navigation: any }): JSX.Element => {
                     </View>
 
                     {/* all tasks */}
-                    {all_task.length ?
+                    {all_task?.length ?
                         <View style={[commonstyles.parent, { marginHorizontal: 5, marginTop: 15, marginBottom: Platform.OS === "ios" ? 25 : 5 }]}>
                             <FlatList
                                 data={all_task}

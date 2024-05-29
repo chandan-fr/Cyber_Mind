@@ -2,17 +2,17 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, TouchableWithoutFe
 import React, { useState } from 'react'
 import LinearGradient from 'react-native-linear-gradient';
 import { getDateTimeFromTimestamp, getFormatedDateTime, getImagUrl } from '../../utility/UtilityFunctions';
-import { TaskCard_Props } from '../../config/CustomTypes';
+import { TaskCard_Props, Task_Data, User_Data } from '../../config/CustomTypes';
 import { fonts } from '../../config/fonts';
 import colors from '../../config/colors';
 import { _Width } from '../../config/staticVariables';
 import { commonstyles } from '../../assets/css/CommonStyles';
 import { icons } from '../../config/icons';
 import DotsMenu from '../DotsMenu';
-import { updateUserTask } from '../../services/slices/UserSlice';
+import { deleteUserTask, updateUserTask } from '../../services/slices/UserSlice';
 
 
-const TaskCard = ({ item, navigation, _Header, dispatch }: TaskCard_Props): JSX.Element => {
+const TaskCard = ({ item, navigation, _Header, dispatch }: TaskCard_Props<Task_Data<User_Data>>): JSX.Element => {
     const curTime = getFormatedDateTime(new Date(), "time");
     const [isMenu, setIsMenu] = useState<boolean>(false);
 
@@ -22,6 +22,10 @@ const TaskCard = ({ item, navigation, _Header, dispatch }: TaskCard_Props): JSX.
 
     const handleTask = (id: string) => {
         dispatch(updateUserTask({ id, _Header }));
+    };
+
+    const deleteTask = (id: string) => {
+        dispatch(deleteUserTask({ id, _Header }));
     };
 
     return (
@@ -89,7 +93,7 @@ const TaskCard = ({ item, navigation, _Header, dispatch }: TaskCard_Props): JSX.
                     </View>
                 </LinearGradient>
 
-                {isMenu && <View style={styles.dotmenuWrap}><DotsMenu onClose={onClose} /></View>}
+                {isMenu && <View style={styles.dotmenuWrap}><DotsMenu onDelete={()=>deleteTask(item?._id)} onClose={onClose} /></View>}
             </View>
         </TouchableWithoutFeedback>
     )

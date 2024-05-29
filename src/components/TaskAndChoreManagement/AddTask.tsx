@@ -1,5 +1,5 @@
 import { FlatList, Image, Keyboard, Platform, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { commonstyles } from '../../assets/css/CommonStyles';
 import { fonts } from '../../config/fonts';
 import colors from '../../config/colors';
@@ -9,7 +9,7 @@ import { icons } from '../../config/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { convertToTimeStamp, getDateTimeFromTimestamp, getImagUrl } from '../../utility/UtilityFunctions';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import { TaskData } from '../../config/CustomTypes';
+import { Task_Error, Task_Form } from '../../config/CustomTypes';
 import { Dispatch } from 'redux';
 import { showModal } from '../../services/slices/UtilitySlice';
 import { addUserTask } from '../../services/slices/UserSlice';
@@ -17,14 +17,20 @@ import { addUserTask } from '../../services/slices/UserSlice';
 const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
   const { all_member, token } = useSelector((state: any) => state.userSlice);
   const [openDateModal, setOpenDateModal] = useState<boolean>(false);
-  const [taskData, setTaskData] = useState<TaskData>({ task_title: "", task_time: 0, location: "", task_partner: [], priority: "Never" });
-  const [taskError, setTaskError] = useState<TaskData>({});
+  const [taskData, setTaskData] = useState<Task_Form>({ task_title: "", task_time: 0, location: "", task_partner: [], priority: "Never" });
+  const [taskError, setTaskError] = useState<Task_Error>({});
   const _Header = { headers: { Authorization: "Bearer " + token } };
 
   const dispatch: Dispatch<any> = useDispatch();
 
-  const validateTaskData = (): TaskData => {
-    const error: TaskData = {};
+  const onChange = (event: DateTimePickerEvent, date: Date | undefined) => {
+    setTaskData({ ...taskData, task_time: convertToTimeStamp(date) });
+    setOpenDateModal(false);
+    setTaskError({ ...taskError, task_time: 0 });
+  };
+
+  const validateTaskData = (): Task_Error => {
+    const error: Task_Error = {};
     const { task_title, task_time, task_partner } = taskData;
 
     if (!task_title) {
@@ -37,7 +43,7 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
     }
     else if (!task_partner?.length) {
       error.task_partner = ["1"];
-      dispatch(showModal({ msg: "Please Select a Date & Time for Event to End!", type: "error" }));
+      dispatch(showModal({ msg: "Please add atleast one task partner!", type: "error" }));
     }
 
     return error;
@@ -51,12 +57,6 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
       dispatch(addUserTask({ taskData, _Header, navigation }));
       // setEventData({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
     }
-  };
-
-  const onChange = (event: DateTimePickerEvent, date: Date | undefined) => {
-    setTaskData({ ...taskData, task_time: convertToTimeStamp(date) });
-    setOpenDateModal(false);
-    setTaskError({ ...taskData, task_time: 0 });
   };
 
   const assignMenber = (id: string) => {
@@ -113,7 +113,7 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
                 style={styles.inputBox}
                 value={taskData.task_title}
                 onChangeText={value => setTaskData({ ...taskData, task_title: value })}
-                onFocus={() => setTaskError({ ...taskData, task_title: "" })}
+                onFocus={() => setTaskError({ ...taskError, task_title: "" })}
               />
             </View>
           </View>
@@ -150,7 +150,7 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
           <View style={[styles.inputWrap,]}>
             <Text style={styles.label}>Enter a Location (Optional)</Text>
 
-            <View style={[styles.inputGrp, {borderColor: taskError.location ? colors.addtask.error : colors.white}]}>
+            <View style={[styles.inputGrp, { borderColor: taskError.location ? colors.addtask.error : colors.white }]}>
               <TextInput
                 style={styles.inputBox}
                 value={taskData.location}
@@ -161,7 +161,7 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
 
           {/* members */}
           <View style={[]}>
-            <Text style={[styles.label, {color: taskError.task_partner?.length ? colors.addtask.error : colors.addtask.label}]}>Add Task Partner</Text>
+            <Text style={[styles.label, { color: taskError.task_partner?.length ? colors.addtask.error : colors.addtask.label }]}>Add Task Partner</Text>
 
             <View style={[styles.memberWrap, commonstyles.fdRow]}>
               {all_member.length ?
@@ -244,7 +244,7 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
 
             <TouchableOpacity
               style={[styles.saveBtn, commonstyles.acjc]}
-              onPress={handleTask}
+              onPress={() => handleTask()}
             >
               <Text style={styles.save}>Save</Text>
             </TouchableOpacity>

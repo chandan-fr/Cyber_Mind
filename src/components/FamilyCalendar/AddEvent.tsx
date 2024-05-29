@@ -284,8 +284,8 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
                                         <>
                                             <DateTimePicker
                                                 value={new Date()}
-                                                mode={'datetime'}
-                                                // is24Hour={false}
+                                                mode={mode}
+                                                is24Hour={false}
                                                 onChange={onChange}
                                             />
 

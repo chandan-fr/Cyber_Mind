@@ -139,6 +139,7 @@ export type Event_Data = {
     note?: string;
     is_allDay: boolean;
 };
+
 export type Event_Error = {
     event_name?: string;
     location?: string;
@@ -197,17 +198,52 @@ export type EmptyData_Props = {
     lifted?: boolean;
 };
 
-export type TaskCard_Props = {
-    item: any;
+export type TaskCard_Props<T extends Task_Data<User_Data>> = {
+    item: T;
     navigation: any;
     _Header: any;
     dispatch: Dispatch<any>;
 };
 
-export type TaskData = {
+export interface Task_Form {
     task_title?: string,
     task_time?: number,
     location?: string,
     task_partner?: Array<string>,
     priority?: string,
+};
+
+export type Task_Error = {
+    task_title?: string,
+    task_time?: number,
+    location?: string,
+    task_partner?: Array<string>,
+    priority?: string,
+};
+
+export interface User_Data {
+    _id: string;
+    full_name: string;
+    profile_img: string;
+    email: string;
+    phone: string;
+    city_state: string;
+    type: string;
+    is_online: boolean;
+    is_delete: boolean;
+    socketId: string;
+    family: string;
+};
+
+export interface Task_Data<T extends User_Data> {
+    _id: string;
+    family: string;
+    task_title: string;
+    task_time: number;
+    location: string;
+    task_assignee: T;
+    task_partner: Array<T>;
+    priority: string;
+    is_complete: boolean;
+    is_delete: boolean;
 };

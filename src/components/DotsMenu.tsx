@@ -6,7 +6,13 @@ import colors from '../config/colors';
 import { _Width } from '../config/staticVariables';
 
 const DotsMenu = ({ onEdit, onDelete, onClose }: DotsMenu_Props): JSX.Element => {
-    const commonFunc = () => {
+    const editFunc = () => {
+        onEdit && onEdit();
+        onClose && onClose();
+    };
+
+    const deleteFunc = ()=>{
+        onDelete && onDelete();
         onClose && onClose();
     };
 
@@ -14,7 +20,7 @@ const DotsMenu = ({ onEdit, onDelete, onClose }: DotsMenu_Props): JSX.Element =>
         <View style={styles.menu}>
             <TouchableOpacity
                 style={[styles.btn]}
-                onPress={commonFunc}
+            onPress={editFunc}
             >
                 <Text style={styles.btnTxt}>Edit</Text>
             </TouchableOpacity>
@@ -23,7 +29,7 @@ const DotsMenu = ({ onEdit, onDelete, onClose }: DotsMenu_Props): JSX.Element =>
 
             <TouchableOpacity
                 style={[styles.btn]}
-                onPress={commonFunc}
+                onPress={deleteFunc}
             >
                 <Text style={styles.btnTxt}>Delete</Text>
             </TouchableOpacity>

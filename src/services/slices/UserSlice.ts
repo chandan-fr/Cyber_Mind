@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ADDEVENT, ADDTASK, ADDTRANSACTION, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTASK, ALLTRANSACTION, ALLTRANSACTIONCATEGORY, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATETASK, UPDATEUSER } from "../api/Api";
+import { ADDEVENT, ADDTASK, ADDTRANSACTION, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTASK, ALLTRANSACTION, ALLTRANSACTIONCATEGORY, DELETETASK, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATETASK, UPDATEUSER } from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { showModal } from "./UtilitySlice";
@@ -232,6 +232,21 @@ export const addUserTask = createAsyncThunk('/add/task', async ({ taskData, _Hea
 export const updateUserTask = createAsyncThunk('/complete/task', async ({ id, _Header }: any, { rejectWithValue, dispatch }) => {
     try {
         const resp: any = await UPDATETASK(id, _Header);
+
+        if (resp.data.success) {
+            dispatch(getAllTask({ _Header }));
+            dispatch(showModal({ msg: resp.data.message, type: "success" }));
+            return resp.data;
+        }
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        return rejectWithValue(exc.response.data);
+    }
+});
+
+export const deleteUserTask = createAsyncThunk('/delete/task', async ({ id, _Header }: any, { rejectWithValue, dispatch }) => {
+    try {
+        const resp: any = await DELETETASK(id, _Header);
 
         if (resp.data.success) {
             dispatch(getAllTask({ _Header }));
@@ -486,6 +501,19 @@ const UserSlice = createSlice({
             state.user_loading = false;
         })
         builder.addCase(updateUserTask.rejected, (state, { payload }) => {
+            state.user_loading = false;
+            const err: any | null = payload;
+            state.error = err;
+        })
+
+        /* delete task */
+        builder.addCase(deleteUserTask.pending, (state, { payload }) => {
+            state.user_loading = true;
+        })
+        builder.addCase(deleteUserTask.fulfilled, (state, { payload }) => {
+            state.user_loading = false;
+        })
+        builder.addCase(deleteUserTask.rejected, (state, { payload }) => {
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;
