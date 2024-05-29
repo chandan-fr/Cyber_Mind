@@ -10,14 +10,14 @@ import { fonts } from '../../config/fonts';
 import { images } from '../../config/images';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dispatch } from 'redux';
-import { getAllTransaction } from '../../services/slices/UserSlice';
+import { getAllBalance, getAllTransaction } from '../../services/slices/UserSlice';
 import { Transactions_Data } from '../../config/CustomTypes';
 import { getDateTimeFromTimestamp } from '../../utility/UtilityFunctions';
 import EmptyData from '../../utility/EmptyData';
 
 
 const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
-    const { all_transactions, token } = useSelector((state: any) => state.userSlice);
+    const { all_transactions, token, all_balance } = useSelector((state: any) => state.userSlice);
     const [isMenu, setIsMenu] = useState<boolean>(false);
     const _Header = { headers: { Authorization: "Bearer " + token } };
     const dispatch: Dispatch<any> = useDispatch();
@@ -32,6 +32,7 @@ const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
     };
 
     useEffect(() => {
+        dispatch(getAllBalance({ _Header }));
         dispatch(getAllTransaction({ _Header }));
     }, []);
 
@@ -80,7 +81,7 @@ const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
                 >
                     <View style={{ margin: 15 }}>
                         <Text style={styles.balanceHead}>Total Balance</Text>
-                        <Text style={styles.totalBalance}>$87,302.32</Text>
+                        <Text style={styles.totalBalance}>${all_balance?.total_balance}</Text>
 
                         <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginBottom: 15 }]}>
                             {/* expense */}
@@ -91,7 +92,7 @@ const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
 
                                 <View>
                                     <Text style={styles.incmExpns}>Expences</Text>
-                                    <Text style={styles.amount}>$1234.56</Text>
+                                    <Text style={styles.amount}>${all_balance?.total_expense}</Text>
                                 </View>
                             </View>
 
@@ -103,7 +104,7 @@ const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
 
                                 <View>
                                     <Text style={styles.incmExpns}>Income</Text>
-                                    <Text style={styles.amount}>$7890.12</Text>
+                                    <Text style={styles.amount}>${all_balance?.total_income}</Text>
                                 </View>
                             </View>
                         </View>

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { ADDEVENT, ADDTASK, ADDTRANSACTION, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTASK, ALLTRANSACTION, ALLTRANSACTIONCATEGORY, DELETETASK, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATETASK, UPDATEUSER } from "../api/Api";
+import { ADDEVENT, ADDTASK, ADDTRANSACTION, ALLBALANCE, ALLCATEGORY, ALLEVENT, ALLMEMBER, ALLTASK, ALLTRANSACTION, ALLTRANSACTIONCATEGORY, DELETETASK, LOGIN, REGISTER, SOCIAL_LOGIN, UPDATETASK, UPDATEUSER } from "../api/Api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { showModal } from "./UtilitySlice";
@@ -189,6 +189,7 @@ export const AddTransaction = createAsyncThunk('/add/new/transaction', async ({ 
         const resp: any = await ADDTRANSACTION(tnxData, _Header);
 
         if (resp.data.success) {
+            dispatch(getAllBalance({ _Header }));
             dispatch(getAllTransaction({ _Header }));
             dispatch(showModal({ msg: resp.data.message, type: "success" }));
             navigation.navigate("finhome");
@@ -259,6 +260,19 @@ export const deleteUserTask = createAsyncThunk('/delete/task', async ({ id, _Hea
     }
 });
 
+export const getAllBalance = createAsyncThunk('/get/balance', async ({ _Header }: any, { rejectWithValue, dispatch }) => {
+    try {
+        const resp: any = await ALLBALANCE(_Header);
+
+        if (resp.data.success) {
+            return { total_income: resp.data.total_income, total_expense: resp.data.total_expense, total_balance: resp.data.total_balance };
+        }
+    } catch (exc: any) {
+        dispatch(showModal({ msg: exc.response.data.message, type: "error" }));
+        return rejectWithValue(exc.response.data);
+    }
+});
+
 const UserSlice = createSlice({
     name: "userSlice",
     initialState: {
@@ -273,6 +287,7 @@ const UserSlice = createSlice({
         all_transactions: [],
         transaction_category: [],
         all_task: [],
+        all_balance: [],
     },
     reducers: {
         saveUserCred(state, { payload }) {
@@ -514,6 +529,21 @@ const UserSlice = createSlice({
             state.user_loading = false;
         })
         builder.addCase(deleteUserTask.rejected, (state, { payload }) => {
+            state.user_loading = false;
+            const err: any | null = payload;
+            state.error = err;
+        })
+
+        /* all balance */
+        builder.addCase(getAllBalance.pending, (state, { payload }) => {
+            state.user_loading = true;
+        })
+        builder.addCase(getAllBalance.fulfilled, (state, { payload }) => {
+            let balData: any = payload;
+            state.all_balance = balData;
+            state.user_loading = false;
+        })
+        builder.addCase(getAllBalance.rejected, (state, { payload }) => {
             state.user_loading = false;
             const err: any | null = payload;
             state.error = err;

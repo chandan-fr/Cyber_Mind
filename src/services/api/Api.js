@@ -61,3 +61,4 @@ export const ALLTASK = (_Header) => Api.get("/get/all/task", _Header);
 export const ADDTASK = (taskData, _Header) => Api.post("/add/task", taskData, _Header);
 export const UPDATETASK = (id, _Header) => Api.post(`/complete/task/${id}`, _Header);
 export const DELETETASK = (id, _Header) => Api.post(`/delete/task/${id}`, _Header);
+export const ALLBALANCE = (_Header) => Api.get(`/get/balance`, _Header);
