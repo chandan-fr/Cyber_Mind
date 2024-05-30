@@ -149,6 +149,8 @@ export const getFormatedDateTime = (inputDate: any, mode: string): string => {
     }
 };
 
+export const isSameDay = (d1: Date, d2: Date): boolean => d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
+
 export const getDateTimeFromTimestamp = (timestamp: number | any, type: string): string => {
     const date = new Date(timestamp * 1000);
 
@@ -164,8 +166,6 @@ export const getDateTimeFromTimestamp = (timestamp: number | any, type: string):
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(today.getDate() - 1);
-
-        const isSameDay = (d1: Date, d2: Date): boolean => d1.getDate() === d2.getDate() && d1.getMonth() === d2.getMonth() && d1.getFullYear() === d2.getFullYear();
 
         if (isSameDay(date, today)) {
             return "Today";

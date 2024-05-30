@@ -7,7 +7,7 @@ import { _Height, _Width } from '../../config/staticVariables';
 import LinearGradient from 'react-native-linear-gradient';
 import { icons } from '../../config/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { convertToTimeStamp, getDateTimeFromTimestamp, getImagUrl } from '../../utility/UtilityFunctions';
+import { convertToTimeStamp, getDateTimeFromTimestamp, getFormatedDateTime, getImagUrl } from '../../utility/UtilityFunctions';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { Task_Error, Task_Form } from '../../config/CustomTypes';
 import { Dispatch } from 'redux';
@@ -17,6 +17,8 @@ import { addUserTask } from '../../services/slices/UserSlice';
 const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
   const { all_member, token } = useSelector((state: any) => state.userSlice);
   const [openDateModal, setOpenDateModal] = useState<boolean>(false);
+  const [mode, setMode] = useState<any>('date');
+  const [time, setTime] = useState<{ inputdate: string | undefined, inputtime: string | undefined }>({ inputdate: "", inputtime: "" });
   const [taskData, setTaskData] = useState<Task_Form>({ task_title: "", task_time: 0, location: "", task_partner: [], priority: "Never" });
   const [taskError, setTaskError] = useState<Task_Error>({});
   const _Header = { headers: { Authorization: "Bearer " + token } };
@@ -24,8 +26,16 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
   const dispatch: Dispatch<any> = useDispatch();
 
   const onChange = (event: DateTimePickerEvent, date: Date | undefined) => {
-    setTaskData({ ...taskData, task_time: convertToTimeStamp(date) });
-    setOpenDateModal(false);
+    if (mode === 'date') {
+      setTime({ ...time, inputdate: date?.toISOString().split("T")[0] })
+      setOpenDateModal(false);
+      setMode('time');
+    }
+    else {
+      setTime({ ...time, inputtime: date?.toISOString().split("T")[1] })
+      setOpenDateModal(false);
+      setMode('date');
+    }
     setTaskError({ ...taskError, task_time: 0 });
   };
 
@@ -37,7 +47,7 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
       error.task_title = "Task Name is Required!";
       dispatch(showModal({ msg: "Task Name is Required!", type: "error" }));
     }
-    else if (!task_time) {
+    else if (!(time.inputdate && time.inputtime)) {
       error.task_time = 1;
       dispatch(showModal({ msg: "Please Select a Date & Time for Task!", type: "error" }));
     }
@@ -54,6 +64,7 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
     setTaskError(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
+      taskData.task_time = convertToTimeStamp(new Date(`${time.inputdate}T${time.inputtime}`));
       dispatch(addUserTask({ taskData, _Header, navigation }));
       // setEventData({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
     }
@@ -126,19 +137,24 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
               <TextInput
                 style={[styles.inputBox, commonstyles.parent]}
                 editable={false}
-                value={taskData?.task_time ? getDateTimeFromTimestamp(taskData?.task_time, "date") + ", " + getDateTimeFromTimestamp(taskData?.task_time, "time") : undefined}
+                value={
+                  time?.inputdate && time?.inputtime ?
+                    getFormatedDateTime(`${time.inputdate}T${time.inputtime}`, "date") + ", " + getFormatedDateTime(`${time.inputdate}T${time.inputtime}`, "time")
+                    :
+                    undefined
+                }
               />
 
               {!openDateModal && <TouchableOpacity
                 style={[commonstyles.acjc, { marginHorizontal: 8 }]}
                 onPress={() => setOpenDateModal(true)}
               >
-                <Image style={styles.calendar} source={icons.calendar} />
+                <Image style={styles.calendar} source={mode === "date" ? icons.calendar : icons.timer} />
               </TouchableOpacity>}
 
               {openDateModal && <DateTimePicker
                 value={new Date()}
-                mode={'date'}
+                mode={mode}
                 is24Hour={false}
                 onChange={onChange}
                 style={{ position: "absolute", right: 3 }}

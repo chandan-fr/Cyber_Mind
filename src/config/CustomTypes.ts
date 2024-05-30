@@ -122,10 +122,10 @@ export type Date_State = {
 };
 
 export type Event_State = {
-    date: string;
-    time: string;
+    date: string | undefined;
+    time: string | undefined;
     open: boolean;
-    datetime: Date | undefined;
+    datetime?: Date | undefined;
 };
 
 export type Event_Data = {

@@ -22,28 +22,28 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
     const [repeat, setRepeat] = useState<boolean>(false);
     const [alertOptn, setAlertOptn] = useState<string>("optn1");
     const [mode, setMode] = useState<any>("");
-    const [startTimeValue, setStartTimeValue] = useState<Event_State>({ date: "", time: "", open: false, datetime: new Date() });
-    const [endTimeValue, setEndTimeValue] = useState<Event_State>({ date: "", time: "", open: false, datetime: new Date() });
+    const [startTimeValue, setStartTimeValue] = useState<Event_State>({ date: "", time: "", open: false });
+    const [endTimeValue, setEndTimeValue] = useState<Event_State>({ date: "", time: "", open: false });
     const [eventData, setEventData] = useState<Event_Data>({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
     const [eventError, setEventError] = useState<Event_Error>({});
     const _Header = { headers: { Authorization: "Bearer " + token } };
 
     const dispatch: Dispatch<any> = useDispatch();
 
-    const onChange = (event: DateTimePickerEvent, date: Date | undefined) => {
+    const onChange = (event: DateTimePickerEvent, dates: Date | undefined) => {
         if (mode === "date") {
             if (startTimeValue.open) {
-                setStartTimeValue({ ...startTimeValue, date: getFormatedDateTime(date, mode), open: false, datetime: date });
+                setStartTimeValue({ ...startTimeValue, date: dates?.toISOString(), open: false });
             }
             if (endTimeValue.open) {
-                setEndTimeValue({ ...endTimeValue, date: getFormatedDateTime(date, mode), open: false, datetime: date });
+                setEndTimeValue({ ...endTimeValue, date: dates?.toISOString(), open: false });
             }
         } else {
             if (startTimeValue.open) {
-                setStartTimeValue({ ...startTimeValue, time: getFormatedDateTime(date, mode), open: false, datetime: date });
+                setStartTimeValue({ ...startTimeValue, time: dates?.toISOString(), open: false });
             }
             if (endTimeValue.open) {
-                setEndTimeValue({ ...endTimeValue, time: getFormatedDateTime(date, mode), open: false, datetime: date });
+                setEndTimeValue({ ...endTimeValue, time: dates?.toISOString(), open: false });
             }
         }
     };
@@ -68,11 +68,11 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
             error.event_name = "Event Name is Required!";
             dispatch(showModal({ msg: "Event Name is Required!", type: "error" }));
         }
-        if (!(startTimeValue.date && startTimeValue.time)) {
+        else if (!(startTimeValue.date && startTimeValue.time)) {
             error.event_start_timestamp = "Please Select a Date & Time for Event!";
             dispatch(showModal({ msg: "Please Select a Date & Time for Event!", type: "error" }));
         }
-        if (!(endTimeValue.date && endTimeValue.time)) {
+        else if (!(endTimeValue.date && endTimeValue.time)) {
             error.event_end_timestamp = "Please Select a Date & Time for Event to End!";
             dispatch(showModal({ msg: "Please Select a Date & Time for Event to End!", type: "error" }));
         }
@@ -86,8 +86,8 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
 
         if (Object.keys(validationErrors).length === 0) {
             eventData.alert = alertOptions[alertOptn];
-            eventData.event_start_timestamp = convertToTimeStamp(startTimeValue.datetime);
-            eventData.event_end_timestamp = convertToTimeStamp(endTimeValue.datetime);
+            eventData.event_start_timestamp = convertToTimeStamp(new Date(`${startTimeValue.date?.split("T")[0]}T${startTimeValue.time?.split("T")[1]}`));
+            eventData.event_end_timestamp = convertToTimeStamp(new Date(`${endTimeValue.date?.split("T")[0]}T${endTimeValue.time?.split("T")[1]}`));
 
             dispatch(addEvents({ eventData, _Header, navigation }));
             // setEventData({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
@@ -253,7 +253,7 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
                                                 placeholder='Enter Date'
                                                 placeholderTextColor={colors.addevent.placeholder}
                                                 style={styles.eventInput}
-                                                value={startTimeValue.date}
+                                                value={startTimeValue.date && getFormatedDateTime(startTimeValue.date, "date")}
                                                 editable={false}
                                             />
                                         </TouchableOpacity>
@@ -269,7 +269,7 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
                                                 placeholder='Time'
                                                 placeholderTextColor={colors.addevent.placeholder}
                                                 style={styles.eventInput}
-                                                value={startTimeValue.time}
+                                                value={startTimeValue.time && getFormatedDateTime(startTimeValue.time, "time")}
                                                 editable={false}
                                             />
                                         </TouchableOpacity>
@@ -321,7 +321,7 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
                                                 placeholder='Enter Date'
                                                 placeholderTextColor={colors.addevent.placeholder}
                                                 style={styles.eventInput}
-                                                value={endTimeValue.date}
+                                                value={endTimeValue.date && getFormatedDateTime(endTimeValue.date, "date")}
                                                 editable={false}
                                             />
                                         </TouchableOpacity>
@@ -337,7 +337,7 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
                                                 placeholder='Time'
                                                 placeholderTextColor={colors.addevent.placeholder}
                                                 style={styles.eventInput}
-                                                value={endTimeValue.time}
+                                                value={endTimeValue.time && getFormatedDateTime(endTimeValue.time, "time")}
                                                 editable={false}
                                             />
                                         </TouchableOpacity>
@@ -624,7 +624,7 @@ const styles = StyleSheet.create({
         fontFamily: fonts.medium,
         ...Platform.select({
             ios: {},
-            android: { paddingTop: 3, paddingBottom: 0, height: 30, }
+            android: { paddingTop: 3, paddingBottom: 0, height: 30, paddingLeft: 0 }
         }),
         flex: 1,
         color: colors.black,
