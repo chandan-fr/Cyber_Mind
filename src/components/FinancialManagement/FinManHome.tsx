@@ -81,7 +81,7 @@ const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
                 >
                     <View style={{ margin: 15 }}>
                         <Text style={styles.balanceHead}>Total Balance</Text>
-                        <Text style={styles.totalBalance}>${all_balance?.total_balance}</Text>
+                        <Text style={styles.totalBalance}>${all_balance?.total_balance ? all_balance?.total_balance : 0}</Text>
 
                         <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginBottom: 15 }]}>
                             {/* expense */}
@@ -92,7 +92,7 @@ const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
 
                                 <View>
                                     <Text style={styles.incmExpns}>Expences</Text>
-                                    <Text style={styles.amount}>${all_balance?.total_expense}</Text>
+                                    <Text style={styles.amount}>${all_balance?.total_expense ? all_balance?.total_expense : 0}</Text>
                                 </View>
                             </View>
 
@@ -104,7 +104,7 @@ const FinManHome = ({ navigation }: { navigation: any }): JSX.Element => {
 
                                 <View>
                                     <Text style={styles.incmExpns}>Income</Text>
-                                    <Text style={styles.amount}>${all_balance?.total_income}</Text>
+                                    <Text style={styles.amount}>${all_balance?.total_income ? all_balance?.total_income : 0}</Text>
                                 </View>
                             </View>
                         </View>

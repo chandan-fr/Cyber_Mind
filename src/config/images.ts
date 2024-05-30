@@ -12,4 +12,10 @@ export const images: { [key: string]: ImageSourcePropType } = {
     fmtimgbg: require("../assets/images/fmtimgbg.png"),
     errorscrn: require("../assets/images/errorscrn.png"),
     tcmnavbg: require("../assets/images/tcmnavbg.png"),
+    ca: require("../assets/images/ca.png"),
+    physics: require("../assets/images/physics.png"),
+    economics: require("../assets/images/economics.png"),
+    biology: require("../assets/images/biology.png"),
+    history: require("../assets/images/history.png"),
+    math: require("../assets/images/math.png"),
 };

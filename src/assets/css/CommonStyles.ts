@@ -112,4 +112,14 @@ export const commonstyles = StyleSheet.create({
             },
         }),
     },
+
+    // coming soon
+    cstext:{
+        fontSize: 40,
+        fontFamily: fonts.semibold,
+        color: colors.black,
+    },
+    csback:{
+        
+    }
 });

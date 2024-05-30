@@ -48,4 +48,7 @@ export const icons = {
     dollar: require("../assets/icons/dollar.png"),
     save: require("../assets/icons/save.png"),
     taskdone: require("../assets/icons/taskdone.png"),
+    planting: require("../assets/icons/planting.png"),
+    co2: require("../assets/icons/co2.png"),
+    recycle: require("../assets/icons/recycle.png"),
 };

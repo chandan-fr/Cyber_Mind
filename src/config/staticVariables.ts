@@ -1,5 +1,6 @@
-import { Dimensions, Permission, PermissionsAndroid, Platform } from "react-native";
+import { Dimensions, ImageSourcePropType, Permission, PermissionsAndroid, Platform } from "react-native";
 import { Wlcm_Data } from "./CustomTypes";
+import { images } from "./images";
 
 export const wlcmData: Array<Wlcm_Data> = [
     {
@@ -64,4 +65,31 @@ export const _TransactionType: Array<{ label: string, value: string }> = [
 export const _ExpenseFilterType: Array<{ label: string, value: string }> = [
     { label: "Weekly", value: "Weekly" },
     { label: "Monthly", value: "Monthly" }
+];
+
+export const courseData: Array<{ name: string; img: ImageSourcePropType; }> = [
+    {
+        name: "Mathematics",
+        img: images.math
+    },
+    {
+        name: "History",
+        img: images.history
+    },
+    {
+        name: "Biology",
+        img: images.biology
+    },
+    {
+        name: "Economics",
+        img: images.economics
+    },
+    {
+        name: "Physics",
+        img: images.physics
+    },
+    {
+        name: "Computer Application",
+        img: images.ca
+    },
 ];
