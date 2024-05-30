@@ -44,11 +44,11 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }): JSX.Element =>
 
     const onRefresh = () => {
         setRefreshing(true);
-
+        dispatch(getAllEvents({ _Header }));
         setTimeout(() => {
             setRefreshing(false);
         }, 2000);
-    }
+    };
 
     useEffect(() => {
         dispatch(getAllEvents({ _Header }));
@@ -209,7 +209,7 @@ const FamilyCalendarHome = ({ navigation }: { navigation: any }): JSX.Element =>
                                                 <TouchableOpacity
                                                     style={[styles.remTodoWrap, commonstyles.fdRow, { backgroundColor: item }]}
                                                 >
-                                                    <Image style={styles.reminderImg} source={user?.profile_img ? { uri: getImagUrl(user?.profile_img) } : icons.man} />
+                                                    <Image style={styles.reminderImg} source={icons.man} />
 
                                                     <View style={[commonstyles.parent, { rowGap: Platform.OS === "android" ? 4 : 8 }]}>
                                                         <Text style={styles.reminderTodoHeading} numberOfLines={1}>
