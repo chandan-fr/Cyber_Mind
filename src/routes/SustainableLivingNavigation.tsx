@@ -1,16 +1,17 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { commonstyles } from '../assets/css/CommonStyles';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SustainableLivingHome from '../components/SLM/SustainableLivingHome';
 
-const SustainableLivingNavigation = ({ navigation }: { navigation: any }): JSX.Element => {
+const SustainableLivingStack = createNativeStackNavigator();
+
+const SustainableLivingNavigation = (): JSX.Element => {
     return (
-        <View style={[commonstyles.parent, commonstyles.acjc]}>
-            <Text style={commonstyles.cstext}>Sustainable Living Module</Text>
-            <Text style={commonstyles.cstext}>Coming Soon!</Text>
-            <View style={{ marginTop: 50 }}>
-                <Button title='Back' onPress={() => navigation.navigate("drawernav")} />
-            </View>
-        </View>
+        <SustainableLivingStack.Navigator
+            initialRouteName='slhome'
+            screenOptions={{ headerShown: false }}
+        >
+            <SustainableLivingStack.Screen name='slhome' component={SustainableLivingHome} />
+        </SustainableLivingStack.Navigator>
     )
 };
 

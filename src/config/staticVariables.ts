@@ -1,6 +1,7 @@
 import { Dimensions, ImageSourcePropType, Permission, PermissionsAndroid, Platform } from "react-native";
 import { Wlcm_Data } from "./CustomTypes";
 import { images } from "./images";
+import { icons } from "./icons";
 
 export const wlcmData: Array<Wlcm_Data> = [
     {
@@ -91,5 +92,23 @@ export const courseData: Array<{ name: string; img: ImageSourcePropType; }> = [
     {
         name: "Computer Application",
         img: images.ca
+    },
+];
+
+export const slmGoal: Array<{ name: string; img: ImageSourcePropType; bg: string; }> = [
+    {
+        name: "Recycle",
+        img: icons.recycle,
+        bg: "#FFD7D7",
+    },
+    {
+        name: "Reduce CO2",
+        img: icons.co2,
+        bg: "#FFEDD8",
+    },
+    {
+        name: "Tree Planting",
+        img: icons.planting,
+        bg: "#F5DFFF",
     },
 ];

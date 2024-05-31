@@ -225,4 +225,12 @@ module.exports = {
         gdcolor: ["#49C4FC", "#13CCD9"],
         border: "#BABABA",
     },
+    slmhome:{
+        bgcolor: "#E2F3F3",
+        gdcolor: ["#49C4FC", "#13CCD9"],
+        goalshadow: "rgba(0, 158, 245, 0.6)",
+        progress: "#009EF5",
+        progressbarbg: "#D9D9D9",
+        addgoal: "#D9D9D9",
+    }
 };
