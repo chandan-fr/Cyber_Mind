@@ -223,5 +223,6 @@ module.exports = {
     elearnhome:{
         bgcolor: "#E2F3F3",
         gdcolor: ["#49C4FC", "#13CCD9"],
+        border: "#BABABA",
     },
 };

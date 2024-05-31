@@ -32,24 +32,29 @@ const ELearningHome = ({ navigation }: { navigation: any }): JSX.Element => {
             </LinearGradient>
 
             {/* body */}
-            <View style={[commonstyles.parent, { marginTop: 0, borderWidth: 1, paddingHorizontal: 20, marginBottom: Platform.OS === "ios" ? 25 : 5 }]}>
+            <View style={[commonstyles.parent, { marginTop: -170, paddingHorizontal: 20, marginBottom: Platform.OS === "ios" ? 25 : 5 }]}>
                 {/* heading */}
-                <View style={[commonstyles.fdRow, { alignItems: "center", columnGap: 20 }]}>
+                <View style={[commonstyles.fdRow, { alignItems: "center", columnGap: 20, backgroundColor: "transparent" }]}>
                     <Text style={styles.heading}>Choose Your Course</Text>
                     <Image style={styles.arrow} source={icons.arrow} />
                 </View>
 
                 {/* subjects */}
-                <View style={[commonstyles.parent, { borderWidth: 1 }]}>
+                <View style={[commonstyles.parent, { marginTop: 10 }]}>
                     <FlatList
                         data={courseData}
                         showsVerticalScrollIndicator={false}
-                        // style={{flexWrap: "wrap"}}
+                        style={{ paddingTop: 15 }}
                         numColumns={2}
                         keyExtractor={(_, index) => index.toString()}
-                        columnWrapperStyle={[commonstyles.fdRow, commonstyles.acjsb, {}]}
+                        columnWrapperStyle={[commonstyles.fdRow, commonstyles.acjsb, { marginBottom: 20 }]}
                         renderItem={({ item }) => (
-                            <CourseCard item={item} />
+                            <TouchableOpacity
+                                style={styles.course}
+                            >
+                                <Text style={styles.courseName}>{item?.name}</Text>
+                                <Image style={[styles.courseImg, { height: item?.name === "Computer Application" ? 100 : 120 }]} resizeMode='stretch' source={item.img} />
+                            </TouchableOpacity>
                         )}
                     />
                 </View>
@@ -60,24 +65,15 @@ const ELearningHome = ({ navigation }: { navigation: any }): JSX.Element => {
 
 export default ELearningHome;
 
-const CourseCard = ({ item }: { item: any }): JSX.Element => (
-    <TouchableOpacity
-        style={styles.course}
-    >
-        <Text>{item?.name}</Text>
-        <Image style={styles.courseImg} resizeMode='stretch' source={item.img} />
-    </TouchableOpacity>
-);
-
 const styles = StyleSheet.create({
     lgStyle: {
         width: "100%",
         ...Platform.select({
             ios: {
-                height: _Height * 0.25,
+                height: _Height * 0.37,
             },
             android: {
-                height: _Height * 0.28,
+                height: _Height * 0.40,
             }
         }),
     },
@@ -120,14 +116,25 @@ const styles = StyleSheet.create({
         transform: [{ rotate: "180deg" }],
     },
     course: {
-        minHeight: 100,
         width: (_Width - 60) / 2,
         padding: 15,
         backgroundColor: colors.white,
         borderRadius: 18.5,
+        rowGap: 15,
+        borderWidth: 2,
+        borderColor: colors.elearnhome.border,
+        ...Platform.select({
+            ios: { height: ((_Width - 60) / 2) * 1.15 },
+            android: { height: ((_Width - 60) / 2) * 1.3 }
+        }),
+    },
+    courseName: {
+        fontSize: 15,
+        fontFamily: fonts.medium,
+        color: colors.black,
     },
     courseImg: {
-        width: "100%",
-        height: "100%",
+        width: (_Width - 90) / 2,
+        marginLeft: -10,
     },
 });
