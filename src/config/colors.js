@@ -194,24 +194,24 @@ module.exports = {
         nestedtnxviewbg: "#FBFBFB",
         nestedtnxviewshadow: "#009EF5",
     },
-    alltnx:{
-        downloadbg:"#009EF5",
+    alltnx: {
+        downloadbg: "#009EF5",
         gdcolor: ["#49C4FC", "#13CCD9"],
         bgcolor: "#E2F3F3",
         today: "#4B4B4B",
     },
-    emptydata:{
+    emptydata: {
         txt: "#CCCCCC",
     },
-    tcmhome:{
+    tcmhome: {
         gdcolor: ["#2695E5", "#4AE7FC"],
         taskcatmenubg: "#009EF5",
         tick: "#33363F",
     },
-    taskcard:{
+    taskcard: {
         gdcolor: ["#81CCD7", "#7E7BFF"]
     },
-    addtask:{
+    addtask: {
         gdcolor: ["#49C4FC", "#13CCD9"],
         label: "#666464",
         seeall: "#49C4FC",
@@ -220,12 +220,12 @@ module.exports = {
         prtcatmenubg: "#009EF5",
         error: "#FA1B1B",
     },
-    elearnhome:{
+    elearnhome: {
         bgcolor: "#E2F3F3",
         gdcolor: ["#49C4FC", "#13CCD9"],
         border: "#BABABA",
     },
-    slmhome:{
+    slmhome: {
         bgcolor: "#E2F3F3",
         gdcolor: ["#49C4FC", "#13CCD9"],
         goalshadow: "rgba(0, 158, 245, 0.6)",
@@ -233,11 +233,19 @@ module.exports = {
         progressbarbg: "#D9D9D9",
         addgoal: "#D9D9D9",
     },
-    dsmhome:{
-        gdcolor:["#2695E5", "#4AE7FC"],
+    dsmhome: {
+        gdcolor: ["#2695E5", "#4AE7FC"],
         bgcolor: "#E2F3F3",
         fileshadow: "rgba(0, 0, 0, 0.25)",
         progress: "#009EF5",
         playshadow: "#49C4FC",
+    },
+    hthome: {
+        gdcolor: ["#49C4FC", "#13CCD9"],
+        bgcolor: "#E2F3F3",
+        analysisbg: "#D9D9D9B0",
+        togglebg: "#D9D9D9",
+        toggleactvthmb: "#009EF5",
+        activitycardborder: "#DEDEDE",
     },
 };

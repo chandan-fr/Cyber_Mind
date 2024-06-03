@@ -1,19 +1,18 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react'
-import { commonstyles } from '../assets/css/CommonStyles'
+import HealthTrackingHome from '../components/HealthTracking/HealthTrackingHome';
 
-const HealthTrackingNavigation = ({ navigation }: { navigation: any }): JSX.Element => {
+const HealthTrackingStack = createNativeStackNavigator();
+
+const HealthTrackingNavigation = (): JSX.Element => {
     return (
-        <View style={[commonstyles.parent, commonstyles.acjc]}>
-            <Text style={commonstyles.cstext}>Health & Wellness Tracking</Text>
-            <Text style={commonstyles.cstext}>Coming Soon!</Text>
-            <View style={{ marginTop: 50 }}>
-                <Button title='Back' onPress={() => navigation.navigate("drawernav")} />
-            </View>
-        </View>
+        <HealthTrackingStack.Navigator
+            initialRouteName='hthome'
+            screenOptions={{ headerShown: false }}
+        >
+            <HealthTrackingStack.Screen name='hthome' component={HealthTrackingHome} />
+        </HealthTrackingStack.Navigator>
     )
 };
 
 export default HealthTrackingNavigation;
-
-const styles = StyleSheet.create({});

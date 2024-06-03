@@ -97,9 +97,9 @@ const StorageManagementHome = ({ navigation }: { navigation: any }): JSX.Element
                                     <Image style={styles.play} source={icons.play} />
                                 </TouchableOpacity>
 
-                                <View style={[commonstyles.parent, {}]}>
+                                <View style={[commonstyles.parent, { rowGap: Platform.OS === "ios" ? 3 : 0 }]}>
                                     <Text numberOfLines={1} style={styles.fileHeading}>Tutorial Part - 1</Text>
-                                    <Text style={styles.fileSubHeading}>45:48 mints</Text>
+                                    <Text style={styles.fileSubHeading}>45:48 mins</Text>
                                 </View>
                             </View>
                         )}
