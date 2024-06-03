@@ -1,16 +1,17 @@
-import { Button, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { commonstyles } from '../assets/css/CommonStyles';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import StorageManagementHome from '../components/StorageManagement/StorageManagementHome';
 
-const DocumentStorageNavigation = ({ navigation }: { navigation: any }): JSX.Element => {
+const DocumentStorageStack = createNativeStackNavigator();
+
+const DocumentStorageNavigation = (): JSX.Element => {
     return (
-        <View style={[commonstyles.parent, commonstyles.acjc]}>
-            <Text style={commonstyles.cstext}>Document And Storage Management</Text>
-            <Text style={commonstyles.cstext}>Coming Soon!</Text>
-            <View style={{ marginTop: 50 }}>
-                <Button title='Back' onPress={() => navigation.navigate("drawernav")} />
-            </View>
-        </View>
+        <DocumentStorageStack.Navigator
+            initialRouteName='smhome'
+            screenOptions={{ headerShown: false }}
+        >
+            <DocumentStorageStack.Screen name='smhome' component={StorageManagementHome} />
+        </DocumentStorageStack.Navigator>
     )
 };
 

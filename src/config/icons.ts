@@ -51,4 +51,6 @@ export const icons = {
     planting: require("../assets/icons/planting.png"),
     co2: require("../assets/icons/co2.png"),
     recycle: require("../assets/icons/recycle.png"),
+    play: require("../assets/icons/play.png"),
+    drive: require("../assets/icons/drive.png"),
 };

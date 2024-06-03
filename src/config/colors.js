@@ -232,5 +232,12 @@ module.exports = {
         progress: "#009EF5",
         progressbarbg: "#D9D9D9",
         addgoal: "#D9D9D9",
-    }
+    },
+    dsmhome:{
+        gdcolor:["#2695E5", "#4AE7FC"],
+        bgcolor: "#E2F3F3",
+        fileshadow: "rgba(0, 0, 0, 0.25)",
+        progress: "#009EF5",
+        playshadow: "#49C4FC",
+    },
 };

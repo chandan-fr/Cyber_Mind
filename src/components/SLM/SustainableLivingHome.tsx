@@ -9,7 +9,7 @@ import { fonts } from '../../config/fonts';
 
 const SustainableLivingHome = ({ navigation }: { navigation: any }): JSX.Element => {
   return (
-    <View style={[commonstyles.parent, { backgroundColor: colors.elearnhome.bgcolor }]}>
+    <View style={[commonstyles.parent, { backgroundColor: colors.slmhome.bgcolor }]}>
       {/* top header section */}
       <LinearGradient
         useAngle={true}
