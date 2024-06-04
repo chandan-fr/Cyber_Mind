@@ -242,7 +242,7 @@ module.exports = {
     },
     hthome: {
         gdcolor: ["#49C4FC", "#13CCD9"],
-        pagdcolor: ["#13CCD9", "#49C4FC"],
+        pagdcolor: ["#14CDD9", "#33C8EE"],
         bgcolor: "#E2F3F3",
         analysisbg: "#D9D9D9B0",
         togglebg: "#D9D9D9",

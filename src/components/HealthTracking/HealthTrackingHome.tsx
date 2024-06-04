@@ -64,6 +64,7 @@ const HealthTrackingHome = ({ navigation }: { navigation: any }): JSX.Element =>
                         lineCap="round"
                         arcSweepAngle={280}
                         rotation={220}
+                        delay={500}
                         duration={1500}
                         renderCap={({ center }) => <Circle cx={center.x} cy={center.y} r="15" fill={colors.hthome.linecap} />}
                         children={() => (
@@ -138,6 +139,7 @@ const HealthTrackingHome = ({ navigation }: { navigation: any }): JSX.Element =>
                                         backgroundColor={colors.hthome.patint}
                                         lineCap="round"
                                         rotation={180}
+                                        delay={500}
                                         duration={1500}
                                         children={() => (
                                             <View style={{ alignItems: "center", rowGap: Platform.OS === "android" ? -6 : 0 }}>
@@ -154,7 +156,7 @@ const HealthTrackingHome = ({ navigation }: { navigation: any }): JSX.Element =>
                             <TouchableOpacity style={[styles.activityCard, { height: 160 }]}>
                                 <Text style={styles.title}>Hydration</Text>
 
-                                <View style={{}}>
+                                <View style={{ rowGap: Platform.OS === "android" ? -6 : 0 }}>
                                     <Text style={styles.value}>450.72</Text>
                                     <Text style={styles.unit}>Kcal</Text>
                                 </View>
@@ -163,7 +165,7 @@ const HealthTrackingHome = ({ navigation }: { navigation: any }): JSX.Element =>
                             <TouchableOpacity style={[styles.activityCard, { height: 160 }]}>
                                 <Text style={styles.title}>Sleep and Recovery</Text>
 
-                                <View style={{}}>
+                                <View style={{ rowGap: Platform.OS === "android" ? -6 : 0 }}>
                                     <Text style={styles.value}>08.32</Text>
                                     <Text style={styles.unit}>hours</Text>
                                 </View>
@@ -175,7 +177,9 @@ const HealthTrackingHome = ({ navigation }: { navigation: any }): JSX.Element =>
                             <TouchableOpacity style={[styles.activityCard, { height: 200 }]}>
                                 <Text style={styles.title}>Mental Well-being</Text>
 
-                                <View style={{}}>
+                                <Image style={{ width: "100%", height: 30, marginLeft: 0 }} resizeMode='stretch' source={images.mwb} />
+
+                                <View style={{ rowGap: Platform.OS === "android" ? -6 : 0 }}>
                                     <Text style={styles.value}>0.55</Text>
                                     <Text style={styles.unit}>liters</Text>
                                 </View>
@@ -186,7 +190,7 @@ const HealthTrackingHome = ({ navigation }: { navigation: any }): JSX.Element =>
 
                                 <Image style={{ width: (_Width - 30) / 2, height: 100, marginLeft: -28 }} resizeMode='stretch' source={images.heartline} />
 
-                                <View style={{}}>
+                                <View style={{ rowGap: Platform.OS === "android" ? -6 : 0 }}>
                                     <Text style={styles.value}>105</Text>
                                     <Text style={styles.unit}>bpm</Text>
                                 </View>
@@ -360,7 +364,7 @@ const styles = StyleSheet.create({
         color: colors.white,
     },
     title: {
-        fontSize: 16,
+        fontSize: 13,
         fontFamily: fonts.medium,
         color: colors.black,
     },

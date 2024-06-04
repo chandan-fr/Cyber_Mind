@@ -19,4 +19,5 @@ export const images: { [key: string]: ImageSourcePropType } = {
     history: require("../assets/images/history.png"),
     math: require("../assets/images/math.png"),
     heartline: require("../assets/images/heartline.png"),
+    mwb: require("../assets/images/mwb.png"),
 };
