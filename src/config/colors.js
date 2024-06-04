@@ -257,4 +257,15 @@ module.exports = {
         linecap: "#F8F3F3",
         patint: "#002C2FDB",
     },
+    chatbot:{
+        gdcolor: ["#49C4FC", "#13CCD9"],
+        bgcolor:"#E2F3F3",
+        sendbg: "#C5CAE8",
+        receivebg: "#E8EAF6",
+        inputcontbg: "#F2F4FF",
+        sendbtnbg: "#009EF5",
+        actnOptn: "#BCBBBB",
+        plus: "#009EF5",
+        addshadow: "#009EF566",
+    },
 };
