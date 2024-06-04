@@ -8,6 +8,8 @@ import { _Height, _Width } from '../../config/staticVariables';
 import { fonts } from '../../config/fonts';
 import ToggleSwitch from 'toggle-switch-react-native';
 import { images } from '../../config/images';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import { Circle } from 'react-native-svg';
 
 const HealthTrackingHome = ({ navigation }: { navigation: any }): JSX.Element => {
     const [isToggle, setIsToggle] = useState<boolean>(true);
@@ -51,8 +53,28 @@ const HealthTrackingHome = ({ navigation }: { navigation: any }): JSX.Element =>
                 </View>
 
                 {/* circular Progress Bar */}
-                <View style={{ width: 175, height: 180, borderWidth: 0, alignSelf: "center", marginTop: 20 }}>
-
+                <View style={[commonstyles.acjc, styles.circularProgressWrap]}>
+                    <AnimatedCircularProgress
+                        size={Platform.OS === "ios" ? (_Width / 2) : (_Width / 1.9)}
+                        width={15}
+                        padding={8}
+                        fill={40}
+                        tintColor={colors.hthome.cptint}
+                        backgroundColor={colors.hthome.cpbg}
+                        lineCap="round"
+                        arcSweepAngle={280}
+                        rotation={220}
+                        duration={1500}
+                        renderCap={({ center }) => <Circle cx={center.x} cy={center.y} r="15" fill={colors.hthome.linecap} />}
+                        children={() => (
+                            <View style={[commonstyles.acjc, styles.cpbContentWrap]}>
+                                <View style={[commonstyles.acjc, styles.cpbChildContentWrap]}>
+                                    <Text style={styles.cpbChildValue}>3.540</Text>
+                                    <Text style={styles.cpbChildUnit}>Calories</Text>
+                                </View>
+                            </View>
+                        )}
+                    />
                 </View>
 
                 {/* my analysis toggle */}
@@ -98,14 +120,35 @@ const HealthTrackingHome = ({ navigation }: { navigation: any }): JSX.Element =>
                     showsVerticalScrollIndicator={false}
                 >
                     <View style={[commonstyles.parent, commonstyles.fdRow, commonstyles.acjsb, { paddingBottom: 20 }]}>
+                        {/* activity row 1 */}
                         <View style={{ rowGap: 20 }}>
-                            <TouchableOpacity style={[styles.activityCard, { height: 200, backgroundColor: "#14CDD9" }]}>
-                                <Text style={[styles.title, { color: colors.white }]}>Physical Activity</Text>
+                            <TouchableOpacity style={[styles.activityCard, { height: 200, padding: 0, backgroundColor: "transparent" }]}>
+                                <LinearGradient
+                                    start={{ x: 0, y: 0.9 }}
+                                    end={{ x: 0, y: 0.1 }}
+                                    colors={colors.hthome.pagdcolor}
+                                    style={[commonstyles.acjc, { width: "100%", height: "100%", padding: 15, borderRadius: 30, justifyContent: "space-between" }]}
+                                >
+                                    <AnimatedCircularProgress
+                                        size={(_Width - 75) / 2.5}
+                                        width={10}
+                                        padding={8}
+                                        fill={75}
+                                        tintColor={colors.white}
+                                        backgroundColor={colors.hthome.patint}
+                                        lineCap="round"
+                                        rotation={180}
+                                        duration={1500}
+                                        children={() => (
+                                            <View style={{ alignItems: "center", rowGap: Platform.OS === "android" ? -6 : 0 }}>
+                                                <Text style={styles.pavalue}>8500</Text>
+                                                <Text style={[styles.unit, { color: "#09818E" }]}>steps</Text>
+                                            </View>
+                                        )}
+                                    />
 
-                                <View style={{}}>
-                                    <Text style={[styles.value, { color: colors.white }]}>8500</Text>
-                                    <Text style={[styles.unit, { color: "#09818E" }]}>steps</Text>
-                                </View>
+                                    <Text style={styles.patitle}>Physical Activity</Text>
+                                </LinearGradient>
                             </TouchableOpacity>
 
                             <TouchableOpacity style={[styles.activityCard, { height: 160 }]}>
@@ -127,6 +170,7 @@ const HealthTrackingHome = ({ navigation }: { navigation: any }): JSX.Element =>
                             </TouchableOpacity>
                         </View>
 
+                        {/* activity row 2 */}
                         <View style={{ rowGap: 20 }}>
                             <TouchableOpacity style={[styles.activityCard, { height: 200 }]}>
                                 <Text style={styles.title}>Mental Well-being</Text>
@@ -204,6 +248,61 @@ const styles = StyleSheet.create({
         fontFamily: fonts.semibold,
         textAlign: "center",
     },
+    circularProgressWrap: {
+        alignSelf: "center",
+        marginTop: 20,
+        ...Platform.select({
+            ios: { marginBottom: -23 },
+            android: { marginBottom: -18 }
+        }),
+    },
+    cpbContentWrap: {
+        ...Platform.select({
+            ios: {
+                width: (_Width / 3.2),
+                height: (_Width / 3.2),
+            },
+            android: {
+                width: (_Width / 3),
+                height: (_Width / 3),
+            },
+        }),
+        borderRadius: (_Width / 3),
+        backgroundColor: colors.hthome.cpbparentbg,
+        shadowColor: colors.hthome.cpbparentshadow,
+        shadowOffset: {
+            width: 0,
+            height: 6,
+        },
+        shadowOpacity: 0.89,
+        shadowRadius: 7.30,
+        elevation: 9,
+    },
+    cpbChildContentWrap: {
+        backgroundColor: colors.hthome.cpbchildbg,
+        ...Platform.select({
+            ios: {
+                width: _Width / 4,
+                height: _Width / 4,
+            },
+            android: {
+                width: _Width / 3.8,
+                height: _Width / 3.8,
+                rowGap: -6,
+            },
+        }),
+        borderRadius: _Width / 3.8,
+    },
+    cpbChildValue: {
+        fontSize: 20,
+        color: colors.hthome.cpbchildvalue,
+        fontFamily: fonts.medium,
+    },
+    cpbChildUnit: {
+        fontSize: 10,
+        color: colors.black,
+        fontFamily: fonts.medium,
+    },
     analysisContainer: {
         marginHorizontal: 30,
         backgroundColor: colors.hthome.analysisbg,
@@ -236,7 +335,6 @@ const styles = StyleSheet.create({
     activityCard: {
         borderWidth: 2,
         borderColor: colors.hthome.activitycardborder,
-        backgroundColor: colors.white,
         shadowColor: colors.black,
         shadowOffset: {
             width: 0,
@@ -247,8 +345,19 @@ const styles = StyleSheet.create({
         elevation: 1,
         width: (_Width - 75) / 2,
         borderRadius: 30,
+        backgroundColor: colors.white,
         padding: 15,
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+    },
+    patitle: {
+        fontSize: 12,
+        fontFamily: fonts.medium,
+        color: colors.white,
+    },
+    pavalue: {
+        fontSize: 18,
+        fontFamily: fonts.medium,
+        color: colors.white,
     },
     title: {
         fontSize: 16,
