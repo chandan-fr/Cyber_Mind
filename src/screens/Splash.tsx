@@ -1,4 +1,4 @@
-import { Image, Platform, StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, View } from 'react-native'
 import React, { useEffect } from 'react'
 import BgGradient from '../utility/BgGradient';
 import { commonstyles } from '../assets/css/CommonStyles';
@@ -9,6 +9,7 @@ import { getSliderData } from '../services/slices/UtilitySlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { loginByAsyncStorage, saveUserCred } from '../services/slices/UserSlice';
 import { RememberMe_Data } from '../config/CustomTypes';
+import * as Animatable from 'react-native-animatable';
 
 const Splash = ({ navigation }: { navigation: any }) => {
     const dispatch: any = useDispatch();
@@ -50,16 +51,16 @@ const Splash = ({ navigation }: { navigation: any }) => {
 
     return (
         <View style={commonstyles.parent}>
-            <BgGradient colors={colors.splash.gdcolor} />
+            <BgGradient colors={colors.splash.gdcolor} isAngle angle={180} xAxis={0} yAxis={0.6} />
 
             <View style={styles.main}>
                 <View style={styles.body}>
-                    <View style={[styles.circle3, styles.circlePosition, { zIndex: 1 }]} />
-                    <View style={[styles.circle2, styles.circlePosition, { zIndex: 2 }]} />
-                    <View style={[styles.circle1, styles.circlePosition, { zIndex: 3 }]} />
+                    <Animatable.View style={[styles.circle3, styles.circlePosition, { zIndex: 1, shadowColor: colors.splash.circle2shadow }]} animation={"zoomIn"} duration={1500} delay={300} />
+                    <Animatable.View style={[styles.circle2, styles.circlePosition, { zIndex: 2, shadowColor: colors.splash.circle2shadow }]} animation={"zoomIn"} duration={1500} delay={200} />
+                    <Animatable.View style={[styles.circle1, { zIndex: 3, position: "absolute", }]} animation={"zoomIn"} duration={1400} delay={120} />
                 </View>
 
-                <Image style={commonstyles.logoMid} source={images.logo} />
+                <Animatable.Image style={[commonstyles.logoMid, { zIndex: 4 }]} source={images.logo} animation={"zoomIn"} duration={1500} />
             </View>
         </View>
     )
@@ -79,7 +80,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     circle1: {
-        // mixBlendMode: 'screen'
         width: 500,
         height: 500,
         borderRadius: 500,
@@ -87,32 +87,42 @@ const styles = StyleSheet.create({
         backgroundColor: colors.splash.circle1,
     },
     circle2: {
-        width: 600,
-        height: 600,
         borderRadius: 500,
         opacity: 0.12,
         backgroundColor: colors.splash.circle2,
+        ...Platform.select({
+            ios: {
+                width: 650,
+                height: 650,
+            },
+            android: {
+                width: 620,
+                height: 620,
+            }
+        })
     },
     circle3: {
-        width: 700,
-        height: 700,
         borderRadius: 500,
         opacity: 0.12,
-        backgroundColor: colors.splash.circle3,
+        backgroundColor: colors.splash.circle2,
+        ...Platform.select({
+            ios: {
+                width: 800,
+                height: 800,
+            },
+            android: {
+                width: 750,
+                height: 750,
+            }
+        })
     },
     circlePosition: {
         position: "absolute",
-        ...Platform.select({
-            ios: {
-                shadowColor: colors.white,
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.3,
-                shadowRadius: 2,
-            },
-            android: {
-                shadowColor: colors.white,
-                elevation: 4,
-            },
-        }),
+        shadowOffset: {
+            width: 2,
+            height: 2,
+        },
+        shadowOpacity: 0.9,
+        shadowRadius: 2,
     },
 });

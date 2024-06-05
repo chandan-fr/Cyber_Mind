@@ -3,9 +3,11 @@ module.exports = {
     white: "#FFFFFF",
     splash: {
         gdcolor: ["#73CACA", "#35A6E5"],
-        circle1: "#7bcfcb",
-        circle2: "#6CB00C",
-        circle3: "#67B404",
+        circle1: "rgba(214, 247, 255, 0.2)",
+        circle2: "rgba(124, 208, 205, 0.2)",
+        circle2shadow: "#599A97",
+        circle3: "rgba(50, 111, 108, 0.3)",
+        circle3shadow: "rgba(0, 0, 0, 0.35)",
     },
     onboard: {
         gdcolor: ["#FFFFFF", "rgba(195, 255, 255, 0.9)"],
