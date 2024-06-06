@@ -82,6 +82,7 @@ const TaskCard = ({ item, navigation, _Header, dispatch }: TaskCard_Props<Task_D
                             <TouchableOpacity
                                 style={{}}
                                 onPress={() => handleTask(item?._id)}
+                                disabled={item.is_complete ? true : false}
                             >
                                 {item?.is_complete ?
                                     <Image style={styles.complete} source={icons.taskdone} />
@@ -93,7 +94,7 @@ const TaskCard = ({ item, navigation, _Header, dispatch }: TaskCard_Props<Task_D
                     </View>
                 </LinearGradient>
 
-                {isMenu && <View style={styles.dotmenuWrap}><DotsMenu onDelete={()=>deleteTask(item?._id)} onClose={onClose} /></View>}
+                {isMenu && <View style={styles.dotmenuWrap}><DotsMenu onDelete={() => deleteTask(item?._id)} onClose={onClose} /></View>}
             </View>
         </TouchableWithoutFeedback>
     )

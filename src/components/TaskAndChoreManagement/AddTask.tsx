@@ -27,12 +27,12 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
 
   const onChange = (event: DateTimePickerEvent, date: Date | undefined) => {
     if (mode === 'date') {
-      setTime({ ...time, inputdate: date?.toISOString().split("T")[0] })
+      setTime({ ...time, inputdate: date?.toISOString() })
       setOpenDateModal(false);
       setMode('time');
     }
     else {
-      setTime({ ...time, inputtime: date?.toISOString().split("T")[1] })
+      setTime({ ...time, inputtime: date?.toISOString() })
       setOpenDateModal(false);
       setMode('date');
     }
@@ -64,10 +64,14 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
     setTaskError(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      taskData.task_time = convertToTimeStamp(new Date(`${time.inputdate}T${time.inputtime}`));
+      taskData.task_time = convertToTimeStamp(new Date(`${time.inputdate?.split("T")[0]}T${time.inputtime?.split("T")[1]}`));
       dispatch(addUserTask({ taskData, _Header, navigation }));
-      // setEventData({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
     }
+  };
+
+  const resetAction = () => {
+    setTaskData({ task_title: "", task_time: 0, location: "", task_partner: [], priority: "Never" });
+    setTime({ inputdate: "", inputtime: "" });
   };
 
   const assignMenber = (id: string) => {
@@ -138,10 +142,10 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
                 style={[styles.inputBox, commonstyles.parent]}
                 editable={false}
                 value={
-                  time?.inputdate && time?.inputtime ?
-                    getFormatedDateTime(`${time.inputdate}T${time.inputtime}`, "date") + ", " + getFormatedDateTime(`${time.inputdate}T${time.inputtime}`, "time")
+                  time.inputdate || time.inputtime ?
+                    (time.inputdate && getFormatedDateTime(time.inputdate, "date")) + ", " + (time?.inputtime && getFormatedDateTime(time.inputtime, "time"))
                     :
-                    undefined
+                    ""
                 }
               />
 
@@ -254,6 +258,7 @@ const AddTask = ({ navigation }: { navigation: any }): JSX.Element => {
           <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginTop: 40 }]}>
             <TouchableOpacity
               style={[styles.closeBtn, commonstyles.acjc]}
+              onPress={resetAction}
             >
               <Image style={styles.close} source={icons.close} />
             </TouchableOpacity>

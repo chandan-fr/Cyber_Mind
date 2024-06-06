@@ -236,7 +236,7 @@ export const updateUserTask = createAsyncThunk('/complete/task', async ({ id, _H
 
         if (resp.data.success) {
             dispatch(getAllTask({ _Header }));
-            dispatch(showModal({ msg: resp.data.message, type: "success" }));
+            // dispatch(showModal({ msg: resp.data.message, type: "success" }));
             return resp.data;
         }
     } catch (exc: any) {

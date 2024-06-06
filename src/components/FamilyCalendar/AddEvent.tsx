@@ -90,8 +90,11 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
             eventData.event_end_timestamp = convertToTimeStamp(new Date(`${endTimeValue.date?.split("T")[0]}T${endTimeValue.time?.split("T")[1]}`));
 
             dispatch(addEvents({ eventData, _Header, navigation }));
-            // setEventData({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
         }
+    };
+
+    const resetAction = () => {
+        setEventData({ event_name: "", event_start_timestamp: 0, event_end_timestamp: 0, alert: "", repeat: "", location: "", url: "", note: "", is_allDay: false });
     };
 
     return (
@@ -363,7 +366,14 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
 
                                 {/* repeat options */}
                                 {repeat && <View style={[styles.repeatOptnWrap]}>
-                                    <View style={[commonstyles.fdRow, commonstyles.acjsb, {}]}>
+                                    <View style={[commonstyles.fdRow, commonstyles.acjsb, { flexWrap: "wrap", rowGap: 10 }]}>
+                                        <TouchableOpacity
+                                            style={[eventData.repeat === "Never" ? styles.repeatOptionActv : styles.repeatOption, commonstyles.fdRow, commonstyles.acjc]}
+                                            onPress={() => setEventData({ ...eventData, repeat: "Never" })}
+                                        >
+                                            <Text style={eventData.repeat === "Never" ? styles.repeatOptnTxtActv : styles.repeatOptnTxt}>Never</Text>
+                                        </TouchableOpacity>
+
                                         <TouchableOpacity
                                             style={[eventData.repeat === "Daily" ? styles.repeatOptionActv : styles.repeatOption, commonstyles.fdRow, commonstyles.acjc]}
                                             onPress={() => setEventData({ ...eventData, repeat: "Daily" })}
@@ -421,6 +431,7 @@ const AddEvent = ({ navigation }: { navigation: any }): JSX.Element => {
             <View style={[commonstyles.fdRow, commonstyles.acjsb, { marginHorizontal: 25, marginTop: 5, marginBottom: Platform.OS === "android" ? 10 : 25 }]}>
                 <TouchableOpacity
                     style={[styles.closeBtn, commonstyles.acjc]}
+                    onPress={resetAction}
                 >
                     <Image style={styles.close} source={icons.close} />
                 </TouchableOpacity>
